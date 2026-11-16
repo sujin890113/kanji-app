@@ -1,0 +1,209 @@
+/* 최초 실행 안내 : 화면 전체를 쓰는 슬라이드 */
+.screen {
+  max-width: var(--max-width);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: env(safe-area-inset-top) var(--gutter) calc(env(safe-area-inset-bottom) + var(--space-5));
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - var(--space-5));
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+}
+
+.count {
+  color: var(--ink-3);
+  font-size: var(--size-small);
+}
+
+.skip {
+  min-height: 44px;
+  padding: 0 var(--space-2);
+  border: 0;
+  background: transparent;
+  color: var(--ink-2);
+  font: inherit;
+  cursor: pointer;
+}
+
+.slide {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.title {
+  font-size: var(--size-display);
+  font-weight: var(--weight-title);
+}
+
+.lead {
+  color: var(--ink-2);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  list-style: none;
+}
+
+.chip {
+  display: inline-block;
+  margin-right: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-chip);
+  color: var(--on-accent);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.chip.study {
+  background: var(--grade-study);
+}
+
+.chip.vague {
+  background: var(--grade-vague);
+}
+
+.chip.know {
+  background: var(--grade-know);
+}
+
+.note {
+  color: var(--ink-2);
+  font-size: var(--size-small);
+}
+
+/* 스와이프 그림 */
+.swipe {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 200px;
+}
+
+.card {
+  display: grid;
+  place-items: center;
+  width: 120px;
+  height: 150px;
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  font-family: var(--font-kanji);
+  font-size: var(--size-kanji-reverse);
+  font-weight: var(--weight-kanji);
+}
+
+.arrow {
+  position: absolute;
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.arrow.study {
+  color: var(--grade-study);
+}
+
+.arrow.vague {
+  color: var(--yamabuki-deep);
+}
+
+.arrow.know {
+  color: var(--grade-know);
+}
+
+.left {
+  left: 0;
+}
+
+.right {
+  right: 0;
+}
+
+.up {
+  top: 0;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.dot,
+.dotOn {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-chip);
+  background: var(--line);
+}
+
+.dotOn {
+  background: var(--ink-2);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+/* 시작 급수 */
+.levels {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.level,
+.levelOn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--button-min-height);
+  padding: 0 var(--space-4);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-button);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+}
+
+.levelOn {
+  border-color: var(--ai);
+  background: color-mix(in srgb, var(--ai) 10%, var(--surface));
+}
+
+.levelName {
+  font-weight: 700;
+}
+
+.levelCount {
+  color: var(--ink-2);
+  font-size: var(--size-small);
+}
+
+.prev {
+  flex-shrink: 0;
+  min-width: 96px;
+  white-space: nowrap;
+}

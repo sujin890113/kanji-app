@@ -130,3 +130,8 @@
   color: var(--ink);
   font: inherit;
 }
+
+.error {
+  color: var(--shu);
+  font-size: var(--size-small);
+}

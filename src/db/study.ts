@@ -8,7 +8,7 @@ import { db, type ChapterRow, type DailyRow, type ReviewLogRow } from './databas
 import { advanceRound, gradeCard, initProgress, newCard, resetCard, settleProgress } from '../domain/scheduler';
 import { capElapsed, dateKey } from '../domain/session';
 import { advanceSrsChapter, gradeSrs, type SrsOptions } from '../domain/srs';
-import { rechunkProgress, type ChapterIds } from '../domain/progress';
+import { rechunkProgress, startLevelProgress, type ChapterIds, type LevelOutline } from '../domain/progress';
 import type { SessionCounts } from '../domain/session';
 import type { CardOrder, CardState, ChapterProgress, Direction, Rating } from '../domain/types';
 
@@ -217,11 +217,19 @@ export async function getAllDaily(): Promise<DailyRow[]> {
  * 장 크기 변경 (SPEC 7.3) : 장별 회독 수를 초기화하고, 장 완료는 한자별 학습 상태로 다시 계산한다.
  * 한자별 학습 상태(cards)는 그대로 둔다.
  */
-export async function applyChapterSize(chapters: readonly ChapterIds[]): Promise<void> {
+export async function applyChapterSize(chapters: readonly ChapterIds[], skipped: ReadonlySet<number> = new Set()): Promise<void> {
   await db.transaction('rw', db.cards, db.chapters, async () => {
     const cards = await getAllCards();
     await db.chapters.clear();
-    await db.chapters.bulkPut(rechunkProgress(chapters, cards, Date.now()));
+    await db.chapters.bulkPut(rechunkProgress(chapters, cards, Date.now(), skipped));
+  });
+}
+
+/** 시작 급수 고르기 : 앞 급수의 장을 완료로 기록한다 (카드 상태는 그대로) */
+export async function applyStartLevel(outline: readonly LevelOutline[], start: number): Promise<void> {
+  await db.transaction('rw', db.chapters, async () => {
+    const existing = await db.chapters.toArray();
+    await db.chapters.bulkPut(startLevelProgress(outline, start, existing, Date.now()));
   });
 }
 

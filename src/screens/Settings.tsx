@@ -21,6 +21,8 @@ import {
 import { useSettings } from '../settings/useSettings';
 import { useJapaneseVoice } from '../audio/tts';
 import { applyChapterSize, resetAll, resetLevel } from '../db/study';
+import { clearStartLevel, skippedLevels } from '../settings/onboarding';
+import { BackupItem } from './BackupItem';
 import styles from './Settings.module.css';
 
 /** 아직 동작을 연결하지 않은 항목 : 해당 단계에서 연결한다 (값은 지금도 저장된다) */
@@ -53,7 +55,7 @@ function SettingsBody({ content }: { content: Content }) {
 
   const changeChapterSize = async (size: number) => {
     // 장 경계를 다시 나누고, 장 완료는 한자별 학습 상태로 다시 계산한다 (SPEC 7.3)
-    await applyChapterSize(withChapterSize(content, size).chapters);
+    await applyChapterSize(withChapterSize(content, size).chapters, skippedLevels());
     await setSetting('chapter_size', size);
     setPendingSize(null);
     setMessage(`장 크기를 ${size}자로 바꿨습니다.`);
@@ -146,10 +148,7 @@ function SettingsBody({ content }: { content: Content }) {
         <h2 id="g-data" className={styles.groupTitle}>
           데이터
         </h2>
-        <div className={styles.item}>
-          <span className={styles.label}>백업 내보내기 · 가져오기</span>
-          <span className={styles.later}>M7에서 만듭니다</span>
-        </div>
+        <BackupItem />
         <div className={styles.item}>
           <span className={styles.label}>급수별 초기화</span>
           <span className={styles.desc}>고른 급수의 학습 상태와 장 진행만 지웁니다. 즐겨찾기는 남습니다.</span>
@@ -264,6 +263,7 @@ function SettingsBody({ content }: { content: Content }) {
             disabled={phrase.trim() !== RESET_PHRASE}
             onClick={async () => {
               await resetAll();
+              await clearStartLevel();
               setConfirmAll(false);
               setPhrase('');
               setMessage('모든 학습 기록을 지웠습니다.');

@@ -147,8 +147,47 @@ export function rechunkProgress(
   chapters: readonly ChapterIds[],
   cards: ReadonlyMap<string, CardState>,
   now: number,
+  /** 시작 급수를 골라 건너뛴 급수 : 학습 상태와 상관없이 완료로 둔다 */
+  skipped: ReadonlySet<number> = new Set(),
 ): ChapterProgress[] {
   return chapters
-    .filter((ch) => chapterDoneByCards(ch.ids, cards))
-    .map((ch) => ({ level: ch.level, chapter: ch.chapter, pass_count: 0, completed_at: now, round_queue: [], round_size: 0 }));
+    .filter((ch) => skipped.has(ch.level) || chapterDoneByCards(ch.ids, cards))
+    .map((ch) => completedRow(ch.level, ch.chapter, now));
+}
+
+const completedRow = (level: number, chapter: number, now: number): ChapterProgress => ({
+  level,
+  chapter,
+  pass_count: 0,
+  completed_at: now,
+  round_queue: [],
+  round_size: 0,
+});
+
+/** 시작 급수보다 앞(급수 순서상)의 급수들. 시작 급수가 목록에 없으면 빈 목록 */
+export function levelsBefore(start: number): number[] {
+  const i = LEVEL_ORDER.indexOf(start as never);
+  return i < 0 ? [] : LEVEL_ORDER.slice(0, i);
+}
+
+/**
+ * 시작 급수 고르기 (SPEC 6장 최초 실행) : 앞 급수의 모든 장을 완료로 기록해 시작 급수를 연다.
+ * 한자별 학습 상태는 바꾸지 않는다. 이미 완료한 장의 기록은 그대로 둔다.
+ */
+export function startLevelProgress(
+  outline: readonly LevelOutline[],
+  start: number,
+  existing: readonly ChapterProgress[],
+  now: number,
+): ChapterProgress[] {
+  const skip = new Set(levelsBefore(start));
+  const done = new Set(existing.filter((r) => r.completed_at !== null).map((r) => chapterKey(r.level, r.chapter)));
+  const out: ChapterProgress[] = [];
+  for (const { level, chapters } of sortLevels(outline)) {
+    if (!skip.has(level)) continue;
+    for (let ch = 1; ch <= chapters; ch++) {
+      if (!done.has(chapterKey(level, ch))) out.push(completedRow(level, ch, now));
+    }
+  }
+  return out;
 }

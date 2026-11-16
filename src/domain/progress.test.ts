@@ -5,8 +5,10 @@ import {
   chunkIds,
   currentChapter,
   isKnownOnce,
+  levelsBefore,
   nextChapter,
   rechunkProgress,
+  startLevelProgress,
   summarizeChapters,
   unlockedChapters,
 } from './progress';
@@ -136,5 +138,33 @@ describe('장 크기 변경과 잠금 (SPEC 7.3)', () => {
     expect(isKnownOnce(relearn)).toBe(true);
     expect(chapterDoneByCards(['a'], new Map([['a', relearn]]))).toBe(true);
     expect(chapterDoneByCards([], new Map())).toBe(false);
+  });
+});
+
+describe('시작 급수 (SPEC 6장 최초 실행)', () => {
+  it('급수 순서상 앞 급수만 건너뛴다', () => {
+    expect(levelsBefore(5)).toEqual([]);
+    expect(levelsBefore(3)).toEqual([5, 4]);
+    expect(levelsBefore(0)).toEqual([5, 4, 3, 2, 1]);
+    expect(levelsBefore(9)).toEqual([]);
+  });
+
+  it('앞 급수의 장을 완료로 기록해 시작 급수 1장이 열린다', () => {
+    const existing = [{ level: 5, chapter: 1, pass_count: 2, completed_at: 3, round_queue: [], round_size: 0 }];
+    const rows = startLevelProgress(LEVELS, 4, existing, 9);
+    // N5 1장은 이미 완료 기록이 있어 그대로 두고 2·3장만 새로
+    expect(rows.map((r) => chapterKey(r.level, r.chapter))).toEqual(['5:2', '5:3']);
+    expect(rows.every((r) => r.completed_at === 9 && r.pass_count === 0)).toBe(true);
+    const completed = new Set(['5:1', '5:2', '5:3']);
+    expect(currentChapter(LEVELS, completed, true)).toEqual({ level: 4, chapter: 1 });
+    expect(startLevelProgress(LEVELS, 5, [], 9)).toEqual([]);
+  });
+
+  it('장 크기를 바꿔도 건너뛴 급수는 완료로 남는다', () => {
+    const ch = [
+      { level: 5, chapter: 1, ids: ['a'] },
+      { level: 4, chapter: 1, ids: ['b'] },
+    ];
+    expect(rechunkProgress(ch, new Map(), 1, new Set([5])).map((r) => r.level)).toEqual([5]);
   });
 });
