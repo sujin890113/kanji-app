@@ -9,13 +9,16 @@ overrides/ko_form.csv  (열 : 신자체, 정자체, 비고)
 overrides/ko_hunum.csv (열 : 한자, 훈, 음, 그밖의 훈음, 일본 고유 한자, 뜻 풀이, 비고)
   - 훈·음이 있으면 대표 훈음을 그 값으로 바꾼다
   - 그밖의 훈음 : "훈 음; 훈 음" 형식. 비어 있으면 자동값 유지
-  - 일본 고유 한자 : Y면 kokuji = true, 대표 훈음은 비운다 (SPEC 2.3 F1)
+  - 일본 고유 한자 : Y면 kokuji = true. 한국 훈음(훈과 음)이 있으면 남기고, 없으면 비운다 (SPEC 2.3 F1)
   - 뜻 풀이 : meaning_ko (선택 항목. 비우면 null → 카드에 훈음만 표시)
 
 음 대응 규칙·음부 묶음·유사 한자는 build_relations.py의 결과(build/relations.json, build/sound_rule_defs.json)를
 합친다. 음 대응 규칙은 검수가 끝난 최종 대표 음(ko_main.eum)으로 판정하고, 일본 고유 한자는 규칙을 붙이지 않는다.
 
-출력 : public/data/kanji.json, public/data/meta.json, public/data/sound_rules.json,
+overrides/words_ko.csv (열 : id, 단어, 뜻, 비고) : 검수한 단어 뜻. 있으면 reviewed = true
+drafts/words_ko_draft*.csv (열 : id, 단어, 뜻 초안) : JMdict 영어 뜻을 옮긴 번역 초안. 검수 값이 없을 때 쓰고 reviewed = false
+
+출력 : public/data/kanji.json, public/data/words.json, review/words_ko_review.csv, public/data/meta.json, public/data/sound_rules.json,
        public/data/phonetic_groups.json, review/sound_rules_review.csv
 """
 
@@ -25,7 +28,7 @@ import datetime as dt
 import sys
 
 from build_relations import match_rules
-from common import BUILD, LOCK, OUT, OVERRIDES, REVIEW, read_csv, read_json, write_csv, write_json
+from common import BUILD, DRAFTS, LOCK, OUT, OVERRIDES, REVIEW, read_csv, read_json, write_csv, write_json
 
 
 def load_override(name: str, key: str) -> tuple[dict[str, dict], list[str]]:
@@ -59,6 +62,8 @@ def main() -> int:
     base = read_json(BUILD / "kanji_base.json")
     korean = read_json(BUILD / "korean.json")
     relations = read_json(BUILD / "relations.json")
+    words_build = read_json(BUILD / "words.json")
+    words_by_kanji = words_build["by_kanji"]
     rule_defs = read_json(BUILD / "sound_rule_defs.json")
     ids = {k["id"] for k in base}
 
@@ -85,7 +90,7 @@ def main() -> int:
             "rules": [],
             "phonetic": relations["phonetic"].get(c),
             "similar": relations["similar"].get(c, []),
-            "words": [],       # M5 (build_words.py)
+            "words": words_by_kanji.get(c, []),
         }
         if c in forms:
             v = forms[c].get("정자체", "")
@@ -99,8 +104,10 @@ def main() -> int:
                 item["ko_more"] = parse_more(h["그밖의 훈음"])
             if h.get("일본 고유 한자", "").upper() == "Y":
                 item["kokuji"] = True
-                item["ko_main"] = None
-                item["ko_more"] = []
+                # 한국 자전에 훈음이 있으면(峠 고개 상 등) 남긴다. 음만 있는 것(KANJIDIC2 음만, 込 입)은 지운다
+                if not (item["ko_main"] and item["ko_main"].get("hun")):
+                    item["ko_main"] = None
+                    item["ko_more"] = []
             if h.get("뜻 풀이"):
                 item["meaning_ko"] = h["뜻 풀이"]
             applied["ko_hunum"] += 1
@@ -132,6 +139,41 @@ def main() -> int:
 
     write_json(OUT / "kanji.json", out, compact=True)
 
+    # ---- 대표 단어 (F9) : 뜻 = 검수 값 > 번역 초안 > 없음
+    reviewed_ko, e3 = load_override("words_ko.csv", "id")
+    errors.extend(e3)
+    drafts: dict[str, str] = {}
+    for path in sorted(DRAFTS.glob("words_ko_draft*.csv")) if DRAFTS.exists() else []:
+        for r in read_csv(path):
+            if r.get("id") and (r.get("뜻 초안") or "").strip():
+                drafts[r["id"]] = r["뜻 초안"].strip()
+    words_out, review_words = [], []
+    known = {w["id"]: w for w in words_build["words"]}
+    for wid, r in reviewed_ko.items():
+        if wid not in known:
+            errors.append(f"words_ko.csv : {wid}는 이번 빌드에 없는 단어")
+        elif r.get("단어") and r["단어"] != known[wid]["text"]:
+            errors.append(f"words_ko.csv : {wid}의 단어 {r['단어']}가 빌드의 {known[wid]['text']}와 다름")
+    for w in words_build["words"]:
+        rv = reviewed_ko.get(w["id"], {}).get("뜻", "")
+        meaning = rv or drafts.get(w["id"])
+        words_out.append({
+            "id": w["id"], "text": w["text"], "reading": w["reading"],
+            "meaning_ko": meaning or None, "reviewed": bool(rv),
+            "level": w["level"], "kanji": w["kanji"],
+        })
+        review_words.append([
+            {5: "N5", 4: "N4", 3: "N3", 2: "N2", 1: "N1", 0: "보충"}[w["level"]], w["id"], w["text"], w["reading"],
+            "".join(w["kanji"]), w["gloss_en"], meaning or "", "검수" if rv else ("초안" if meaning else "없음"),
+            "" if w["common"] else "빈도 표시 없음",
+        ])
+    write_json(OUT / "words.json", words_out, compact=True)
+    write_csv(REVIEW / "words_ko_review.csv",
+              ["급수", "id", "단어", "읽기", "한자", "영어 뜻(JMdict)", "한국어 뜻", "상태", "참고"], review_words)
+    applied["words_reviewed"] = sum(1 for w in words_out if w["reviewed"])
+    applied["words_draft"] = sum(1 for w in words_out if w["meaning_ko"] and not w["reviewed"])
+    applied["words_total"] = len(words_out)
+
     lock = read_json(LOCK)["sources"]
     levels: dict[str, int] = {}
     for k in out:
@@ -156,6 +198,7 @@ def main() -> int:
     for e in errors:
         print(f"[문제] {e}")
     print(f"apply_overrides : {len(out)}자 → public/data/kanji.json (반영 : 정자체 {applied['ko_form']}, 훈음 {applied['ko_hunum']})")
+    print(f"  대표 단어 : {applied['words_total']}개 (검수 {applied['words_reviewed']}, 초안 {applied['words_draft']}, 뜻 없음 {applied['words_total'] - applied['words_reviewed'] - applied['words_draft']})")
     print("  음 대응 규칙 : " + ", ".join(f"{d['id']} {d['count']}자" for d in rules_out)
           + f" / 규칙이 붙은 한자 {sum(1 for k in out if k['rules'])}자")
     return 1 if errors else 0

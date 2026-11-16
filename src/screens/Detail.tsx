@@ -66,8 +66,9 @@ export function DetailBody({ content, id, onOpen }: { content: Content; id: stri
           <div className={`${styles.line} ${styles.lineKo}`}>
             <span className={styles.lineLabel}>한</span>
             <div className={styles.lineBody}>
-              {kanji.kokuji || !kanji.ko_main ? (
-                <KokujiBadge />
+              {kanji.kokuji && <KokujiBadge />}
+              {!kanji.ko_main ? (
+                !kanji.kokuji && <span>—</span>
               ) : (
                 <>
                   <span className={styles.koMain}>{`${kanji.ko_main.hun} ${kanji.ko_main.eum}`.trim()}</span>

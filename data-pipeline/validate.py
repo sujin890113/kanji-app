@@ -114,6 +114,40 @@ def main() -> int:
     with_phon = sum(1 for k in data if k["phonetic"])
     with_sim = sum(1 for k in data if k["similar"])
     sim_examples = [k for k in data if k["similar"]][:12]
+
+    # ---- M5 대표 단어 (build_words.py)
+    words = read_json(OUT / "words.json")
+    wmap = {w["id"]: w for w in words}
+    rank = {5: 0, 4: 1, 3: 2, 2: 3, 1: 4, 0: 5}
+    lv_of = {k["id"]: k["level"] for k in data}
+    for k in data:
+        c = k["id"]
+        if len(k["words"]) < 2:
+            pending.append(f"{c} : 대표 단어 {len(k['words'])}개 (조건에 맞는 단어 부족)")
+        for wid in k["words"]:
+            w = wmap.get(wid)
+            if not w:
+                errors.append(f"{c} : 없는 단어 {wid}")
+            elif c not in w["text"]:
+                errors.append(f"{c} : 단어 {w['text']}에 이 한자가 없음")
+            elif any(rank[lv_of[x]] > rank[k["level"]] for x in w["kanji"]):
+                errors.append(f"{c} : 단어 {w['text']}에 더 어려운 급수의 한자가 있음")
+    used = {wid for k in data for wid in k["words"]}
+    for w in words:
+        if w["id"] not in used:
+            errors.append(f"단어 {w['id']} {w['text']} : 어느 한자에도 연결되지 않음")
+    sm = read_json(BUILD / "build_strokes_meta.json")
+    errors.extend(sm["problems"])
+    for m in sm["stroke_count_mismatch"]:
+        notes.append(f"획순 {m} (KanjiVG 자형이 상용한자표 인쇄 자형과 다를 수 있음. 앱은 KanjiVG 획을 그대로 그린다)")
+    drafted = sum(1 for w in words if w["meaning_ko"] and not w["reviewed"])
+    reviewed_n = sum(1 for w in words if w["reviewed"])
+    by_lv: dict[int, list[int]] = {}
+    for w in words:
+        t = by_lv.setdefault(w["level"], [0, 0, 0])
+        t[0] += 1
+        t[1] += 1 if w["reviewed"] else 0
+        t[2] += 1 if w["meaning_ko"] and not w["reviewed"] else 0
     big_groups = sorted(groups, key=lambda g_: -len(g_["members"]))[:8]
 
     report = [
@@ -178,6 +212,15 @@ def main() -> int:
         "| 한자 | 유사 한자 |",
         "| --- | --- |",
         *(f"| {k['id']} | {' '.join(k['similar'])} |" for k in sim_examples),
+        "",
+        "## 대표 단어 (M5)",
+        "",
+        f"단어 {len(words)}개 : 검수한 뜻 {reviewed_n}, 번역 초안(미검수 표시) {drafted}, 뜻 없음 {len(words) - reviewed_n - drafted}. "
+        "검수 목록 review/words_ko_review.csv, 검수 결과 overrides/words_ko.csv",
+        "",
+        "| 단어 급수(가장 어려운 한자) | 단어 수 | 검수 | 초안 | 뜻 없음 |",
+        "| --- | --- | --- | --- | --- |",
+        *(f"| {level_name(lv)} | {t[0]} | {t[1]} | {t[2]} | {t[0] - t[1] - t[2]} |" for lv, t in sorted(by_lv.items(), key=lambda kv: rank[kv[0]])),
         "",
         "## 검수 대기 (오류 아님)",
         "",

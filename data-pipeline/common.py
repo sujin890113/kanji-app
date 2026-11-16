@@ -11,6 +11,7 @@ RAW = ROOT / "raw"                # 내려받은 원본 (git 제외)
 BUILD = ROOT / "build"            # 중간 결과 (git 제외)
 REVIEW = ROOT / "review"          # 검수용 CSV (빌드가 만든다. git 포함)
 OVERRIDES = ROOT / "overrides"    # 사람이 검수한 결과 (빌드 스크립트는 읽기만 한다)
+DRAFTS = ROOT / "drafts"          # 번역 초안 (사전 뜻을 옮긴 것. 앱에 미검수 표시로 나간다. 빌드 스크립트는 읽기만 한다)
 OUT = ROOT.parent / "public" / "data"
 LOCK = ROOT / "SOURCES.lock"
 

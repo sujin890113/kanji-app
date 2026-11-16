@@ -38,11 +38,11 @@ export function KoFormInline({ kanji }: { kanji: Kanji }) {
 
 /**
  * 한국어 줄 (카드)
- * - F1 켬 : 대표 훈음 크게, 나머지 훈음 작게, 뜻 풀이. 국자는 표지와 뜻 풀이
- * - F1 끔 : 뜻 풀이, 없으면 대표 훈음 하나만
+ * - F1 켬 : 대표 훈음 크게, 나머지 훈음 작게, 뜻 풀이. 국자는 표지를 붙이고, 한국 자전에 훈음이 있으면(峠 고개 상) 함께 둔다
+ * - F1 끔 : 뜻 풀이, 없으면 대표 훈음 하나만 (그것도 없으면 국자 표지)
  */
 export function KoLine({ kanji, f1, f2 }: { kanji: Kanji; f1: boolean; f2: boolean }) {
-  const noHunum = kanji.kokuji || !kanji.ko_main;
+  const noHunum = !kanji.ko_main;
   return (
     <div className={`${styles.row} ${f1 ? styles.rowKo : styles.rowPlain}`}>
       <span className={styles.rowLabel}>{f1 ? '한' : '뜻'}</span>
@@ -50,7 +50,9 @@ export function KoLine({ kanji, f1, f2 }: { kanji: Kanji; f1: boolean; f2: boole
         {f1 ? (
           <>
             <div className={styles.koHead}>
-              {noHunum ? <KokujiBadge /> : <span className={styles.koMain}>{hunumText(kanji)}</span>}
+              {kanji.kokuji && <KokujiBadge />}
+              {!noHunum && <span className={styles.koMain}>{hunumText(kanji)}</span>}
+              {noHunum && !kanji.kokuji && <span className={styles.koMain}>—</span>}
               {f2 && <KoFormInline kanji={kanji} />}
             </div>
             {!noHunum && kanji.ko_more.length > 0 && (
@@ -63,7 +65,7 @@ export function KoLine({ kanji, f1, f2 }: { kanji: Kanji; f1: boolean; f2: boole
             {kanji.meaning_ko ? (
               <span className={styles.plainMain}>{kanji.meaning_ko}</span>
             ) : noHunum ? (
-              <KokujiBadge />
+              kanji.kokuji ? <KokujiBadge /> : <span className={styles.plainMain}>—</span>
             ) : (
               <span className={styles.plainMain}>{hunumText(kanji)}</span>
             )}

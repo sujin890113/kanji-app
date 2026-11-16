@@ -68,7 +68,7 @@ function SearchBody({ content }: { content: Content }) {
                   {k.id}
                 </span>
                 <span className={styles.main}>
-                  <span className={styles.hunum}>{k.kokuji || !k.ko_main ? '일본 고유 한자' : hunumText(k)}</span>
+                  <span className={styles.hunum}>{[k.kokuji ? '일본 고유 한자' : '', hunumText(k)].filter(Boolean).join(' · ') || '—'}</span>
                   <span className={styles.on} lang="ja">
                     {k.on.join('・')}
                   </span>

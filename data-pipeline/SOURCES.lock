@@ -58,6 +58,17 @@
       "sha256": "b5df6cd2bc249dd49b8041eb99e38ba9f8dc6b9ea57962a80084b4a315d1a7fc",
       "bytes": 12650667,
       "fetched_at": "2026-11-16T03:33:02Z"
+    },
+    "jmdict": {
+      "url": "https://www.edrdg.org/pub/Nihongo/JMdict_e.gz",
+      "file": "raw/jmdict/JMdict_e.gz",
+      "version": "Last-Modified Mon, 16 Nov 2026 03:30:25 GMT",
+      "license": "CC BY-SA 4.0 (출처 표시 필수)",
+      "license_url": "https://www.edrdg.org/edrdg/licence.html",
+      "attribution": "JMdict © Electronic Dictionary Research and Development Group",
+      "sha256": "96baa24218c052fef29de6d0f6fdb1aa35070ca5215f71580b62e8d03b671d36",
+      "bytes": 10602208,
+      "fetched_at": "2026-11-16T03:56:48Z"
     }
   }
 }
