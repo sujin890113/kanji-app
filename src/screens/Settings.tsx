@@ -23,6 +23,7 @@ import { useJapaneseVoice } from '../audio/tts';
 import { applyChapterSize, resetAll, resetLevel } from '../db/study';
 import { clearStartLevel, skippedLevels } from '../settings/onboarding';
 import { BackupItem } from './BackupItem';
+import { FONT_CREDITS, LIBRARY_CREDITS } from '../content/credits';
 import styles from './Settings.module.css';
 
 /** 아직 동작을 연결하지 않은 항목 : 해당 단계에서 연결한다 (값은 지금도 저장된다) */
@@ -199,6 +200,13 @@ function SettingsBody({ content }: { content: Content }) {
             </li>
           ))}
         </ul>
+        <p className={styles.creditNote}>
+          단어의 한국어 뜻 가운데 ‘미검수’ 표시가 붙은 것은 JMdict의 영어 뜻을 옮긴 초안입니다.
+        </p>
+        <h3 className={styles.creditTitle}>글꼴</h3>
+        <CreditList items={FONT_CREDITS} />
+        <h3 className={styles.creditTitle}>라이브러리</h3>
+        <CreditList items={LIBRARY_CREDITS} />
       </section>
 
       <Sheet open={pendingSize !== null} title={`장 크기를 ${pendingSize}자로 바꿀까요?`} onClose={() => setPendingSize(null)}>
@@ -283,6 +291,21 @@ function SettingsBody({ content }: { content: Content }) {
         </div>
       </Sheet>
     </>
+  );
+}
+
+function CreditList({ items }: { items: { name: string; license: string; url: string }[] }) {
+  return (
+    <ul className={styles.sources}>
+      {items.map((c) => (
+        <li key={c.name}>
+          <a href={c.url} target="_blank" rel="noreferrer">
+            {c.name}
+          </a>
+          <span className={styles.desc}>{c.license}</span>
+        </li>
+      ))}
+    </ul>
   );
 }
 

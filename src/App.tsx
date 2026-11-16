@@ -13,6 +13,7 @@ import { SettingsScreen } from './screens/Settings';
 import { Search } from './screens/Search';
 import { Onboarding } from './screens/Onboarding';
 import { isOnboarded } from './settings/onboarding';
+import { UpdatePrompt } from './components/UpdatePrompt';
 
 /**
  * 화면 9개 (SPEC 6장).
@@ -45,15 +46,19 @@ export function App() {
   useApplyDisplaySettings();
   // 최초 실행이면 안내와 시작 급수 고르기를 먼저 보여 준다 (SPEC 6장)
   const [ready, setReady] = useState(isOnboarded);
-  if (!ready) {
-    return (
-      <Onboarding
-        onDone={() => {
-          void router.navigate('/');
-          setReady(true);
-        }}
-      />
-    );
-  }
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      {ready ? (
+        <RouterProvider router={router} />
+      ) : (
+        <Onboarding
+          onDone={() => {
+            void router.navigate('/');
+            setReady(true);
+          }}
+        />
+      )}
+      <UpdatePrompt />
+    </>
+  );
 }

@@ -671,7 +671,7 @@ Python 스크립트로 원본을 내려받아 합치고, 사람이 고친 내용
 | 움직임 | Pointer Events + Web Animations API(브라우저 내장) | 카드 스와이프, 판정 시 카드 나가기. 움직임이 카드 한 장의 끌기·나가기뿐이라 라이브러리 없이 구현한다(M7에서 Motion 대신 결정) |
 | 기기 DB | Dexie(IndexedDB) | 3.3의 사용자 데이터 |
 | 복습 스케줄 | ts-fsrs | 4.2의 간격 계산. Node.js 20 이상 필요 |
-| 설치·오프라인 | vite-plugin-pwa | 홈 화면 설치, 오프라인 캐시 |
+| 설치·오프라인 | vite-plugin-pwa (2.0, MIT. Workbox 7.4) | 홈 화면 설치, 오프라인 캐시. 첫 접속 때 앱·woff2 글꼴·한자 데이터·획순 전부(약 24MB, 2,861개 파일)를 미리 받아 둔다. 새 버전은 자동 적용하지 않고 화면 위쪽에 "새 버전이 있습니다 \[새로 고침\]"을 띄운다. 아이콘은 scripts/make_icons.py로 Klee One의 '漢'을 주홍 도장 모양으로 그린다 |
 | 발음 | Web Speech API(브라우저 내장) | 일본어 음성 읽기 |
 | 획순 | SVG 직접 렌더링 | KanjiVG 경로를 한 획씩 그림 |
 | 테스트 | Vitest | 스케줄·회독 규칙 단위 테스트 |

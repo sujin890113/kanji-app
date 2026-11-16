@@ -1,0 +1,45 @@
+/* 화면 위쪽에 뜨는 알림 줄 (하단 탭·판정 버튼을 가리지 않게) */
+.bar {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + var(--space-2));
+  left: 50%;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: calc(100% - var(--gutter) * 2);
+  max-width: calc(var(--max-width) - var(--gutter) * 2);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-button);
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: var(--shadow-card);
+  transform: translateX(-50%);
+}
+
+.text {
+  flex: 1;
+  font-size: var(--size-small);
+}
+
+.action,
+.close {
+  min-height: 40px;
+  padding: 0 var(--space-3);
+  border: 0;
+  border-radius: var(--radius-chip);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.action {
+  background: var(--shu);
+  color: var(--on-accent);
+}
+
+.close {
+  background: transparent;
+  color: var(--paper);
+}
