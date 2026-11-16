@@ -15,6 +15,12 @@ python apply_overrides.py  # 7. overrides/ 반영 → public/data/kanji.json, me
 python validate.py         # 8. 전수 검사 → review/build_report.md
 ```
 
+스크립트 테스트(표준 라이브러리 unittest, 추가 설치 없음) :
+
+```bash
+python -m unittest discover tests
+```
+
 4단계는 `python fetch.py --only jmdict`, 5·6단계는 `python fetch.py --only kanjivg`로 원본을 먼저 받아 둔다.
 
 ### 5단계 : 관계 데이터 (F3·F4·F8)

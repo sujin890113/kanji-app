@@ -125,9 +125,42 @@ def korean_list(fields: dict[str, str]) -> str:
     return "+".join(tags)
 
 
+_HANGUL_BASE = 0xAC00
+_CHO_N, _CHO_R, _CHO_NG = 2, 5, 11
+# ㅑ ㅒ ㅕ ㅖ ㅛ ㅠ ㅣ : 이 모음 앞의 ㄴ·ㄹ은 ㅇ이 된다
+_Y_VOWELS = {2, 3, 6, 7, 12, 17, 20}
+
+
+def dueum(syllable: str) -> str:
+    """두음법칙을 적용한 음 (녀→여, 려→여, 로→노). 해당하지 않으면 그대로.
+    앱의 src/domain/sinoKorean.ts applyDueum과 같은 규칙이다."""
+    if len(syllable) != 1:
+        return syllable
+    code = ord(syllable) - _HANGUL_BASE
+    if not 0 <= code <= 11171:
+        return syllable
+    cho, jung, jong = code // 588, (code % 588) // 28, code % 28
+    if cho == _CHO_N and jung in _Y_VOWELS:
+        cho = _CHO_NG
+    elif cho == _CHO_R:
+        cho = _CHO_NG if jung in _Y_VOWELS else _CHO_N
+    else:
+        return syllable
+    return chr(_HANGUL_BASE + cho * 588 + jung * 28 + jong)
+
+
 def split_hunum(eum: str, meaning: str) -> dict:
-    if meaning.endswith(" " + eum):
-        return {"hun": meaning[: -len(eum) - 1], "eum": eum}
+    """hanja.txt 한 줄의 뜻("나그네 려")을 훈과 음으로 나눈다.
+
+    hanja.txt는 두음법칙 형태를 따로 한 줄로 싣는다 (예 : `여:旅:나그네 려, 베풀 려`).
+    이 줄은 머리 음(여)과 뜻 끝의 음(려)이 다르므로, 뜻 끝 음을 두음법칙으로 바꾼 값이
+    머리 음과 같으면 본음(려)으로 나눈다. 그러면 본음 줄의 훈음과 같아져 중복이 사라진다.
+    """
+    head, _, last = meaning.rpartition(" ")
+    if head and last == eum:
+        return {"hun": head, "eum": eum}
+    if head and last != eum and dueum(last) == eum:
+        return {"hun": head, "eum": last}
     return {"hun": meaning, "eum": eum}
 
 

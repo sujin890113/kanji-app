@@ -58,7 +58,7 @@ N3,3,55,済,,후보 없음,,,,,,인명용,,hanja.txt에 신자체가 뜻 없이�
 N3,4,72,参,參,엇갈림,,교육용+인명용,Y,간여할 참 | 석 참 | 석 삼,kTraditionalVariant,,,
 N3,5,87,増,增,일치,Y,교육용,Y,불을 증 | 더할 증,kJinmeiyoKanji,,,
 N3,5,93,変,變,엇갈림,,교육용,Y,변할 변,"kSemanticVariant, kSemanticVariant(역)",,,
-N3,5,96,両,兩,엇갈림,,교육용,Y,두 량 | 둘 량 | 두 량 양 | 둘 양,"kSemanticVariant, kSemanticVariant(역)",,,
+N3,5,96,両,兩,엇갈림,,교육용,Y,두 량 | 둘 량 | 둘 양,"kSemanticVariant, kSemanticVariant(역)",,,
 N3,6,103,歳,歲,엇갈림,,교육용,Y,해 세 | 곡식 익을 세 | 돐 세 | 풍년 세,"kSemanticVariant, kSemanticVariant(역)",,,
 N3,6,104,争,爭,일치,Y,교육용,Y,다툴 쟁 | 다스릴 쟁 | 분별할 쟁,"kJinmeiyoKanji, kSemanticVariant, kSemanticVariant(역), kTraditionalVariant",,,
 N3,6,116,状,狀,일치,Y,교육용+인명용,Y,형상 상 | 모양 형상 장,"kJinmeiyoKanji, kTraditionalVariant",,,
@@ -105,7 +105,7 @@ N3,16,316,緒,緖,일치,Y,교육용,Y,실마리 서,"kJinmeiyoKanji, kZVariant,
 N3,17,325,寝,寢,일치,Y,교육용,Y,잠잘 침 | 쉴 침 | 방 침 | 못생길 침,"kJinmeiyoKanji, kTraditionalVariant",,,
 N3,17,327,盗,盜,일치,Y,교육용,Y,도둑 도,"kJinmeiyoKanji, kSemanticVariant, kSemanticVariant(역), kTraditionalVariant",,,
 N3,17,331,歯,,후보 없음,,,,,,,,hanja.txt에 신자체가 뜻 없이만 있음. 정자체를 직접 확인 필요
-N3,17,339,礼,禮,일치,Y,교육용,Y,예도 례 | 예도 례 예 | 인사 례 예,"kJinmeiyoKanji, kSemanticVariant, kSemanticVariant(역), kTraditionalVariant",인명용,,
+N3,17,339,礼,禮,일치,Y,교육용,Y,예도 례 | 인사 례,"kJinmeiyoKanji, kSemanticVariant, kSemanticVariant(역), kTraditionalVariant",인명용,,
 N3,18,345,祖,祖,엇갈림,Y,,,,kJinmeiyoKanji,교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음) ; 후보가 호환 한자(자형만 다른 같은 글자)
 N3,18,346,杯,盃,일치,Y,인명용,Y,杯의 俗字 배 | 잔 배,"kJinmeiyoKanji, kSemanticVariant, kSemanticVariant(역)",교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음)
 N3,18,357,晩,晚,엇갈림,Y,교육용,,,"kJinmeiyoKanji, kZVariant, kZVariant(역)",,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
@@ -133,8 +133,8 @@ N2,4,79,戸,戶,엇갈림,,교육용,Y,지게 호,"kZVariant, kZVariant(역)",,,
 N2,5,83,捜,搜,일치,Y,교육용,Y,찾을 수 | 더듬을 수 | 화살 빨리 가는 소리 수 | 어지러울 수,kJinmeiyoKanji,,,
 N2,5,86,並,幷,엇갈림,,인명용,Y,아우를 병,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N2,5,86,並,竝,엇갈림,,교육용,Y,아우를 병,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
-N2,5,94,歴,歷,일치,Y,교육용,Y,지낼 력 | 지날 력 | 지낼 력 역 | 겪을 력 역 | 지날 역,"kJinmeiyoKanji, kSemanticVariant, kSemanticVariant(역)",,,
-N2,5,94,歴,曆,참고(일치 후보 따로 있음),,교육용,Y,책력 력 | 셀 력 역 | 세월 력 역 | 책력 역,"kSemanticVariant, kSemanticVariant(역)",,,
+N2,5,94,歴,歷,일치,Y,교육용,Y,지낼 력 | 지날 력 | 겪을 력 | 지날 역,"kJinmeiyoKanji, kSemanticVariant, kSemanticVariant(역)",,,
+N2,5,94,歴,曆,참고(일치 후보 따로 있음),,교육용,Y,책력 력 | 셀 력 | 세월 력 | 책력 역,"kSemanticVariant, kSemanticVariant(역)",,,
 N2,5,95,将,將,일치,Y,교육용,Y,장차 장 | 장수 장,"kJinmeiyoKanji, kTraditionalVariant",인명용,,
 N2,6,101,装,裝,일치,Y,교육용,Y,차려 입을 장 | 행장 장,"kJinmeiyoKanji, kTraditionalVariant",,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N2,6,102,諸,諸,엇갈림,Y,,,,kJinmeiyoKanji,교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음) ; 후보가 호환 한자(자형만 다른 같은 글자)
@@ -177,7 +177,7 @@ N2,13,257,緑,綠,일치,Y,교육용,Y,초록빛 록 | 초록빛 녹,kJinmeiyoKa
 N2,13,259,祝,祝,엇갈림,Y,,,,kJinmeiyoKanji,교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음) ; 후보가 호환 한자(자형만 다른 같은 글자)
 N2,14,270,黄,黃,일치,Y,교육용,Y,누를 황,"kJinmeiyoKanji, kTraditionalVariant",,,
 N2,14,273,浅,淺,엇갈림,,교육용,Y,얕을 천,kTraditionalVariant,,,
-N2,15,282,恋,戀,엇갈림,,교육용,Y,사모할 련 | 생각할 련 연 | 사모할 련 연,"kSemanticVariant, kSemanticVariant(역), kTraditionalVariant",,,
+N2,15,282,恋,戀,엇갈림,,교육용,Y,사모할 련 | 생각할 련,"kSemanticVariant, kSemanticVariant(역), kTraditionalVariant",,,
 N2,15,287,踊,踴,엇갈림,,인명용,Y,뛸 용,"kSemanticVariant, kSemanticVariant(역), kTraditionalVariant",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N2,15,295,喫,吃,엇갈림,,인명용,Y,말더듬을 흘 | 말더듬는 흘,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N2,15,297,虫,蟲,엇갈림,,교육용,Y,벌레 충 | 김 오를 충,"kSemanticVariant, kSemanticVariant(역), kTraditionalVariant",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
@@ -195,7 +195,7 @@ N2,17,338,麦,麥,엇갈림,,교육용,Y,보리 맥,kTraditionalVariant,,,
 N2,18,345,畳,疊,일치,Y,인명용,Y,거듭 첩 | 포갤 첩,kJinmeiyoKanji,,,
 N2,18,346,机,機,엇갈림,,교육용,Y,틀 기 | 베틀 기,"kSemanticVariant, kSemanticVariant(역), kTraditionalVariant",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N2,18,352,菓,果,엇갈림,,교육용,Y,실과 과 | 과실 과,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
-N2,18,355,涼,凉,일치,Y,인명용,Y,涼의 俗字 량 | 서늘할 량 | 서늘할 량 양,"kJinmeiyoKanji, kSemanticVariant, kSemanticVariant(역), kTraditionalVariant(역)",교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음)
+N2,18,355,涼,凉,일치,Y,인명용,Y,涼의 俗字 량 | 서늘할 량,"kJinmeiyoKanji, kSemanticVariant, kSemanticVariant(역), kTraditionalVariant(역)",교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음)
 N2,18,359,憎,憎,엇갈림,Y,,,,kJinmeiyoKanji,교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음) ; 후보가 호환 한자(자형만 다른 같은 글자)
 N2,19,364,挟,挾,엇갈림,,인명용,Y,낄 협 | 도울 협 | 품을 협,kTraditionalVariant,,,
 N1,1,10,価,價,일치,Y,교육용,Y,값 가,kJinmeiyoKanji,,,
@@ -273,7 +273,7 @@ N1,17,323,舎,,후보 없음,,,,,,,,hanja.txt에 신자체가 뜻 없이만 있�
 N1,17,324,偽,僞,일치,Y,교육용,Y,거짓 위 | 속일 위,kJinmeiyoKanji,,,
 N1,17,326,覇,霸,엇갈림,,인명용,Y,으뜸 패 | 패왕 패,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N1,17,331,犠,,후보 없음,,,,,,,,hanja.txt에 신자체가 뜻 없이만 있음. 정자체를 직접 확인 필요
-N1,17,337,竜,龍,일치,Y,교육용,Y,용 룡 | 용 룡 용 | 임금 룡 용,kJinmeiyoKanji,인명용,,
+N1,17,337,竜,龍,일치,Y,교육용,Y,용 룡 | 임금 룡,kJinmeiyoKanji,인명용,,
 N1,17,339,繁,繁,엇갈림,Y,,,,kJinmeiyoKanji,교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음) ; 후보가 호환 한자(자형만 다른 같은 글자)
 N1,18,345,斉,齊,일치,Y,교육용,Y,가지런할 제,"kJinmeiyoKanji, kSemanticVariant, kSemanticVariant(역)",,,
 N1,18,348,圏,圈,일치,Y,인명용,Y,둥글 권,kJinmeiyoKanji,,,
@@ -281,7 +281,7 @@ N1,18,356,梅,梅,엇갈림,Y,,,,kJinmeiyoKanji,교육용,Y,신자체도 한국 
 N1,18,357,尽,盡,일치,Y,교육용,Y,다할 진,"kJinmeiyoKanji, kSemanticVariant, kSemanticVariant(역), kTraditionalVariant",인명용,,
 N1,18,357,尽,儘,참고(일치 후보 따로 있음),,인명용,Y,盡과 同字 진,kTraditionalVariant,인명용,,
 N1,18,359,桜,櫻,일치,Y,인명용,Y,앵두나무 앵,kJinmeiyoKanji,,,
-N1,19,370,励,勵,엇갈림,,교육용,Y,힘쓸 려 | 힘쓸 려 여 | 가다듬을 려 여,kTraditionalVariant,,,
+N1,19,370,励,勵,엇갈림,,교육용,Y,힘쓸 려 | 가다듬을 려,kTraditionalVariant,,,
 N1,19,371,縦,縱,일치,Y,교육용,Y,늘어질 종 | 세로 종,kJinmeiyoKanji,,,
 N1,19,378,砲,炮,엇갈림,,인명용,Y,그슬릴 포 | 싸서 구울 포 | 형벌 포,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N1,20,381,祥,祥,엇갈림,Y,,,,kJinmeiyoKanji,교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음) ; 후보가 호환 한자(자형만 다른 같은 글자)
@@ -373,7 +373,7 @@ N1,35,686,呉,吳,엇갈림,,인명용,Y,오나라 오 | 큰소리 지를 오 | 
 N1,35,696,穀,穀,엇갈림,Y,,,,kJinmeiyoKanji,교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음) ; 후보가 호환 한자(자형만 다른 같은 글자)
 N1,36,707,臭,臭,엇갈림,Y,,,,kJinmeiyoKanji,교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음) ; 후보가 호환 한자(자형만 다른 같은 글자)
 N1,36,708,悦,悅,엇갈림,,교육용,Y,즐거울 열 | 복종할 열 | 성씨 열 | 기뻐할 열,"kSemanticVariant, kSemanticVariant(역), kTraditionalVariant, kZVariant, kZVariant(역)",,,
-N1,36,711,暦,曆,일치,Y,교육용,Y,책력 력 | 셀 력 역 | 세월 력 역 | 책력 역,kJinmeiyoKanji,,,
+N1,36,711,暦,曆,일치,Y,교육용,Y,책력 력 | 셀 력 | 세월 력 | 책력 역,kJinmeiyoKanji,,,
 N1,36,714,粋,粹,일치,Y,인명용,Y,정할 수 | 순수할 수,kJinmeiyoKanji,,,
 N1,36,717,猿,猨,엇갈림,,인명용,Y,猿과 同字 원,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N1,36,718,弦,絃,엇갈림,,교육용,Y,줄풍류 현,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
@@ -423,11 +423,11 @@ N1,45,899,桟,,후보 없음,,,,,,,,hanja.txt에 신자체가 뜻 없이만 있�
 N1,45,900,婿,壻,엇갈림,,인명용,Y,사위 서,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N1,46,918,勅,敕,엇갈림,,인명용,Y,경계할 칙 | 다스릴 칙 | 삼갈 칙 | 바를 칙 | 칙서 칙 | 기릴 칙 | 신칙할 칙,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N1,47,922,楼,樓,엇갈림,,교육용,Y,다락 루 | 다락 누,kTraditionalVariant,,,
-N1,47,931,錬,鍊,일치,Y,교육용,Y,불릴 련 | 쇠불릴 련 | 불린 쇠 련 연 | 단련할 련 연 | 쇠불릴 연,kJinmeiyoKanji,,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
+N1,47,931,錬,鍊,일치,Y,교육용,Y,불릴 련 | 쇠불릴 련 | 불린 쇠 련 | 단련할 련 | 쇠불릴 연,kJinmeiyoKanji,,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N1,47,940,蚕,蠶,엇갈림,,인명용,Y,누에 잠,"kSemanticVariant, kSemanticVariant(역), kTraditionalVariant",,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N1,48,949,蛮,蠻,엇갈림,,인명용,Y,오랑캐 만,kTraditionalVariant,,,
 N1,48,951,壱,,후보 없음,,,,,,,,hanja.txt에 신자체가 뜻 없이만 있음. 정자체를 직접 확인 필요
-N1,48,952,瑠,琉,엇갈림,,인명용,Y,유리 류 | 유리돌 류 | 유리돌 류 유 | 나라이름 류 유,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
+N1,48,952,瑠,琉,엇갈림,,인명용,Y,유리 류 | 유리돌 류 | 나라이름 류,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N1,48,960,倹,儉,일치,Y,교육용,Y,검소할 검 | 흉년들 검 | 적을 검 | 가난할 검,kJinmeiyoKanji,,,
 N1,49,968,弐,,후보 없음,,,,,,,,hanja.txt에 신자체가 뜻 없이만 있음. 정자체를 직접 확인 필요
 N1,49,971,采,埰,엇갈림,,인명용,Y,영지 채 | 사패땅 채,kTraditionalVariant,인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
@@ -435,7 +435,7 @@ N1,49,971,采,採,엇갈림,,교육용,Y,캘 채,kTraditionalVariant,인명용,Y
 N1,49,975,塑,塐,엇갈림,,인명용,Y,塑와 同字 소,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N1,49,977,箇,個,엇갈림,,교육용,Y,낱 개 | 치우칠 개,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 N1,49,979,謁,謁,엇갈림,Y,,,,kJinmeiyoKanji,교육용,Y,신자체도 한국 교육용 한자(한국도 신자체를 쓸 수 있음) ; 후보가 호환 한자(자형만 다른 같은 글자)
-N1,50,984,瞭,了,엇갈림,,교육용,Y,마칠 료 | 마칠 료 요 | 깨달을 료 요,kTraditionalVariant(역),인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
+N1,50,984,瞭,了,엇갈림,,교육용,Y,마칠 료 | 깨달을 료,kTraditionalVariant(역),인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 보충,1,7,岡,崗,엇갈림,,인명용,Y,岡의 俗字 강 | 산등성이 강,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 보충,1,8,阪,坂,엇갈림,,인명용,Y,언덕 판 | 산비탈 판 | 순나라 서울이름 판,kTraditionalVariant(역),인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 보충,1,10,埼,崎,엇갈림,,인명용,Y,험할 기 | 산길험할 기,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
@@ -458,7 +458,7 @@ N1,50,984,瞭,了,엇갈림,,교육용,Y,마칠 료 | 마칠 료 요 | 깨달을
 보충,6,117,捗,,후보 없음,,,,,,인명용,,hanja.txt에 신자체가 뜻 없이만 있음. 정자체를 직접 확인 필요
 보충,7,121,崖,厓,엇갈림,,인명용,Y,언덕 애 | 물가 애,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 보충,7,132,痩,瘦,일치,Y,인명용,Y,파리할 수 | 가늘 수,kJinmeiyoKanji,,,
-보충,7,137,慄,栗,엇갈림,,교육용,Y,밤나무 률 | 밤 률 율 | 신주 재목 률 율 | 단단할 률 율 | 무서울 률 율 | 공손할 률 율,kTraditionalVariant(역),인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
+보충,7,137,慄,栗,엇갈림,,교육용,Y,밤나무 률 | 밤 률 | 신주 재목 률 | 단단할 률 | 무서울 률 | 공손할 률,kTraditionalVariant(역),인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 보충,7,139,毀,毁,엇갈림,,교육용,Y,毀의 俗字 훼 | 헐 훼,kTraditionalVariant(역),인명용,,
 보충,8,148,遡,泝,엇갈림,,인명용,Y,거슬러 올라갈 소 | 흘러갈 소,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)
 보충,8,148,遡,溯,엇갈림,,인명용,Y,거슬러 올라갈 소,"kSemanticVariant, kSemanticVariant(역)",인명용,Y,신자체도 hanja.txt에 뜻이 있음(한국에서 별개 글자일 수 있음)

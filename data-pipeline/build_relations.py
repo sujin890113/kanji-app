@@ -156,7 +156,7 @@ def main() -> int:
     order = {c: i for i, c in enumerate(ids)}
     groups, phonetic = [], {}
     for comp, members in sorted(by_comp.items(), key=lambda kv: min(order[m] for m in kv[1])):
-        readings = Counter(o for m in members for o in set(by_id[m]["on"]))
+        readings = Counter(o for m in members for o in dict.fromkeys(by_id[m]["on"]))
         if not readings:
             continue
         reading, n = readings.most_common(1)[0]
