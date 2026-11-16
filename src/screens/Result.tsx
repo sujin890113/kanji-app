@@ -1,4 +1,6 @@
+import { useEffect } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router';
+import { feedback } from '../audio/feedback';
 import { ContentGate } from '../components/ContentGate';
 import { Button } from '../components/Button';
 import { Stamp } from '../components/Stamp';
@@ -53,6 +55,11 @@ export function Result() {
 function ResultView({ state }: { state: ResultState }) {
   const navigate = useNavigate();
   const { counts, items } = state;
+  // 장 완료 : 도장이 찍히며 진동 2회·효과음 (SPEC 5.6)
+  const chapterDone = state.completed.length > 0;
+  useEffect(() => {
+    if (chapterDone) feedback('complete');
+  }, [chapterDone]);
   const total = items.length;
   const seconds = Math.max(0, Math.round((state.endedAt - state.startedAt) / 1000));
   const studyIds = [...new Set(items.filter((i) => i.rating === 'study' && !i.reverse).map((i) => i.id))];

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router';
 import { ContentGate } from '../components/ContentGate';
 import { GradeButtons } from '../components/GradeButtons';
@@ -28,6 +28,8 @@ import {
 import { buildSrsQueue, dailyRoom } from '../domain/srs';
 import { planReverse, reverseCandidates, reversePrompt, type ReverseItem } from '../domain/reverse';
 import { WritingPad, type Point } from '../components/Strokes';
+import { useCardMotion, type SwipeHint } from '../components/useCardMotion';
+import { feedback } from '../audio/feedback';
 import { useStrokes } from '../content/lazyData';
 import type { CardState, ChapterProgress, Rating } from '../domain/types';
 import {
@@ -257,6 +259,36 @@ function StudySession({ content, scope, retryIds }: Props) {
   }, [kanji?.id, revItem?.id, readingOpen]);
   useEffect(() => stopSpeaking, [kanji?.id, revItem?.id]);
 
+  // 카드 움직임 (SPEC 5.6) : 판정 시 나가기, 스와이프 판정. 카드가 바뀔 때마다 나타나기
+  const motion = useCardMotion({
+    swipe: settings.swipe_enabled && (!revItem || revOpen),
+    threeGrade: settings.f6_three_grade,
+    cardKey: `${items.length}:${revItem ? `r${revItem.id}` : (currentId ?? '')}`,
+    onSwipe: (r) => void judge(r),
+  });
+  const animating = useRef(false);
+  /** 판정 : 피드백 → 카드 나가기 → 기록 (버튼·스와이프 공통) */
+  async function judge(rating: Rating) {
+    if (busy || animating.current) return;
+    animating.current = true;
+    feedback(rating);
+    try {
+      await motion.exit(rating);
+      if (revItem) await gradeReverse(revItem, rating);
+      else await grade(rating);
+    } catch (err) {
+      motion.reset();
+      throw err;
+    } finally {
+      animating.current = false;
+    }
+  }
+  // 답이 카드 높이를 넘을 때만 카드 안 세로 스크롤을 허용한다 (그 밖에서는 위로 끌기가 애매함 판정)
+  useLayoutEffect(() => {
+    const body = motion.ref.current?.querySelector<HTMLElement>('[data-card-body]');
+    if (body) body.dataset.overflow = String(body.scrollHeight > body.clientHeight + 1);
+  });
+
   const resetForNextCard = () => {
     setReveal(initialReveal(settings.auto_reveal));
     setRevOpen(false);
@@ -334,7 +366,6 @@ function StudySession({ content, scope, retryIds }: Props) {
         chapter: mode === 'retry' || !home ? null : { level: home.level, chapter: home.chapter, ids: home.ids, order: settings.card_order },
         requeueAt,
       });
-      if (settings.haptics) navigator.vibrate?.(15);
 
       const ui: UiSnapshot = {
         progress,
@@ -405,7 +436,6 @@ function StudySession({ content, scope, retryIds }: Props) {
         scheduler: mode === 'srs' ? { kind: 'srs', options: { retention: settings.srs_retention, fuzz: true } } : { kind: 'round' },
         chapter: null,
       });
-      if (settings.haptics) navigator.vibrate?.(15);
       const ui: UiSnapshot = {
         progress,
         queue,
@@ -544,6 +574,7 @@ function StudySession({ content, scope, retryIds }: Props) {
             lines={revLines}
             onLines={setRevLines}
             settings={settings}
+            motion={motion}
           />
           <footer className={styles.footer}>
             {revOpen ? (
@@ -551,7 +582,7 @@ function StudySession({ content, scope, retryIds }: Props) {
                 threeGrade={settings.f6_three_grade}
                 longPress={settings.longpress_graduate}
                 disabled={busy}
-                onGrade={(r) => void gradeReverse(revItem, r)}
+                onGrade={(r) => void judge(r)}
               />
             ) : (
               <Button tone="primary" block className={styles.revealButton} onClick={() => setRevOpen(true)}>
@@ -564,10 +595,13 @@ function StudySession({ content, scope, retryIds }: Props) {
         kanji && (
           <>
           <section
-            className={styles.card}
+            ref={motion.ref}
+            className={`${styles.card} ${settings.swipe_enabled ? styles.swipeable : ''}`}
             onClick={() => setReveal(anyOpen && reveal.ko && reveal.reading ? { ko: false, reading: false } : { ko: true, reading: true })}
             aria-label="학습 카드. 누르면 전부 펼치거나 접습니다"
+            {...motion.handlers}
           >
+            <SwipeEdge hint={motion.hint} />
             {pending.has(kanji.id) && <span className={styles.againTag}>다시</span>}
             <button
               type="button"
@@ -582,7 +616,7 @@ function StudySession({ content, scope, retryIds }: Props) {
               <StarIcon filled={cards.get(kanji.id)?.favorite ?? false} />
             </button>
 
-            <div className={styles.cardBody}>
+            <div className={styles.cardBody} data-card-body>
               <div className={styles.kanjiRow}>
                 <div className={`${styles.kanji} ${anyOpen ? styles.kanjiSmall : ''}`} lang="ja">
                   {kanji.id}
@@ -617,7 +651,7 @@ function StudySession({ content, scope, retryIds }: Props) {
               threeGrade={settings.f6_three_grade}
               longPress={settings.longpress_graduate}
               disabled={busy}
-              onGrade={(r) => void grade(r)}
+              onGrade={(r) => void judge(r)}
             />
           </footer>
           </>
@@ -760,6 +794,7 @@ function ReverseCard({
   lines,
   onLines,
   settings,
+  motion,
 }: {
   kanji: Kanji;
   item: ReverseItem;
@@ -768,18 +803,22 @@ function ReverseCard({
   lines: Point[][];
   onLines: (lines: Point[][]) => void;
   settings: Settings;
+  motion: ReturnType<typeof useCardMotion>;
 }) {
   const strokes = useStrokes(kanji.id);
   const prompt = reversePrompt(kanji, item.type);
   const write = settings.f10_stroke;
   return (
     <section
-      className={`${styles.card} ${styles.reverseCard}`}
+      ref={motion.ref}
+      className={`${styles.card} ${styles.reverseCard} ${settings.swipe_enabled && open ? styles.swipeable : ''}`}
       onClick={() => !open && onOpen()}
       aria-label={open ? '역방향 카드' : '역방향 카드. 누르면 한자를 펼칩니다'}
+      {...motion.handlers}
     >
+      <SwipeEdge hint={motion.hint} />
       <span className={styles.reverseLabel}>한자 떠올리기</span>
-      <div className={styles.cardBody}>
+      <div className={styles.cardBody} data-card-body>
         <p className={styles.reverseHint}>{item.type === 'ko' ? '한국 훈음' : '읽기'}</p>
         <p
           className={`${styles.reversePrompt} ${item.type === 'ko' ? styles.reverseKo : styles.reverseKana}`}
@@ -823,6 +862,23 @@ function ReverseCard({
         )}
       </div>
     </section>
+  );
+}
+
+const HINT_LABEL: Record<Rating, string> = { study: '공부하겠음', vague: '애매함', know: '알고있음', graduate: '졸업' };
+
+/** 끄는 동안·판정할 때 카드 가장자리의 판정 색과 라벨. 졸업이면 작은 도장 */
+function SwipeEdge({ hint }: { hint: SwipeHint | null }) {
+  if (!hint) return null;
+  return (
+    <div className={styles.swipeEdge} data-rating={hint.rating} style={{ opacity: hint.progress }} aria-hidden="true">
+      <span className={styles.swipeLabel}>{HINT_LABEL[hint.rating]}</span>
+      {hint.rating === 'graduate' && (
+        <span className={styles.swipeStamp}>
+          <Stamp animate />
+        </span>
+      )}
+    </div>
   );
 }
 

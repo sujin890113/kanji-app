@@ -32,8 +32,7 @@ export function GradeButtons({ threeGrade, longPress, disabled, onGrade }: Props
     timer.current = window.setTimeout(() => {
       fired.current = true;
       clear();
-      navigator.vibrate?.(80);
-      onGrade('graduate');
+      onGrade('graduate'); // 진동·소리는 판정 쪽(feedback)에서
     }, HOLD_MS);
   };
 
@@ -67,7 +66,12 @@ export function GradeButtons({ threeGrade, longPress, disabled, onGrade }: Props
         onClick={onKnowClick}
         aria-description={longPress ? '길게 누르면 졸업' : undefined}
       >
-        <span className={styles.gauge} aria-hidden="true" />
+        {longPress && (
+          <svg className={styles.gauge} viewBox="0 0 24 24" aria-hidden="true">
+            <circle className={styles.gaugeTrack} cx="12" cy="12" r="9" />
+            <circle className={styles.gaugeFill} cx="12" cy="12" r="9" pathLength={100} />
+          </svg>
+        )}
         <span className={styles.label}>알고있음</span>
         {longPress && <span className={styles.hint}>길게 누르면 졸업</span>}
       </button>

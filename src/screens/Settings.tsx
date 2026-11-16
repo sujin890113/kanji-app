@@ -25,8 +25,6 @@ import styles from './Settings.module.css';
 
 /** 아직 동작을 연결하지 않은 항목 : 해당 단계에서 연결한다 (값은 지금도 저장된다) */
 const LATER: Partial<Record<SettingKey, string>> = {
-  swipe_enabled: 'M7',
-  sound_fx: 'M7',
 };
 
 const RESET_PHRASE = '전체 초기화';
