@@ -60,9 +60,18 @@ function StudyRoute({ content }: { content: Content }) {
   const location = useLocation();
   const [settings] = useSettings();
   const today = location.pathname.endsWith('/today');
+  const list = location.pathname.endsWith('/list');
+  const routeState = location.state as { retryIds?: string[]; label?: string } | null;
+  const retryIds = routeState?.retryIds;
   if (today && !settings.f5_srs) return <Navigate replace to="/study" />;
+  // 고른 한자만 학습 (통계의 [이 한자만 학습]) : 목록 없이 들어오면 통계로
+  if (list) {
+    if (!retryIds?.length) return <Navigate replace to="/stats" />;
+    return (
+      <StudySession key={location.key} content={content} scope={{ kind: 'list', label: routeState?.label ?? '고른 한자' }} retryIds={retryIds} />
+    );
+  }
   if (!today && (level === undefined || chapter === undefined)) return <ResolveCurrent content={content} />;
-  const retryIds = (location.state as { retryIds?: string[] } | null)?.retryIds;
   return (
     <StudySession
       key={location.key}
@@ -82,7 +91,7 @@ function ResolveCurrent({ content }: { content: Content }) {
   return <Navigate replace to={cur ? `/study/${cur.level}/${cur.chapter}` : '/levels'} />;
 }
 
-type Scope = { kind: 'today' } | { kind: 'chapter'; level: number; chapter: number };
+type Scope = { kind: 'today' } | { kind: 'chapter'; level: number; chapter: number } | { kind: 'list'; label: string };
 type Mode = 'round' | 'retry' | 'srs';
 type RevealState = { ko: boolean; reading: boolean };
 
@@ -102,7 +111,7 @@ interface UiSnapshot {
 interface Props {
   content: Content;
   scope: Scope;
-  /** [공부하겠음만 다시] 연습 : 회독 진행과 별도로 이 한자들만 */
+  /** [공부하겠음만 다시] 연습, 또는 고른 한자 학습(scope list) : 회독 진행과 별도로 이 한자들만 */
   retryIds?: string[];
 }
 
@@ -150,7 +159,13 @@ function StudySession({ content, scope, retryIds }: Props) {
         if (!cancelled) setBlocked(true);
         return;
       }
-      if (mode === 'srs') {
+      if (scope.kind === 'list' && retryIds) {
+        // 고른 한자 : 주어진 순서(자주 틀린 순) 또는 섞어서
+        const valid = [...new Set(retryIds)].filter((id) => content.byId.has(id));
+        if (cancelled) return;
+        setCards(allCards);
+        setQueue(settings.card_order === 'shuffle' ? shuffle(valid, Math.random) : valid);
+      } else if (mode === 'srs') {
         const q = srsQueue(content, settings, summary.open, summary.completed, allCards, today, ch);
         if (cancelled) return;
         setCards(allCards);
@@ -202,7 +217,7 @@ function StudySession({ content, scope, retryIds }: Props) {
     if (sessionId.current !== null) await finishSession(sessionId.current, final.counts);
     const last = final.completed.at(-1);
     const next = last ? nextChapter(content.outline, last.level, last.chapter) : null;
-    const here = ch ? `/study/${ch.level}/${ch.chapter}` : '/study/today';
+    const here = ch ? `/study/${ch.level}/${ch.chapter}` : scope.kind === 'list' ? '/stats' : '/study/today';
     const roundNo = p ? (roundCompleted ? p.pass_count : roundNumber(p)) : 0;
     const state: ResultState = {
       where: whereLabel(mode, scope, roundNo),
@@ -215,8 +230,9 @@ function StudySession({ content, scope, retryIds }: Props) {
       roundNo,
       completed: final.completed,
       continueTo: mode === 'srs' ? here : next ? `/study/${next.level}/${next.chapter}` : here,
-      continueLabel: mode !== 'srs' && last && next ? `계속하기 (${levelName(next.level)} ${next.chapter}장)` : '계속하기',
-      retryTo: mode !== 'srs' && ch ? here : null,
+      continueLabel:
+        scope.kind === 'list' ? '통계로' : mode !== 'srs' && last && next ? `계속하기 (${levelName(next.level)} ${next.chapter}장)` : '계속하기',
+      retryTo: scope.kind === 'list' ? '/study/list' : mode !== 'srs' && ch ? here : null,
     };
     navigate('/result', { replace: true, state });
   };
@@ -258,7 +274,8 @@ function StudySession({ content, scope, retryIds }: Props) {
         rating,
         elapsedMs: Date.now() - shownAt.current,
         sessionId: sessionId.current,
-        scheduler: mode === 'srs' ? { kind: 'srs', options: { retention: settings.srs_retention, fuzz: true } } : { kind: 'round' },
+        // 고른 한자 학습은 지금의 복습 방식(F5)을 따른다
+        scheduler: mode === 'srs' || (scope.kind === 'list' && settings.f5_srs) ? { kind: 'srs', options: { retention: settings.srs_retention, fuzz: true } } : { kind: 'round' },
         chapter: mode === 'retry' || !home ? null : { level: home.level, chapter: home.chapter, ids: home.ids, order: settings.card_order },
         requeueAt,
       });
@@ -333,7 +350,7 @@ function StudySession({ content, scope, retryIds }: Props) {
 
   const exit = async () => {
     setConfirmExit(false);
-    if (items.length === 0) navigate(scope.kind === 'today' ? '/' : '/levels');
+    if (items.length === 0) navigate(scope.kind === 'today' ? '/' : scope.kind === 'list' ? '/stats' : '/levels');
     else await finish({ counts, items, completed }, false, mode === 'round' ? progress : null);
   };
 
@@ -358,7 +375,8 @@ function StudySession({ content, scope, retryIds }: Props) {
   } else {
     done = items.length;
     total = items.length + queue.length;
-    if (mode === 'retry' && ch) title = `${levelName(ch.level)} · ${ch.chapter}장 · 다시`;
+    if (scope.kind === 'list') title = scope.label;
+    else if (mode === 'retry' && ch) title = `${levelName(ch.level)} · ${ch.chapter}장 · 다시`;
     else {
       const isNew = (cards.get(kanji.id)?.status ?? 'new') === 'new';
       const home = content.chapterOf.get(kanji.id);
@@ -518,6 +536,7 @@ function srsQueue(
 /** 결과 화면 머리 표시. roundNo : 이번 세션의 회독 번호 (회독 방식) */
 function whereLabel(mode: Mode, scope: Scope, roundNo: number): string {
   if (scope.kind === 'today') return '오늘 학습';
+  if (scope.kind === 'list') return scope.label;
   const at = `${levelName(scope.level)} · ${scope.chapter}장`;
   if (mode === 'retry') return `${at} · 공부하겠음 다시`;
   if (mode === 'srs') return `${at} · 간격 반복`;

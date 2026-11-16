@@ -249,3 +249,9 @@ export async function getKanjiLogs(kanjiId: string, limit: number): Promise<Revi
     .sort((a, b) => b.ts - a.ts)
     .slice(0, limit);
 }
+
+/** 정방향 판정 이력 전체 (기록 순서). 격자의 '애매' 표시와 통계에 쓴다 */
+export async function getForwardLogs(): Promise<ReviewLogRow[]> {
+  const rows = await db.review_logs.orderBy('id').toArray();
+  return rows.filter((r) => r.direction === FORWARD);
+}
