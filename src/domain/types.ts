@@ -27,7 +27,15 @@ export interface CardState {
   /** '공부하겠음'을 받은 횟수 (F8 자동 펼침 기준) */
   study_marks: number;
   favorite: boolean;
+  /** FSRS 카드 상태 (0 New, 1 Learning, 2 Review, 3 Relearning). 간격 반복(F5)에서만 바뀐다 */
+  fsrs_state: FsrsState;
+  /** FSRS 예정 간격(일) */
+  scheduled_days: number;
+  /** FSRS 학습 단계 위치 */
+  learning_steps: number;
 }
+
+export type FsrsState = 0 | 1 | 2 | 3;
 
 /** 장별 진행 상태. 회독 도중 이어하기를 위해 현재 회독의 남은 한자 순서를 함께 저장한다. */
 export interface ChapterProgress {

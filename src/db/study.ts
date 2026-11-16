@@ -3,9 +3,12 @@
  * 앱이 어느 순간에 닫혀도 카드 상태·회독 진행·판정 이력이 서로 어긋나지 않게 한다.
  */
 
+import Dexie from 'dexie';
 import { db, type ChapterRow, type DailyRow, type ReviewLogRow } from './database';
 import { advanceRound, gradeCard, initProgress, newCard, resetCard, settleProgress } from '../domain/scheduler';
 import { capElapsed, dateKey } from '../domain/session';
+import { advanceSrsChapter, gradeSrs, type SrsOptions } from '../domain/srs';
+import { rechunkProgress, type ChapterIds } from '../domain/progress';
 import type { SessionCounts } from '../domain/session';
 import type { CardOrder, CardState, ChapterProgress, Rating } from '../domain/types';
 
@@ -53,6 +56,7 @@ export async function openChapter(
   });
 }
 
+/** 세션 시작. 오늘 학습(여러 장에 걸친 간격 반복 세션)은 level -1, chapter 0으로 기록한다 */
 export async function startSession(level: number, chapter: number): Promise<number> {
   return (await db.sessions.add({ start: Date.now(), end: null, level, chapter, counts: { study: 0, vague: 0, know: 0 } })) as number;
 }
@@ -65,7 +69,9 @@ export async function finishSession(id: number, counts: SessionCounts): Promise<
 export interface UndoSnapshot {
   logId: number;
   cardBefore: CardState | undefined;
-  progressBefore: ChapterProgress | null;
+  /** 판정 전 장 진행 기록. undefined면 기록이 없었음(되돌릴 때 지움) */
+  progressBefore: ChapterProgress | undefined;
+  progressKey: [number, number] | null;
   dailyBefore: DailyRow | undefined;
 }
 
@@ -74,8 +80,12 @@ export interface GradeInput {
   rating: Rating;
   elapsedMs: number;
   sessionId: number;
-  /** 회독 진행에 반영할 때 (공부하겠음만 다시 연습에서는 null) */
-  round: { progress: ChapterProgress; ids: readonly string[]; order: CardOrder } | null;
+  /** 카드 판정 방식 : 회독(F5 끔) 또는 간격 반복(F5 켬) */
+  scheduler: { kind: 'round' } | { kind: 'srs'; options: SrsOptions };
+  /** 장 진행에 반영할 장 ([공부하겠음만 다시] 연습에서는 null) */
+  chapter: { level: number; chapter: number; ids: readonly string[]; order: CardOrder } | null;
+  /** 회독 방식의 애매함 : 이 한자를 회독 목록의 이 위치로 옮긴다 (같은 세션 뒤쪽에 한 번 더) */
+  requeueAt?: number;
 }
 
 export interface GradeOutput {
@@ -91,7 +101,11 @@ export async function recordGrade(input: GradeInput): Promise<GradeOutput> {
   const elapsed = capElapsed(input.elapsedMs);
   return db.transaction('rw', [db.cards, db.chapters, db.review_logs, db.daily], async () => {
     const cardBefore = await db.cards.get([input.kanjiId, FORWARD]);
-    const card = gradeCard(cardBefore ?? newCard(input.kanjiId), input.rating, now);
+    const start = cardBefore ?? newCard(input.kanjiId);
+    const card =
+      input.scheduler.kind === 'srs'
+        ? gradeSrs(start, input.rating, now, input.scheduler.options)
+        : gradeCard(start, input.rating, now);
     await db.cards.put(card);
 
     const logId = (await db.review_logs.add({
@@ -115,19 +129,34 @@ export async function recordGrade(input: GradeInput): Promise<GradeOutput> {
     let progress: ChapterProgress | null = null;
     let roundCompleted = false;
     let chapterCompleted = false;
-    let progressBefore: ChapterProgress | null = null;
-    if (input.round) {
-      const { ids, order } = input.round;
-      progressBefore = (await db.chapters.get([input.round.progress.level, input.round.progress.chapter])) ?? input.round.progress;
-      const cards = await getCards(ids);
-      const r = advanceRound(progressBefore, input.kanjiId, ids, cards, order, Math.random, now);
-      progress = r.progress;
-      roundCompleted = r.roundCompleted;
-      chapterCompleted = r.chapterCompleted;
-      await db.chapters.put(progress);
+    let progressBefore: ChapterProgress | undefined;
+    let progressKey: [number, number] | null = null;
+    const ch = input.chapter;
+    if (ch) {
+      progressKey = [ch.level, ch.chapter];
+      progressBefore = await db.chapters.get(progressKey);
+      const cards = await getCards(ch.ids);
+      let r: { progress: ChapterProgress; roundCompleted: boolean; chapterCompleted: boolean } | null = null;
+      if (input.scheduler.kind === 'srs') {
+        r = advanceSrsChapter(progressBefore, ch.level, ch.chapter, ch.ids, cards, input.kanjiId, now);
+      } else if (progressBefore) {
+        r = advanceRound(progressBefore, input.kanjiId, ch.ids, cards, ch.order, Math.random, now, input.requeueAt);
+      }
+      if (r) {
+        progress = r.progress;
+        roundCompleted = r.roundCompleted;
+        chapterCompleted = r.chapterCompleted;
+        await db.chapters.put(progress);
+      }
     }
 
-    return { card, progress, roundCompleted, chapterCompleted, undo: { logId, cardBefore, progressBefore, dailyBefore } };
+    return {
+      card,
+      progress,
+      roundCompleted,
+      chapterCompleted,
+      undo: { logId, cardBefore, progressBefore, progressKey, dailyBefore },
+    };
   });
 }
 
@@ -138,6 +167,7 @@ export async function undoGrade(s: UndoSnapshot, kanjiId: string): Promise<void>
     if (s.cardBefore) await db.cards.put(s.cardBefore);
     else await db.cards.delete([kanjiId, FORWARD]);
     if (s.progressBefore) await db.chapters.put(s.progressBefore);
+    else if (s.progressKey) await db.chapters.delete(s.progressKey);
     const key = dateKey(Date.now());
     if (s.dailyBefore) await db.daily.put(s.dailyBefore);
     else await db.daily.delete(key);
@@ -160,5 +190,45 @@ export async function resetChapter(level: number, chapter: number, ids: readonly
     const reset = [...cards.values()].map(resetCard);
     await db.cards.bulkPut(reset);
     await db.chapters.put(initProgress(level, chapter, ids, new Map(), order, Math.random, Date.now()));
+  });
+}
+
+/** 오늘 날짜의 일별 기록 */
+export async function getToday(): Promise<DailyRow | undefined> {
+  return db.daily.get(dateKey(Date.now()));
+}
+
+export async function getAllDaily(): Promise<DailyRow[]> {
+  return db.daily.toArray();
+}
+
+/**
+ * 장 크기 변경 (SPEC 7.3) : 장별 회독 수를 초기화하고, 장 완료는 한자별 학습 상태로 다시 계산한다.
+ * 한자별 학습 상태(cards)는 그대로 둔다.
+ */
+export async function applyChapterSize(chapters: readonly ChapterIds[]): Promise<void> {
+  await db.transaction('rw', db.cards, db.chapters, async () => {
+    const cards = await getAllCards();
+    await db.chapters.clear();
+    await db.chapters.bulkPut(rechunkProgress(chapters, cards, Date.now()));
+  });
+}
+
+/** 급수별 초기화 (SPEC 7.5) : 그 급수 한자의 학습 상태와 장 진행만 지운다 (즐겨찾기는 유지) */
+export async function resetLevel(level: number, ids: readonly string[]): Promise<void> {
+  await db.transaction('rw', db.cards, db.chapters, async () => {
+    const idSet = new Set(ids);
+    const rows = await db.cards.filter((c) => idSet.has(c.kanji_id)).toArray();
+    const keep = rows.filter((c) => c.favorite).map(resetCard);
+    await db.cards.bulkDelete(rows.map((c) => [c.kanji_id, c.direction] as [string, typeof c.direction]));
+    await db.cards.bulkPut(keep);
+    await db.chapters.where('[level+chapter]').between([level, Dexie.minKey], [level, Dexie.maxKey]).delete();
+  });
+}
+
+/** 전체 초기화 (SPEC 7.5) : 학습 기록을 모두 지운다. 설정은 남긴다 */
+export async function resetAll(): Promise<void> {
+  await db.transaction('rw', [db.cards, db.chapters, db.review_logs, db.sessions, db.daily], async () => {
+    await Promise.all([db.cards.clear(), db.chapters.clear(), db.review_logs.clear(), db.sessions.clear(), db.daily.clear()]);
   });
 }

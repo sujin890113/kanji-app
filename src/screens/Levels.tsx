@@ -9,11 +9,11 @@ import { ProgressBar } from '../components/ProgressBar';
 import { LockIcon } from '../components/icons';
 import { STATUS_COLOR, STATUS_LABEL } from '../components/status';
 import { levelName, type Chapter, type Content } from '../content/content';
-import { chapterKey, currentChapter, unlockedChapters } from '../domain/progress';
+import { chapterKey, isKnownOnce } from '../domain/progress';
 import { roundDone, roundNumber } from '../domain/scheduler';
 import type { CardState, ChapterProgress } from '../domain/types';
-import { getAllCards, getAllChapters, resetChapter } from '../db/study';
-import { useLive } from '../db/useLive';
+import { resetChapter } from '../db/study';
+import { useProgressView } from '../db/useProgress';
 import { useSettings } from '../settings/useSettings';
 import styles from './Levels.module.css';
 
@@ -29,29 +29,25 @@ export function Levels() {
 function LevelMap({ content }: { content: Content }) {
   const [settings] = useSettings();
   const navigate = useNavigate();
-  const rows = useLive(getAllChapters);
-  const cards = useLive(getAllCards);
+  const view = useProgressView(content);
   const [selected, setSelected] = useState<Chapter | null>(null);
   const currentRef = useRef<HTMLButtonElement>(null);
 
   const progressByKey = useMemo(
-    () => new Map((rows ?? []).map((r) => [chapterKey(r.level, r.chapter), r])),
-    [rows],
+    () => new Map((view?.rows ?? []).map((r) => [chapterKey(r.level, r.chapter), r])),
+    [view],
   );
-  const completed = useMemo(
-    () => new Set((rows ?? []).filter((r) => r.completed_at !== null).map((r) => chapterKey(r.level, r.chapter))),
-    [rows],
-  );
-  const open = useMemo(() => unlockedChapters(content.outline, completed, settings.level_lock), [content, completed, settings.level_lock]);
-  const current = useMemo(() => currentChapter(content.outline, completed, settings.level_lock), [content, completed, settings.level_lock]);
 
   // 화면에 들어오면 현재 학습 중인 장으로 스크롤
-  const ready = rows !== undefined && cards !== undefined;
+  const ready = view !== undefined;
   useEffect(() => {
     if (ready) currentRef.current?.scrollIntoView({ block: 'center' });
   }, [ready]);
 
-  if (!ready) return <p className={styles.loading}>기록을 불러오는 중…</p>;
+  if (!view) return <p className={styles.loading}>기록을 불러오는 중…</p>;
+  // 장 완료·열림은 진행 기록과 한자별 학습 상태로 계산한다 (장 크기를 바꿔도 학습한 범위는 잠기지 않음)
+  const { cards } = view;
+  const { completed, open, current, touched } = view.summary;
 
   return (
     <>
@@ -73,6 +69,7 @@ function LevelMap({ content }: { content: Content }) {
               {lv.chapters.map((ch) => {
                 const key = chapterKey(ch.level, ch.chapter);
                 const p = progressByKey.get(key);
+                const done = completed.has(key);
                 const locked = !open.has(key);
                 const isCurrent = current?.level === ch.level && current.chapter === ch.chapter;
                 return (
@@ -82,11 +79,11 @@ function LevelMap({ content }: { content: Content }) {
                       ref={isCurrent ? currentRef : undefined}
                       className={[styles.cell, locked ? styles.locked : '', isCurrent ? styles.current : ''].join(' ')}
                       onClick={() => setSelected(ch)}
-                      aria-label={`${levelName(ch.level)} ${ch.chapter}장${locked ? ', 잠김' : ''}${p?.completed_at ? ', 완료' : ''}`}
+                      aria-label={`${levelName(ch.level)} ${ch.chapter}장${locked ? ', 잠김' : ''}${done ? ', 완료' : ''}`}
                     >
                       <span className={styles.cellNo}>{ch.chapter}장</span>
-                      <span className={styles.cellSub}>{chapterSub(p)}</span>
-                      {p?.completed_at ? (
+                      <span className={styles.cellSub}>{chapterSub(p, done, touched.has(key))}</span>
+                      {done ? (
                         <span className={styles.cellMark}>
                           <Stamp />
                         </span>
@@ -107,6 +104,8 @@ function LevelMap({ content }: { content: Content }) {
           chapter={selected}
           content={content}
           progress={progressByKey.get(chapterKey(selected.level, selected.chapter))}
+          done={completed.has(chapterKey(selected.level, selected.chapter))}
+          srs={settings.f5_srs}
           cards={cards}
           locked={!open.has(chapterKey(selected.level, selected.chapter))}
           onClose={() => setSelected(null)}
@@ -121,18 +120,23 @@ function LevelMap({ content }: { content: Content }) {
   );
 }
 
-const isKnown = (c: CardState | undefined) => c?.status === 'review' || c?.status === 'graduated';
+/** 진도 : '알고있음'을 1회 이상 받았거나 졸업한 한자 (홈의 전체 진도와 같은 기준) */
+const isKnown = isKnownOnce;
 
-function chapterSub(p: ChapterProgress | undefined): string {
-  if (!p) return '미학습';
-  if (p.completed_at) return `${p.pass_count}회독`;
-  return `${roundNumber(p)}회독 중`;
+function chapterSub(p: ChapterProgress | undefined, done: boolean, touched: boolean): string {
+  if (done) return p && p.pass_count > 0 ? `${p.pass_count}회독` : '완료';
+  if (p && p.round_size > 0) return `${roundNumber(p)}회독 중`;
+  return touched ? '학습 중' : '미학습';
 }
 
 interface SheetProps {
   chapter: Chapter;
   content: Content;
   progress: ChapterProgress | undefined;
+  /** 완료한 장 (진행 기록 또는 한자별 학습 상태 기준) */
+  done: boolean;
+  /** 간격 반복(F5) 켬 */
+  srs: boolean;
   cards: Map<string, CardState>;
   locked: boolean;
   onClose: () => void;
@@ -140,13 +144,13 @@ interface SheetProps {
   onReset: () => Promise<void>;
 }
 
-function ChapterSheet({ chapter, content, progress, cards, locked, onClose, onStudy, onReset }: SheetProps) {
+function ChapterSheet({ chapter, content, progress, done, srs, cards, locked, onClose, onStudy, onReset }: SheetProps) {
   const [confirmReset, setConfirmReset] = useState(false);
   const remaining = chapter.ids.filter((id) => !isKnown(cards.get(id))).length;
 
-  let status = '아직 시작하지 않은 장입니다.';
-  if (progress?.completed_at) status = `완료 · ${progress.pass_count}회독`;
-  else if (progress) status = `${roundNumber(progress)}회독 · ${roundDone(progress)}/${progress.round_size} · 남은 한자 ${remaining}자`;
+  let status = remaining < chapter.ids.length ? `학습 중 · 남은 한자 ${remaining}자` : '아직 시작하지 않은 장입니다.';
+  if (done) status = progress && progress.pass_count > 0 ? `완료 · ${progress.pass_count}회독` : '완료';
+  else if (progress && progress.round_size > 0) status = `${roundNumber(progress)}회독 · ${roundDone(progress)}/${progress.round_size} · 남은 한자 ${remaining}자`;
 
   return (
     <Sheet open title={`${levelName(chapter.level)} · ${chapter.chapter}장`} onClose={onClose}>
@@ -175,12 +179,13 @@ function ChapterSheet({ chapter, content, progress, cards, locked, onClose, onSt
         </Button>
       ) : (
         <div className={styles.sheetActions}>
-          {!progress?.completed_at && (
+          {/* 회독 방식은 완료한 장을 다시 열지 않는다. 간격 반복은 그 장의 복습을 할 수 있다 */}
+          {(!done || srs) && (
             <Button tone="primary" block onClick={onStudy}>
-              {progress ? '이어서 학습' : '이 장 학습'}
+              {srs ? (done ? '이 장 복습' : '이 장 학습') : progress ? '이어서 학습' : '이 장 학습'}
             </Button>
           )}
-          {progress &&
+          {(progress || done) &&
             (confirmReset ? (
               <Button block onClick={() => void onReset()}>
                 학습 상태를 지우고 처음부터 (확인)

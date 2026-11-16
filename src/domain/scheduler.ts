@@ -3,6 +3,7 @@
  *
  * | 판정 | 카드 상태 | 회독 |
  * | 공부하겠음 | learning | 이번 회독에서 빠지고 다음 회독에 다시 나옴 |
+ * | 애매함 (F6) | learning | 같은 세션 뒤쪽에 한 번 더 나오고, 다음 회독에도 나옴 |
  * | 알고있음 | review | 다음 회독부터 제외 |
  * | 길게 누르기 | graduated | 어디서도 더 출제하지 않음 |
  *
@@ -10,6 +11,7 @@
  * 남은 한자만으로 다음 회독을 시작한다. 남은 한자가 0이면 장 완료.
  */
 
+import { requeue } from './session';
 import type { CardOrder, CardState, ChapterProgress, Direction, Rating, Rng } from './types';
 
 export function newCard(kanji_id: string, direction: Direction = 'forward'): CardState {
@@ -26,6 +28,9 @@ export function newCard(kanji_id: string, direction: Direction = 'forward'): Car
     pass_count: 0,
     study_marks: 0,
     favorite: false,
+    fsrs_state: 0,
+    scheduled_days: 0,
+    learning_steps: 0,
   };
 }
 
@@ -136,7 +141,10 @@ export function settleProgress(
   };
 }
 
-/** 회독 중 한 한자를 판정한 뒤의 진행 상태 */
+/**
+ * 회독 중 한 한자를 판정한 뒤의 진행 상태.
+ * requeueAt을 주면 그 한자를 빼지 않고 회독 목록의 그 위치로 옮긴다 (애매함 : 같은 세션 뒤쪽에 한 번 더).
+ */
 export function advanceRound(
   progress: ChapterProgress,
   gradedId: string,
@@ -145,9 +153,13 @@ export function advanceRound(
   order: CardOrder,
   rng: Rng,
   now: number,
+  requeueAt?: number,
 ): SettleResult {
-  const removed = { ...progress, round_queue: progress.round_queue.filter((id) => id !== gradedId) };
-  return settleProgress(removed, ids, cardsAfter, order, rng, now);
+  const round_queue =
+    requeueAt === undefined
+      ? progress.round_queue.filter((id) => id !== gradedId)
+      : requeue(progress.round_queue, gradedId, requeueAt);
+  return settleProgress({ ...progress, round_queue }, ids, cardsAfter, order, rng, now);
 }
 
 /** 화면에 보여줄 회독 번호 (1회독부터). 완료한 장은 마지막으로 끝낸 회독 */

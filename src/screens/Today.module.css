@@ -1,0 +1,158 @@
+.date {
+  font-size: var(--size-title);
+  font-weight: var(--weight-title);
+}
+
+.muted {
+  color: var(--ink-2);
+}
+
+.streak {
+  color: var(--ink-2);
+  font-weight: 600;
+}
+
+.streakNo {
+  color: var(--shu);
+  font-size: var(--size-title);
+  font-weight: var(--weight-title);
+}
+
+.card,
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.cardTitle {
+  font-weight: 700;
+}
+
+.preview {
+  color: var(--ink-2);
+  font-family: var(--font-ja);
+  font-size: var(--size-ja);
+  letter-spacing: 0.2em;
+}
+
+.barRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.barText {
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-variant-numeric: tabular-nums;
+}
+
+.counts {
+  display: flex;
+  gap: var(--space-5);
+  padding: 0 var(--space-1);
+  color: var(--ink-2);
+}
+
+.counts strong {
+  color: var(--ink);
+  font-size: var(--size-title);
+  font-variant-numeric: tabular-nums;
+}
+
+.doneBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.doneText {
+  color: var(--shu);
+  font-size: var(--size-title);
+  font-weight: var(--weight-title);
+}
+
+.blockTitle {
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.blockValue {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--space-2);
+  height: 96px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.week li {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.weekBar {
+  width: 100%;
+  min-height: 2px;
+  border-radius: var(--radius-stamp-s);
+  background: var(--grade-study);
+  opacity: 0.6;
+}
+
+.today .weekBar {
+  opacity: 1;
+}
+
+.weekCount,
+.weekDay {
+  color: var(--ink-2);
+  font-size: var(--size-tiny);
+  font-variant-numeric: tabular-nums;
+}
+
+.today .weekDay {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.levels {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.levels li {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.levelName {
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+}

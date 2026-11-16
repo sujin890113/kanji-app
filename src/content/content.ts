@@ -4,7 +4,7 @@
  */
 
 import { useSyncExternalStore } from 'react';
-import { sortLevels, type LevelOutline } from '../domain/progress';
+import { chunkIds, sortLevels, type LevelOutline } from '../domain/progress';
 
 export interface HunEum {
   hun: string;
@@ -34,6 +34,7 @@ export interface Kanji {
 export interface ContentMeta {
   built_at: string;
   count: number;
+  chapter_size?: number;
   aliases: Record<string, string>;
   sources: { attribution: string; license: string; license_url: string; url: string; version: string }[];
 }
@@ -53,8 +54,16 @@ export interface Level {
 
 export interface Content {
   byId: Map<string, Kanji>;
+  /** 급수별 한자 (급수 안 순번 순서). 장 크기와 상관없음 */
+  levelIds: { level: number; ids: string[] }[];
+  /** 장 크기(chapter_size)에 따라 나눈 급수·장 */
+  chapterSize: number;
   levels: Level[];
   outline: LevelOutline[];
+  /** 한자 → 그 한자가 속한 장 */
+  chapterOf: Map<string, Chapter>;
+  /** 모든 장 (급수 순서, 장 순서) */
+  chapters: Chapter[];
   meta: ContentMeta;
 }
 
@@ -81,24 +90,53 @@ export function getChapter(content: Content, level: number, chapter: number): Ch
 
 function build(list: Kanji[], meta: ContentMeta): Content {
   const byId = new Map(list.map((k) => [k.id, k]));
-  const grouped = new Map<number, Map<number, Kanji[]>>();
+  const grouped = new Map<number, Kanji[]>();
   for (const k of list) {
-    const chapters = grouped.get(k.level) ?? new Map<number, Kanji[]>();
-    const arr = chapters.get(k.chapter) ?? [];
+    const arr = grouped.get(k.level) ?? [];
     arr.push(k);
-    chapters.set(k.chapter, arr);
-    grouped.set(k.level, chapters);
+    grouped.set(k.level, arr);
   }
-  const levels: Level[] = sortLevels(
-    [...grouped.entries()].map(([level, chapters]) => ({
+  // 급수 안 순서 : 빌드 시 장 → 장 안 순번 (빌드 장 크기와 상관없이 전체 순번이 된다)
+  const levelIds = sortLevels(
+    [...grouped.entries()].map(([level, arr]) => ({
       level,
-      count: [...chapters.values()].reduce((n, a) => n + a.length, 0),
-      chapters: [...chapters.entries()]
-        .sort(([a], [b]) => a - b)
-        .map(([chapter, arr]) => ({ level, chapter, ids: arr.sort((a, b) => a.order - b.order).map((k) => k.id) })),
+      ids: arr.sort((a, b) => a.chapter - b.chapter || a.order - b.order).map((k) => k.id),
     })),
   );
-  return { byId, levels, outline: levels.map((l) => ({ level: l.level, chapters: l.chapters.length })), meta };
+  return withChapterSize({ byId, levelIds, meta } as Content, meta.chapter_size ?? 20);
+}
+
+const chunkCache = new WeakMap<object, Map<number, Content>>();
+
+/** 장 크기(chapter_size, SPEC 7.3)에 맞춰 장 경계를 다시 계산한 콘텐츠. 같은 크기는 한 번만 계산한다 */
+export function withChapterSize(content: Content, size: number): Content {
+  if (content.chapterSize === size) return content;
+  const key = content.levelIds;
+  const cache = chunkCache.get(key) ?? new Map<number, Content>();
+  chunkCache.set(key, cache);
+  const hit = cache.get(size);
+  if (hit) return hit;
+
+  const levels: Level[] = content.levelIds.map(({ level, ids }) => ({
+    level,
+    count: ids.length,
+    chapters: chunkIds(ids, size).map((chIds, i) => ({ level, chapter: i + 1, ids: chIds })),
+  }));
+  const chapters = levels.flatMap((l) => l.chapters);
+  const chapterOf = new Map<string, Chapter>();
+  for (const ch of chapters) for (const id of ch.ids) chapterOf.set(id, ch);
+  const next: Content = {
+    byId: content.byId,
+    levelIds: content.levelIds,
+    meta: content.meta,
+    chapterSize: size,
+    levels,
+    outline: levels.map((l) => ({ level: l.level, chapters: l.chapters.length })),
+    chapters,
+    chapterOf,
+  };
+  cache.set(size, next);
+  return next;
 }
 
 export async function loadContent(): Promise<void> {

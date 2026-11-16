@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { useSettings } from './useSettings';
 
 /**
- * 화면 설정(theme, kanji_font)을 <html> 속성에 반영한다.
+ * 화면 설정(theme, kanji_font, kanji_size)을 <html> 속성에 반영한다.
  * 실제 색과 글꼴은 tokens.css가 이 속성을 보고 고른다.
  */
 export function useApplyDisplaySettings() {
-  const [{ theme, kanji_font }] = useSettings();
+  const [{ theme, kanji_font, kanji_size }] = useSettings();
 
   useEffect(() => {
     const root = document.documentElement;
@@ -37,4 +37,10 @@ export function useApplyDisplaySettings() {
     if (kanji_font === 'textbook') delete root.dataset.kanjiFont;
     else root.dataset.kanjiFont = kanji_font;
   }, [kanji_font]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (kanji_size === 'normal') delete root.dataset.kanjiSize;
+    else root.dataset.kanjiSize = kanji_size;
+  }, [kanji_size]);
 }

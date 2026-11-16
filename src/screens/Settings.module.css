@@ -1,0 +1,132 @@
+/* S8 설정 : 묶음(카드) 안에 항목을 줄로 나열 */
+.group {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.groupTitle {
+  padding: var(--space-4) var(--space-4) var(--space-2);
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--line);
+}
+
+.groupTitle + .item {
+  border-top: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.label {
+  font-weight: 600;
+}
+
+.desc {
+  color: var(--ink-2);
+  font-size: var(--size-small);
+}
+
+.later {
+  color: var(--ink-3);
+  font-size: var(--size-small);
+}
+
+/* 기능을 켜면 바로 아래에 펼쳐지는 하위 옵션 */
+.sub {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+  padding: var(--space-3);
+  border-radius: var(--radius-button);
+  background: var(--surface-2);
+}
+
+.info {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding: 0 var(--space-4) var(--space-3);
+}
+
+.info dt {
+  color: var(--ink-2);
+}
+
+.info dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.sources {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.sources li {
+  display: flex;
+  flex-direction: column;
+}
+
+.sources a {
+  color: var(--ai);
+}
+
+.toast {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-button);
+  background: var(--surface-2);
+}
+
+.sheetText {
+  color: var(--ink-2);
+}
+
+.sheetActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.input {
+  min-height: var(--button-min-height);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-button);
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+}

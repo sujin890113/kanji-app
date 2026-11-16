@@ -59,6 +59,22 @@ export const featureDefs = {
 
 export type FeatureKey = keyof typeof featureDefs;
 
+/** 7.1 각 기능 이름 아래 붙이는 한 줄 설명 (SPEC 2.2 '켰을 때 동작') */
+export const featureDescriptions: Record<FeatureKey, string> = {
+  f1_hunum: '답에 한국 훈음, 음독, 훈독을 색을 달리해 한 줄씩 표시',
+  f2_ko_form: '한국 정자체와 자형이 다른 한자에 정자체를 나란히 표시',
+  f3_sound_rule: '한국 음 → 일본 음독 대응 규칙을 한 줄 힌트로 표시',
+  f4_phonetic: '소리 부분이 같은 한자를 칩으로 나열',
+  f5_srs: '판정 결과로 다음 출제일을 계산해 오늘 복습에 자동 편성',
+  f6_three_grade: '판정 버튼에 [애매함] 추가',
+  f7_reverse: '한국 훈음이나 히라가나를 보고 한자를 떠올리는 카드를 섞어 출제',
+  f8_similar: '답에 모양이 닮은 한자를 나란히 표시',
+  f9_words: '한자마다 대표 단어를 읽기·뜻과 함께 표시',
+  f10_stroke: '한자 상세에 획순 애니메이션과 따라 쓰기 제공',
+  f11_tts: '스피커 버튼으로 음독·훈독·단어를 읽어줌',
+  f12_stats: '통계 탭과 홈의 연속 학습일·오늘 목표·전체 진도 표시',
+};
+
 /* ---------- 7.2 하위 옵션 ---------- */
 export const subOptionDefs = {
   srs_new_per_day: sel(
@@ -84,9 +100,9 @@ export const subOptionDefs = {
     [0.8, 0.85, 0.9, 0.95].map((n) => ({ value: n, label: `${Math.round(n * 100)}%` })),
     'f5_srs',
   ),
-  reverse_types: sel(
+  reverse_types: sel<'ko' | 'kana' | 'both'>(
     '출제 유형',
-    'both' as 'ko' | 'kana' | 'both',
+    'both',
     [
       { value: 'ko', label: '한국 훈음 → 한자' },
       { value: 'kana', label: '히라가나 → 한자' },
@@ -107,9 +123,9 @@ export const subOptionDefs = {
     [1, 2, 3].map((n) => ({ value: n, label: `${n}개` })),
     'f9_words',
   ),
-  stroke_speed: sel(
+  stroke_speed: sel<'slow' | 'normal' | 'fast'>(
     '획순 재생 속도',
-    'normal' as 'slow' | 'normal' | 'fast',
+    'normal',
     [
       { value: 'slow', label: '느림' },
       { value: 'normal', label: '보통' },
@@ -119,9 +135,9 @@ export const subOptionDefs = {
   ),
   stroke_numbers: sw('획 번호 표시', true, 'f10_stroke'),
   tts_auto: sw('펼칠 때 자동 재생', false, 'f11_tts'),
-  tts_rate: sel(
+  tts_rate: sel<'slow' | 'normal'>(
     '읽는 속도',
-    'normal' as 'slow' | 'normal',
+    'normal',
     [
       { value: 'slow', label: '느림' },
       { value: 'normal', label: '보통' },

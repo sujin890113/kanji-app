@@ -2,25 +2,29 @@ import { Link, Navigate, useLocation, useNavigate } from 'react-router';
 import { ContentGate } from '../components/ContentGate';
 import { Button } from '../components/Button';
 import { Stamp } from '../components/Stamp';
-import { levelName, type Content } from '../content/content';
-import { nextChapter } from '../domain/progress';
+import { levelName } from '../content/content';
 import type { SessionCounts } from '../domain/session';
 import type { Rating } from '../domain/types';
 import styles from './Result.module.css';
 
 /** 학습 카드 화면이 넘겨주는 세션 결과 */
 export interface ResultState {
-  level: number;
-  chapter: number;
-  mode: 'round' | 'retry';
+  /** 머리 표시 : 'N5 · 1장 · 2회독', '오늘 학습' 등 */
+  where: string;
+  mode: 'round' | 'retry' | 'srs';
   counts: SessionCounts;
   startedAt: number;
   endedAt: number;
   items: { id: string; rating: Rating }[];
   roundCompleted: boolean;
-  chapterCompleted: boolean;
-  /** 이번 세션의 회독 번호 */
+  /** 이번 세션의 회독 번호 (회독 방식) */
   roundNo: number;
+  /** 이번 세션에서 완료한 장 */
+  completed: { level: number; chapter: number }[];
+  continueTo: string;
+  continueLabel: string;
+  /** [공부하겠음만 다시]로 갈 장 주소. 간격 반복에서는 같은 세션 안에서 다시 나오므로 null */
+  retryTo: string | null;
 }
 
 const RATING_COLOR: Record<Rating, string> = {
@@ -42,10 +46,10 @@ export function Result() {
   const location = useLocation();
   const state = location.state as ResultState | null;
   if (!state) return <Navigate replace to="/levels" />;
-  return <ContentGate>{(content) => <ResultView state={state} content={content} />}</ContentGate>;
+  return <ContentGate>{() => <ResultView state={state} />}</ContentGate>;
 }
 
-function ResultView({ state, content }: { state: ResultState; content: Content }) {
+function ResultView({ state }: { state: ResultState }) {
   const navigate = useNavigate();
   const { counts, items } = state;
   const total = items.length;
@@ -53,25 +57,24 @@ function ResultView({ state, content }: { state: ResultState; content: Content }
   const studyIds = [...new Set(items.filter((i) => i.rating === 'study').map((i) => i.id))];
   // 같은 한자를 여러 번 판정했으면 마지막 판정으로 칸을 칠한다
   const last = new Map(items.map((i) => [i.id, i.rating]));
-  const next = nextChapter(content.outline, state.level, state.chapter);
-
-  const continueTo = state.chapterCompleted && next ? `/study/${next.level}/${next.chapter}` : `/study/${state.level}/${state.chapter}`;
 
   return (
     <div className={styles.screen}>
       <header className={styles.header}>
         <p className={styles.where}>
-          {levelName(state.level)} · {state.chapter}장 · {state.mode === 'retry' ? '공부하겠음 다시' : `${state.roundNo}회독`}
+          {state.where}
         </p>
         <h1 className={styles.title}>
           {total}자 · {formatDuration(seconds)}
         </h1>
       </header>
 
-      {state.chapterCompleted ? (
+      {state.completed.length > 0 ? (
         <section className={styles.complete}>
           <Stamp size="large" animate />
-          <p className={styles.completeText}>{state.chapter}장 완료</p>
+          <p className={styles.completeText}>
+            {state.completed.map((c) => `${levelName(c.level)} ${c.chapter}장`).join(', ')} 완료
+          </p>
         </section>
       ) : (
         state.roundCompleted && <p className={styles.note}>{state.roundNo}회독을 마쳤습니다. 남은 한자로 다음 회독이 이어집니다.</p>
@@ -122,16 +125,18 @@ function ResultView({ state, content }: { state: ResultState; content: Content }
       </section>
 
       <footer className={styles.actions}>
-        <Button
-          block
-          tone="study"
-          disabled={studyIds.length === 0}
-          onClick={() => navigate(`/study/${state.level}/${state.chapter}`, { replace: true, state: { retryIds: studyIds } })}
-        >
-          공부하겠음만 다시{studyIds.length ? ` (${studyIds.length})` : ''}
-        </Button>
-        <Button block tone="primary" onClick={() => navigate(continueTo, { replace: true })}>
-          {state.chapterCompleted && next ? `계속하기 (${levelName(next.level)} ${next.chapter}장)` : '계속하기'}
+        {state.retryTo && (
+          <Button
+            block
+            tone="study"
+            disabled={studyIds.length === 0}
+            onClick={() => navigate(state.retryTo!, { replace: true, state: { retryIds: studyIds } })}
+          >
+            공부하겠음만 다시{studyIds.length ? ` (${studyIds.length})` : ''}
+          </Button>
+        )}
+        <Button block tone="primary" onClick={() => navigate(state.continueTo, { replace: true })}>
+          {state.continueLabel}
         </Button>
         <Button block onClick={() => navigate('/', { replace: true })}>
           홈으로

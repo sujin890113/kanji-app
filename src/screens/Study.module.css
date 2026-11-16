@@ -250,3 +250,16 @@
   font-size: var(--size-title);
   font-weight: var(--weight-title);
 }
+
+/* 같은 세션에서 다시 나온 카드 표시 */
+.againTag {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-chip);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+}

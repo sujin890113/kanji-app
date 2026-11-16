@@ -154,6 +154,11 @@
 :root[data-kanji-font='gothic'] {
   --font-kanji: var(--font-kanji-gothic);
 }
+/* 7.4 카드 한자 크기 '크게' */
+:root[data-kanji-size='large'] {
+  --size-kanji-card: 200px;
+  --size-kanji-card-open: 112px;
+}
 
 /* ---------- 5.5 간격·모양 ---------- */
 :root {

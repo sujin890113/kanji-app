@@ -66,6 +66,19 @@ class KanjiDatabase extends Dexie {
       chapters: '[level+chapter]',
       daily: 'date',
     });
+    // M3 : 간격 반복(ts-fsrs)에 필요한 카드 필드 추가. 기존 카드는 'FSRS로 판정한 적 없음'으로 채운다
+    this.version(3)
+      .stores({})
+      .upgrade((tx) =>
+        tx
+          .table('cards')
+          .toCollection()
+          .modify((c: Partial<CardRow>) => {
+            c.fsrs_state ??= 0;
+            c.scheduled_days ??= 0;
+            c.learning_steps ??= 0;
+          }),
+      );
   }
 }
 
