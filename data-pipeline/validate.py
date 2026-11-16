@@ -83,8 +83,41 @@ def main() -> int:
     no_meaning = sum(1 for k in data if not k["meaning_ko"])
     no_freq = meta_k["no_freq"]
 
+    # ---- M4 관계 데이터 (build_relations.py)
+    ids = {k["id"] for k in data}
+    by_id = {k["id"]: k for k in data}
+    rules = read_json(OUT / "sound_rules.json")
+    groups = read_json(OUT / "phonetic_groups.json")
+    rule_ids = {r["id"] for r in rules["rules"]}
+    group_ids = {g_["id"] for g_ in groups}
+    for k in data:
+        c = k["id"]
+        for r in k["rules"]:
+            if r not in rule_ids:
+                errors.append(f"{c} : 없는 음 대응 규칙 {r}")
+        if k["kokuji"] and k["rules"]:
+            errors.append(f"{c} : 일본 고유 한자에 음 대응 규칙이 붙음")
+        if k["phonetic"] and k["phonetic"] not in group_ids:
+            errors.append(f"{c} : 없는 음부 묶음 {k['phonetic']}")
+        if len(k["similar"]) > 3 or c in k["similar"] or not set(k["similar"]) <= ids:
+            errors.append(f"{c} : 유사 한자 이상 {k['similar']}")
+    for g_ in groups:
+        if len(g_["members"]) < 2 or not set(g_["members"]) <= ids:
+            errors.append(f"음부 묶음 {g_['id']} : 구성원 이상 {g_['members']}")
+        for m in g_["members"]:
+            if g_["reading"] not in by_id[m]["on"]:
+                errors.append(f"음부 묶음 {g_['id']} : {m}에 음독 {g_['reading']} 없음")
+    rel = read_json(BUILD / "relations.json")
+    for c in rel["kanjivg_missing"]:
+        pending.append(f"{c} : KanjiVG 자료 없음(음부·유사 한자 계산 안 됨)")
+    with_rules = sum(1 for k in data if k["rules"])
+    with_phon = sum(1 for k in data if k["phonetic"])
+    with_sim = sum(1 for k in data if k["similar"])
+    sim_examples = [k for k in data if k["similar"]][:12]
+    big_groups = sorted(groups, key=lambda g_: -len(g_["members"]))[:8]
+
     report = [
-        "# M1 빌드 보고서",
+        "# 빌드 보고서",
         "",
         f"- 대상 : {'전체' if lv_filter is None else level_name(lv_filter) + '만'} {len(data)}자 (기대 {expected}자)",
         f"- 결과 : {'통과' if not errors else f'실패 ({len(errors)}건)'}",
@@ -126,6 +159,25 @@ def main() -> int:
         f"- 훈 없이 음만 있는 한자 : {missing_hun}",
         f"- 뜻 풀이(meaning_ko, 선택 항목)를 채운 한자 : {len(data) - no_meaning} (비어 있으면 카드에 훈음만 표시)",
         f"- 승인된 훈음(overrides/ko_hunum.csv) 반영 : {meta_ov['applied']['ko_hunum']}자",
+        "",
+        "## 음 대응 규칙·음부 묶음·유사 한자 (M4)",
+        "",
+        f"음 대응 규칙 정의 : {rules['source']} (검수 목록 review/sound_rules_review.csv, 고칠 때 overrides/sound_rules.csv)",
+        "",
+        "| 규칙 | 한국 음 | 음독 | 해당 한자 수 | 예시 |",
+        "| --- | --- | --- | --- | --- |",
+        *(f"| {r['title']} | {r['ko_pattern'].replace('|', '·')} | {r['ja_pattern'].replace('|', '·')} | {r['count']} | {' '.join(r['examples'])} |" for r in rules["rules"]),
+        "",
+        f"- 규칙이 하나 이상 붙은 한자 : {with_rules}자 (판정 기준 : 검수 반영 뒤 대표 음, 일본 고유 한자 제외)",
+        f"- 음부 묶음 : {len(groups)}개, 묶음에 든 한자 {with_phon}자 (KanjiVG kvg:phon + 같은 음독 공유 2자 이상)",
+        "- 큰 음부 묶음 : " + ", ".join(f"{g_['component']}({g_['reading']}) {''.join(g_['members'])}" for g_ in big_groups),
+        f"- 유사 한자가 있는 한자 : {with_sim}자 (KanjiVG 구성 요소 겹침 + 획수 차 4 이하, 최대 3자)",
+        "",
+        "유사 한자 예시 (자동 계산, 덮어쓰기 파일은 아직 없음) :",
+        "",
+        "| 한자 | 유사 한자 |",
+        "| --- | --- |",
+        *(f"| {k['id']} | {' '.join(k['similar'])} |" for k in sim_examples),
         "",
         "## 검수 대기 (오류 아님)",
         "",

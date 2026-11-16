@@ -47,6 +47,17 @@
       "bytes": 8340649,
       "fetched_at": "2026-11-16T02:21:15Z",
       "used_fields": "kJinmeiyoKanji, kJoyoKanji, kKoreanEducationHanja, kKoreanName, kSemanticVariant, kZVariant"
+    },
+    "kanjivg": {
+      "url": "https://github.com/KanjiVG/kanjivg/releases/download/r20260714/kanjivg-20260714-main.zip",
+      "file": "raw/kanjivg/kanjivg-20260714-main.zip",
+      "version": "r20260714",
+      "license": "CC BY-SA 3.0 (출처 표시 필수)",
+      "license_url": "https://github.com/KanjiVG/kanjivg/blob/master/COPYING",
+      "attribution": "KanjiVG © Ulrich Apel",
+      "sha256": "b5df6cd2bc249dd49b8041eb99e38ba9f8dc6b9ea57962a80084b4a315d1a7fc",
+      "bytes": 12650667,
+      "fetched_at": "2026-11-16T03:33:02Z"
     }
   }
 }

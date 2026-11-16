@@ -232,3 +232,20 @@ export async function resetAll(): Promise<void> {
     await Promise.all([db.cards.clear(), db.chapters.clear(), db.review_logs.clear(), db.sessions.clear(), db.daily.clear()]);
   });
 }
+
+/** 한자 한 자의 학습 상태 초기화 (S5 내 기록). 즐겨찾기와 판정 이력은 남긴다. 이미 완료한 장은 다시 잠그지 않는다 */
+export async function resetKanji(kanjiId: string): Promise<void> {
+  await db.transaction('rw', db.cards, async () => {
+    const card = await db.cards.get([kanjiId, FORWARD]);
+    if (card) await db.cards.put(resetCard(card));
+  });
+}
+
+/** 한 한자의 최근 판정 이력 (새것부터) */
+export async function getKanjiLogs(kanjiId: string, limit: number): Promise<ReviewLogRow[]> {
+  const rows = await db.review_logs.where('kanji_id').equals(kanjiId).toArray();
+  return rows
+    .filter((r) => r.direction === FORWARD)
+    .sort((a, b) => b.ts - a.ts)
+    .slice(0, limit);
+}

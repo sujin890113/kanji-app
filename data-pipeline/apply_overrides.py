@@ -12,7 +12,11 @@ overrides/ko_hunum.csv (열 : 한자, 훈, 음, 그밖의 훈음, 일본 고유 
   - 일본 고유 한자 : Y면 kokuji = true, 대표 훈음은 비운다 (SPEC 2.3 F1)
   - 뜻 풀이 : meaning_ko (선택 항목. 비우면 null → 카드에 훈음만 표시)
 
-출력 : public/data/kanji.json, public/data/meta.json
+음 대응 규칙·음부 묶음·유사 한자는 build_relations.py의 결과(build/relations.json, build/sound_rule_defs.json)를
+합친다. 음 대응 규칙은 검수가 끝난 최종 대표 음(ko_main.eum)으로 판정하고, 일본 고유 한자는 규칙을 붙이지 않는다.
+
+출력 : public/data/kanji.json, public/data/meta.json, public/data/sound_rules.json,
+       public/data/phonetic_groups.json, review/sound_rules_review.csv
 """
 
 from __future__ import annotations
@@ -20,7 +24,8 @@ from __future__ import annotations
 import datetime as dt
 import sys
 
-from common import BUILD, LOCK, OUT, OVERRIDES, read_csv, read_json, write_json
+from build_relations import match_rules
+from common import BUILD, LOCK, OUT, OVERRIDES, REVIEW, read_csv, read_json, write_csv, write_json
 
 
 def load_override(name: str, key: str) -> tuple[dict[str, dict], list[str]]:
@@ -53,6 +58,8 @@ def parse_more(text: str) -> list[dict]:
 def main() -> int:
     base = read_json(BUILD / "kanji_base.json")
     korean = read_json(BUILD / "korean.json")
+    relations = read_json(BUILD / "relations.json")
+    rule_defs = read_json(BUILD / "sound_rule_defs.json")
     ids = {k["id"] for k in base}
 
     forms, e1 = load_override("ko_form.csv", "신자체")
@@ -75,9 +82,9 @@ def main() -> int:
             "ko_form": None,
             "kokuji": False,
             "meaning_ko": None,
-            "rules": [],       # M4 (build_relations.py)
-            "phonetic": None,  # M4
-            "similar": [],     # M4
+            "rules": [],
+            "phonetic": relations["phonetic"].get(c),
+            "similar": relations["similar"].get(c, []),
             "words": [],       # M5 (build_words.py)
         }
         if c in forms:
@@ -97,7 +104,31 @@ def main() -> int:
             if h.get("뜻 풀이"):
                 item["meaning_ko"] = h["뜻 풀이"]
             applied["ko_hunum"] += 1
+        if not item["kokuji"]:
+            item["rules"] = match_rules((item["ko_main"] or {}).get("eum"), item["on"], rule_defs["rules"])
         out.append(item)
+
+    # ---- 음 대응 규칙 : 규칙별 해당 한자와 예시, 검수 목록
+    by_rule: dict[str, list[dict]] = {d["id"]: [] for d in rule_defs["rules"]}
+    for k in out:
+        for r in k["rules"]:
+            by_rule[r].append(k)
+    rules_out = []
+    for d in rule_defs["rules"]:
+        members = by_rule[d["id"]]
+        rules_out.append({**d, "count": len(members), "examples": [k["id"] for k in members[:6]]})
+    write_json(OUT / "sound_rules.json", {"source": rule_defs["source"], "rules": rules_out})
+    write_json(OUT / "phonetic_groups.json", relations["groups"])
+    review_rows = []
+    for d in rules_out:
+        members = by_rule[d["id"]]
+        review_rows.append({
+            "id": d["id"], "title": d["title"], "ko_pattern": d["ko_pattern"], "ja_pattern": d["ja_pattern"],
+            "description": d["description"], "해당 한자 수": len(members),
+            "예시(최대 20자)": " ".join(f"{k['id']}({k['ko_main']['eum']}/{'·'.join(k['on'])})" for k in members[:20]),
+            "출처": rule_defs["source"],
+        })
+    write_csv(REVIEW / "sound_rules_review.csv", list(review_rows[0]), [list(r.values()) for r in review_rows])
 
     write_json(OUT / "kanji.json", out, compact=True)
 
@@ -125,6 +156,8 @@ def main() -> int:
     for e in errors:
         print(f"[문제] {e}")
     print(f"apply_overrides : {len(out)}자 → public/data/kanji.json (반영 : 정자체 {applied['ko_form']}, 훈음 {applied['ko_hunum']})")
+    print("  음 대응 규칙 : " + ", ".join(f"{d['id']} {d['count']}자" for d in rules_out)
+          + f" / 규칙이 붙은 한자 {sum(1 for k in out if k['rules'])}자")
     return 1 if errors else 0
 
 

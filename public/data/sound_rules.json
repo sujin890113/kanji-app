@@ -1,0 +1,117 @@
+{
+  "source": "SPEC 2.3 초안",
+  "rules": [
+    {
+      "id": "batchim_g",
+      "title": "ㄱ받침 → ク·キ",
+      "ko_pattern": "받침:ㄱ",
+      "ja_pattern": "끝:ク|キ",
+      "description": "한국 음이 ㄱ받침이면 음독이 ク·キ로 끝나는 경우가 많다.",
+      "count": 227,
+      "examples": [
+        "国",
+        "学",
+        "六",
+        "北",
+        "百",
+        "木"
+      ]
+    },
+    {
+      "id": "batchim_l",
+      "title": "ㄹ받침 → ツ·チ",
+      "ko_pattern": "받침:ㄹ",
+      "ja_pattern": "끝:ツ|チ",
+      "description": "한국 음이 ㄹ받침이면 음독이 ツ·チ로 끝나는 경우가 많다.",
+      "count": 109,
+      "examples": [
+        "日",
+        "一",
+        "出",
+        "月",
+        "八",
+        "七"
+      ]
+    },
+    {
+      "id": "batchim_b",
+      "title": "ㅂ받침 → 장음(ウ)",
+      "ko_pattern": "받침:ㅂ",
+      "ja_pattern": "끝:ウ",
+      "description": "한국 음이 ㅂ받침이면 음독이 ウ로 끝나는 장음이 되는 경우가 많다.",
+      "count": 49,
+      "examples": [
+        "十",
+        "入",
+        "業",
+        "立",
+        "集",
+        "急"
+      ]
+    },
+    {
+      "id": "batchim_ng",
+      "title": "ㅇ받침 → 장음(ウ·イ)",
+      "ko_pattern": "받침:ㅇ",
+      "ja_pattern": "끝:ウ|イ",
+      "description": "한국 음이 ㅇ받침이면 음독이 ウ·イ로 끝나는 장음이 되는 경우가 많다.",
+      "count": 367,
+      "examples": [
+        "中",
+        "長",
+        "行",
+        "生",
+        "上",
+        "東"
+      ]
+    },
+    {
+      "id": "batchim_nm",
+      "title": "ㄴ·ㅁ받침 → ン",
+      "ko_pattern": "받침:ㄴ|ㅁ",
+      "ja_pattern": "끝:ン",
+      "description": "한국 음이 ㄴ·ㅁ받침이면 음독이 ン으로 끝나는 경우가 많다.",
+      "count": 442,
+      "examples": [
+        "人",
+        "年",
+        "本",
+        "三",
+        "見",
+        "前"
+      ]
+    },
+    {
+      "id": "initial_h",
+      "title": "초성 ㅎ → カ행",
+      "ko_pattern": "초성:ㅎ",
+      "ja_pattern": "행:カ|ガ",
+      "description": "한국 음의 초성이 ㅎ이면 음독이 カ행(ガ행 포함)으로 시작하는 경우가 많다.",
+      "count": 163,
+      "examples": [
+        "行",
+        "後",
+        "学",
+        "下",
+        "何",
+        "火"
+      ]
+    },
+    {
+      "id": "initial_bp",
+      "title": "초성 ㅂ·ㅍ → ハ행",
+      "ko_pattern": "초성:ㅂ|ㅍ",
+      "ja_pattern": "행:ハ|バ|パ",
+      "description": "한국 음의 초성이 ㅂ·ㅍ이면 음독이 ハ행(バ·パ행 포함)으로 시작하는 경우가 많다.",
+      "count": 236,
+      "examples": [
+        "本",
+        "八",
+        "北",
+        "百",
+        "半",
+        "白"
+      ]
+    }
+  ]
+}

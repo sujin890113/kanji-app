@@ -1,0 +1,3387 @@
+[
+  {
+    "id": "phon_大",
+    "component": "大",
+    "reading": "タイ",
+    "members": [
+      "大",
+      "泰"
+    ]
+  },
+  {
+    "id": "phon_十",
+    "component": "十",
+    "reading": "ジュウ",
+    "members": [
+      "十",
+      "汁"
+    ]
+  },
+  {
+    "id": "phon_二",
+    "component": "二",
+    "reading": "ニ",
+    "members": [
+      "二",
+      "仁",
+      "弐"
+    ]
+  },
+  {
+    "id": "phon_中",
+    "component": "中",
+    "reading": "チュウ",
+    "members": [
+      "中",
+      "仲",
+      "沖",
+      "忠"
+    ]
+  },
+  {
+    "id": "phon_長",
+    "component": "長",
+    "reading": "チョウ",
+    "members": [
+      "長",
+      "張",
+      "帳"
+    ]
+  },
+  {
+    "id": "phon_寺",
+    "component": "寺",
+    "reading": "ジ",
+    "members": [
+      "時",
+      "持",
+      "寺",
+      "侍"
+    ]
+  },
+  {
+    "id": "phon_行",
+    "component": "行",
+    "reading": "コウ",
+    "members": [
+      "行",
+      "衡"
+    ]
+  },
+  {
+    "id": "phon_生",
+    "component": "生",
+    "reading": "セイ",
+    "members": [
+      "生",
+      "性",
+      "星",
+      "姓",
+      "牲"
+    ]
+  },
+  {
+    "id": "phon_間",
+    "component": "間",
+    "reading": "カン",
+    "members": [
+      "間",
+      "簡"
+    ]
+  },
+  {
+    "id": "phon_東",
+    "component": "東",
+    "reading": "トウ",
+    "members": [
+      "東",
+      "凍",
+      "棟"
+    ]
+  },
+  {
+    "id": "phon_今",
+    "component": "今",
+    "reading": "キン",
+    "members": [
+      "今",
+      "琴"
+    ]
+  },
+  {
+    "id": "phon_九",
+    "component": "九",
+    "reading": "キュウ",
+    "members": [
+      "九",
+      "究"
+    ]
+  },
+  {
+    "id": "phon_高",
+    "component": "高",
+    "reading": "コウ",
+    "members": [
+      "高",
+      "稿"
+    ]
+  },
+  {
+    "id": "phon_气",
+    "component": "气",
+    "reading": "キ",
+    "members": [
+      "気",
+      "汽"
+    ]
+  },
+  {
+    "id": "phon_山",
+    "component": "山",
+    "reading": "セン",
+    "members": [
+      "山",
+      "仙"
+    ]
+  },
+  {
+    "id": "phon_舌",
+    "component": "舌",
+    "reading": "カツ",
+    "members": [
+      "活",
+      "括"
+    ]
+  },
+  {
+    "id": "phon_女",
+    "component": "女",
+    "reading": "ジョ",
+    "members": [
+      "女",
+      "如"
+    ]
+  },
+  {
+    "id": "phon_先",
+    "component": "先",
+    "reading": "セン",
+    "members": [
+      "先",
+      "洗"
+    ]
+  },
+  {
+    "id": "phon_名",
+    "component": "名",
+    "reading": "メイ",
+    "members": [
+      "名",
+      "銘"
+    ]
+  },
+  {
+    "id": "phon_半",
+    "component": "半",
+    "reading": "ハン",
+    "members": [
+      "半",
+      "判",
+      "伴",
+      "畔"
+    ]
+  },
+  {
+    "id": "phon_交",
+    "component": "交",
+    "reading": "コウ",
+    "members": [
+      "校",
+      "交",
+      "効",
+      "郊",
+      "較",
+      "絞"
+    ]
+  },
+  {
+    "id": "phon_吾",
+    "component": "吾",
+    "reading": "ゴ",
+    "members": [
+      "語",
+      "悟"
+    ]
+  },
+  {
+    "id": "phon_土",
+    "component": "土",
+    "reading": "ト",
+    "members": [
+      "土",
+      "徒",
+      "吐"
+    ]
+  },
+  {
+    "id": "phon_門",
+    "component": "門",
+    "reading": "モン",
+    "members": [
+      "聞",
+      "問",
+      "門"
+    ]
+  },
+  {
+    "id": "phon_可",
+    "component": "可",
+    "reading": "カ",
+    "members": [
+      "何",
+      "河",
+      "可"
+    ]
+  },
+  {
+    "id": "phon_何",
+    "component": "何",
+    "reading": "カ",
+    "members": [
+      "何",
+      "荷"
+    ]
+  },
+  {
+    "id": "phon_毎",
+    "component": "毎",
+    "reading": "カイ",
+    "members": [
+      "海",
+      "悔"
+    ]
+  },
+  {
+    "id": "phon_白",
+    "component": "白",
+    "reading": "ハク",
+    "members": [
+      "白",
+      "泊",
+      "迫",
+      "拍",
+      "伯",
+      "舶"
+    ]
+  },
+  {
+    "id": "phon_天",
+    "component": "天",
+    "reading": "テン",
+    "members": [
+      "天",
+      "蚕"
+    ]
+  },
+  {
+    "id": "phon_友",
+    "component": "友",
+    "reading": "ハツ",
+    "members": [
+      "抜",
+      "髪"
+    ]
+  },
+  {
+    "id": "phon_左",
+    "component": "左",
+    "reading": "サ",
+    "members": [
+      "左",
+      "佐"
+    ]
+  },
+  {
+    "id": "phon_会",
+    "component": "会",
+    "reading": "エ",
+    "members": [
+      "会",
+      "絵"
+    ]
+  },
+  {
+    "id": "phon_同",
+    "component": "同",
+    "reading": "ドウ",
+    "members": [
+      "同",
+      "銅",
+      "洞",
+      "胴"
+    ]
+  },
+  {
+    "id": "phon_者",
+    "component": "者",
+    "reading": "ショ",
+    "members": [
+      "緒",
+      "諸",
+      "署",
+      "暑"
+    ]
+  },
+  {
+    "id": "phon_也",
+    "component": "也",
+    "reading": "チ",
+    "members": [
+      "地",
+      "池"
+    ]
+  },
+  {
+    "id": "phon_方",
+    "component": "方",
+    "reading": "ボウ",
+    "members": [
+      "防",
+      "房",
+      "妨",
+      "紡",
+      "肪",
+      "坊"
+    ]
+  },
+  {
+    "id": "phon_新",
+    "component": "新",
+    "reading": "シン",
+    "members": [
+      "新",
+      "薪"
+    ]
+  },
+  {
+    "id": "phon_昜",
+    "component": "昜",
+    "reading": "チョウ",
+    "members": [
+      "場",
+      "腸"
+    ]
+  },
+  {
+    "id": "phon_員",
+    "component": "員",
+    "reading": "イン",
+    "members": [
+      "員",
+      "韻"
+    ]
+  },
+  {
+    "id": "phon_立",
+    "component": "立",
+    "reading": "リュウ",
+    "members": [
+      "立",
+      "粒"
+    ]
+  },
+  {
+    "id": "phon_代",
+    "component": "代",
+    "reading": "タイ",
+    "members": [
+      "代",
+      "貸",
+      "袋"
+    ]
+  },
+  {
+    "id": "phon_明",
+    "component": "明",
+    "reading": "メイ",
+    "members": [
+      "明",
+      "盟"
+    ]
+  },
+  {
+    "id": "phon_動",
+    "component": "動",
+    "reading": "ドウ",
+    "members": [
+      "動",
+      "働"
+    ]
+  },
+  {
+    "id": "phon_京",
+    "component": "京",
+    "reading": "ケイ",
+    "members": [
+      "京",
+      "景"
+    ]
+  },
+  {
+    "id": "phon_甬",
+    "component": "甬",
+    "reading": "ツウ",
+    "members": [
+      "通",
+      "痛"
+    ]
+  },
+  {
+    "id": "phon_里",
+    "component": "里",
+    "reading": "リ",
+    "members": [
+      "理",
+      "裏",
+      "里"
+    ]
+  },
+  {
+    "id": "phon_主",
+    "component": "主",
+    "reading": "チュウ",
+    "members": [
+      "住",
+      "注",
+      "駐",
+      "柱"
+    ]
+  },
+  {
+    "id": "phon_是",
+    "component": "是",
+    "reading": "ダイ",
+    "members": [
+      "題",
+      "提"
+    ]
+  },
+  {
+    "id": "phon_意",
+    "component": "意",
+    "reading": "オク",
+    "members": [
+      "億",
+      "憶"
+    ]
+  },
+  {
+    "id": "phon_乍",
+    "component": "乍",
+    "reading": "サク",
+    "members": [
+      "作",
+      "昨",
+      "酢"
+    ]
+  },
+  {
+    "id": "phon_用",
+    "component": "用",
+    "reading": "ヨウ",
+    "members": [
+      "用",
+      "庸"
+    ]
+  },
+  {
+    "id": "phon_度",
+    "component": "度",
+    "reading": "ト",
+    "members": [
+      "度",
+      "渡"
+    ]
+  },
+  {
+    "id": "phon_公",
+    "component": "公",
+    "reading": "ショウ",
+    "members": [
+      "松",
+      "訟"
+    ]
+  },
+  {
+    "id": "phon_予",
+    "component": "予",
+    "reading": "ヨ",
+    "members": [
+      "予",
+      "預"
+    ]
+  },
+  {
+    "id": "phon_家",
+    "component": "家",
+    "reading": "カ",
+    "members": [
+      "家",
+      "稼",
+      "嫁"
+    ]
+  },
+  {
+    "id": "phon_正",
+    "component": "正",
+    "reading": "セイ",
+    "members": [
+      "正",
+      "政",
+      "整",
+      "征"
+    ]
+  },
+  {
+    "id": "phon_安",
+    "component": "安",
+    "reading": "アン",
+    "members": [
+      "安",
+      "案"
+    ]
+  },
+  {
+    "id": "phon_介",
+    "component": "介",
+    "reading": "カイ",
+    "members": [
+      "界",
+      "介"
+    ]
+  },
+  {
+    "id": "phon_孝",
+    "component": "孝",
+    "reading": "キョウ",
+    "members": [
+      "教",
+      "孝"
+    ]
+  },
+  {
+    "id": "phon_文",
+    "component": "文",
+    "reading": "モン",
+    "members": [
+      "文",
+      "紋"
+    ]
+  },
+  {
+    "id": "phon_元",
+    "component": "元",
+    "reading": "カン",
+    "members": [
+      "完",
+      "冠"
+    ]
+  },
+  {
+    "id": "phon_斤",
+    "component": "斤",
+    "reading": "キン",
+    "members": [
+      "近",
+      "斤"
+    ]
+  },
+  {
+    "id": "phon_丂",
+    "component": "丂",
+    "reading": "コウ",
+    "members": [
+      "考",
+      "巧"
+    ]
+  },
+  {
+    "id": "phon_知",
+    "component": "知",
+    "reading": "チ",
+    "members": [
+      "知",
+      "痴"
+    ]
+  },
+  {
+    "id": "phon_道",
+    "component": "道",
+    "reading": "ドウ",
+    "members": [
+      "道",
+      "導"
+    ]
+  },
+  {
+    "id": "phon_厶",
+    "component": "厶",
+    "reading": "フツ",
+    "members": [
+      "払",
+      "仏"
+    ]
+  },
+  {
+    "id": "phon_台",
+    "component": "台",
+    "reading": "タイ",
+    "members": [
+      "台",
+      "怠",
+      "胎"
+    ]
+  },
+  {
+    "id": "phon_朝",
+    "component": "朝",
+    "reading": "チョウ",
+    "members": [
+      "朝",
+      "潮"
+    ]
+  },
+  {
+    "id": "phon_軍",
+    "component": "軍",
+    "reading": "キ",
+    "members": [
+      "揮",
+      "輝"
+    ]
+  },
+  {
+    "id": "phon_広",
+    "component": "広",
+    "reading": "コウ",
+    "members": [
+      "広",
+      "鉱",
+      "拡"
+    ]
+  },
+  {
+    "id": "phon_真",
+    "component": "真",
+    "reading": "シン",
+    "members": [
+      "真",
+      "慎"
+    ]
+  },
+  {
+    "id": "phon_少",
+    "component": "少",
+    "reading": "ショウ",
+    "members": [
+      "少",
+      "抄"
+    ]
+  },
+  {
+    "id": "phon_丁",
+    "component": "丁",
+    "reading": "チョウ",
+    "members": [
+      "町",
+      "頂",
+      "庁",
+      "丁"
+    ]
+  },
+  {
+    "id": "phon_工",
+    "component": "工",
+    "reading": "コウ",
+    "members": [
+      "工",
+      "紅",
+      "攻",
+      "江",
+      "功",
+      "項",
+      "貢"
+    ]
+  },
+  {
+    "id": "phon_建",
+    "component": "建",
+    "reading": "ケン",
+    "members": [
+      "建",
+      "健"
+    ]
+  },
+  {
+    "id": "phon_止",
+    "component": "止",
+    "reading": "シ",
+    "members": [
+      "止",
+      "歯",
+      "祉"
+    ]
+  },
+  {
+    "id": "phon_切",
+    "component": "切",
+    "reading": "セツ",
+    "members": [
+      "切",
+      "窃"
+    ]
+  },
+  {
+    "id": "phon_云",
+    "component": "云",
+    "reading": "テン",
+    "members": [
+      "転",
+      "伝"
+    ]
+  },
+  {
+    "id": "phon_开",
+    "component": "开",
+    "reading": "ケイ",
+    "members": [
+      "形",
+      "刑"
+    ]
+  },
+  {
+    "id": "phon_足",
+    "component": "足",
+    "reading": "ソク",
+    "members": [
+      "足",
+      "促"
+    ]
+  },
+  {
+    "id": "phon_己",
+    "component": "己",
+    "reading": "キ",
+    "members": [
+      "起",
+      "記",
+      "紀",
+      "己",
+      "忌"
+    ]
+  },
+  {
+    "id": "phon_占",
+    "component": "占",
+    "reading": "テン",
+    "members": [
+      "店",
+      "点"
+    ]
+  },
+  {
+    "id": "phon_丙",
+    "component": "丙",
+    "reading": "ヘイ",
+    "members": [
+      "病",
+      "柄",
+      "丙"
+    ]
+  },
+  {
+    "id": "phon_艮",
+    "component": "艮",
+    "reading": "ゲン",
+    "members": [
+      "限",
+      "眼"
+    ]
+  },
+  {
+    "id": "phon_早",
+    "component": "早",
+    "reading": "ソウ",
+    "members": [
+      "早",
+      "草"
+    ]
+  },
+  {
+    "id": "phon_央",
+    "component": "央",
+    "reading": "エイ",
+    "members": [
+      "映",
+      "英"
+    ]
+  },
+  {
+    "id": "phon_㑒",
+    "component": "㑒",
+    "reading": "ケン",
+    "members": [
+      "験",
+      "険",
+      "検",
+      "剣",
+      "倹"
+    ]
+  },
+  {
+    "id": "phon_士",
+    "component": "士",
+    "reading": "シ",
+    "members": [
+      "仕",
+      "士",
+      "志"
+    ]
+  },
+  {
+    "id": "phon_未",
+    "component": "未",
+    "reading": "ミ",
+    "members": [
+      "味",
+      "未",
+      "魅"
+    ]
+  },
+  {
+    "id": "phon_古",
+    "component": "古",
+    "reading": "コ",
+    "members": [
+      "古",
+      "居",
+      "固",
+      "枯",
+      "故"
+    ]
+  },
+  {
+    "id": "phon_周",
+    "component": "周",
+    "reading": "シュウ",
+    "members": [
+      "週",
+      "周"
+    ]
+  },
+  {
+    "id": "phon_几",
+    "component": "几",
+    "reading": "キ",
+    "members": [
+      "肌",
+      "机",
+      "飢"
+    ]
+  },
+  {
+    "id": "phon_氏",
+    "component": "氏",
+    "reading": "シ",
+    "members": [
+      "紙",
+      "氏"
+    ]
+  },
+  {
+    "id": "phon_黒",
+    "component": "黒",
+    "reading": "ボク",
+    "members": [
+      "黙",
+      "墨"
+    ]
+  },
+  {
+    "id": "phon_化",
+    "component": "化",
+    "reading": "カ",
+    "members": [
+      "花",
+      "化",
+      "靴",
+      "貨"
+    ]
+  },
+  {
+    "id": "phon_青",
+    "component": "青",
+    "reading": "セイ",
+    "members": [
+      "青",
+      "情",
+      "精",
+      "静",
+      "晴",
+      "清",
+      "請"
+    ]
+  },
+  {
+    "id": "phon_官",
+    "component": "官",
+    "reading": "カン",
+    "members": [
+      "館",
+      "官",
+      "管",
+      "棺"
+    ]
+  },
+  {
+    "id": "phon_秋",
+    "component": "秋",
+    "reading": "シュウ",
+    "members": [
+      "秋",
+      "愁"
+    ]
+  },
+  {
+    "id": "phon_尺",
+    "component": "尺",
+    "reading": "タク",
+    "members": [
+      "沢",
+      "択"
+    ]
+  },
+  {
+    "id": "phon_羊",
+    "component": "羊",
+    "reading": "ヨウ",
+    "members": [
+      "洋",
+      "様",
+      "養",
+      "羊",
+      "窯"
+    ]
+  },
+  {
+    "id": "phon_昔",
+    "component": "昔",
+    "reading": "シャク",
+    "members": [
+      "借",
+      "昔",
+      "錯"
+    ]
+  },
+  {
+    "id": "phon_尚",
+    "component": "尚",
+    "reading": "ショウ",
+    "members": [
+      "賞",
+      "尚",
+      "掌"
+    ]
+  },
+  {
+    "id": "phon_反",
+    "component": "反",
+    "reading": "ハン",
+    "members": [
+      "飯",
+      "反",
+      "販",
+      "版",
+      "坂",
+      "板"
+    ]
+  },
+  {
+    "id": "phon_魚",
+    "component": "魚",
+    "reading": "ギョ",
+    "members": [
+      "魚",
+      "漁"
+    ]
+  },
+  {
+    "id": "phon_兄",
+    "component": "兄",
+    "reading": "キョウ",
+    "members": [
+      "兄",
+      "況"
+    ]
+  },
+  {
+    "id": "phon_市",
+    "component": "市",
+    "reading": "シ",
+    "members": [
+      "姉",
+      "市"
+    ]
+  },
+  {
+    "id": "phon_義",
+    "component": "義",
+    "reading": "ギ",
+    "members": [
+      "議",
+      "義",
+      "儀",
+      "犠"
+    ]
+  },
+  {
+    "id": "phon_民",
+    "component": "民",
+    "reading": "ミン",
+    "members": [
+      "民",
+      "眠"
+    ]
+  },
+  {
+    "id": "phon_咅",
+    "component": "咅",
+    "reading": "バイ",
+    "members": [
+      "倍",
+      "賠",
+      "培",
+      "陪"
+    ]
+  },
+  {
+    "id": "phon_相",
+    "component": "相",
+    "reading": "ソウ",
+    "members": [
+      "相",
+      "想",
+      "箱",
+      "霜"
+    ]
+  },
+  {
+    "id": "phon_定",
+    "component": "定",
+    "reading": "ジョウ",
+    "members": [
+      "定",
+      "錠"
+    ]
+  },
+  {
+    "id": "phon_表",
+    "component": "表",
+    "reading": "ヒョウ",
+    "members": [
+      "表",
+      "俵"
+    ]
+  },
+  {
+    "id": "phon_単",
+    "component": "単",
+    "reading": "セン",
+    "members": [
+      "戦",
+      "禅"
+    ]
+  },
+  {
+    "id": "phon_圣",
+    "component": "圣",
+    "reading": "ケイ",
+    "members": [
+      "経",
+      "軽",
+      "径",
+      "茎"
+    ]
+  },
+  {
+    "id": "phon_要",
+    "component": "要",
+    "reading": "ヨウ",
+    "members": [
+      "要",
+      "腰"
+    ]
+  },
+  {
+    "id": "phon_制",
+    "component": "制",
+    "reading": "セイ",
+    "members": [
+      "制",
+      "製"
+    ]
+  },
+  {
+    "id": "phon_矛",
+    "component": "矛",
+    "reading": "ム",
+    "members": [
+      "務",
+      "矛"
+    ]
+  },
+  {
+    "id": "phon_務",
+    "component": "務",
+    "reading": "ム",
+    "members": [
+      "務",
+      "霧"
+    ]
+  },
+  {
+    "id": "phon_成",
+    "component": "成",
+    "reading": "セイ",
+    "members": [
+      "成",
+      "城",
+      "盛",
+      "誠"
+    ]
+  },
+  {
+    "id": "phon_其",
+    "component": "其",
+    "reading": "キ",
+    "members": [
+      "期",
+      "基",
+      "旗",
+      "棋"
+    ]
+  },
+  {
+    "id": "phon_取",
+    "component": "取",
+    "reading": "シュ",
+    "members": [
+      "取",
+      "趣"
+    ]
+  },
+  {
+    "id": "phon_幾",
+    "component": "幾",
+    "reading": "キ",
+    "members": [
+      "機",
+      "幾"
+    ]
+  },
+  {
+    "id": "phon_平",
+    "component": "平",
+    "reading": "ヒョウ",
+    "members": [
+      "平",
+      "評"
+    ]
+  },
+  {
+    "id": "phon_加",
+    "component": "加",
+    "reading": "カ",
+    "members": [
+      "加",
+      "架"
+    ]
+  },
+  {
+    "id": "phon_受",
+    "component": "受",
+    "reading": "ジュ",
+    "members": [
+      "受",
+      "授"
+    ]
+  },
+  {
+    "id": "phon_旨",
+    "component": "旨",
+    "reading": "シ",
+    "members": [
+      "指",
+      "脂",
+      "旨"
+    ]
+  },
+  {
+    "id": "phon_支",
+    "component": "支",
+    "reading": "シ",
+    "members": [
+      "支",
+      "枝",
+      "肢"
+    ]
+  },
+  {
+    "id": "phon_斉",
+    "component": "斉",
+    "reading": "セイ",
+    "members": [
+      "済",
+      "剤",
+      "斉"
+    ]
+  },
+  {
+    "id": "phon_原",
+    "component": "原",
+    "reading": "ゲン",
+    "members": [
+      "原",
+      "源"
+    ]
+  },
+  {
+    "id": "phon_共",
+    "component": "共",
+    "reading": "キョウ",
+    "members": [
+      "共",
+      "供",
+      "恭"
+    ]
+  },
+  {
+    "id": "phon_次",
+    "component": "次",
+    "reading": "シ",
+    "members": [
+      "資",
+      "次",
+      "姿"
+    ]
+  },
+  {
+    "id": "phon_祭",
+    "component": "祭",
+    "reading": "サイ",
+    "members": [
+      "際",
+      "祭"
+    ]
+  },
+  {
+    "id": "phon_告",
+    "component": "告",
+    "reading": "コク",
+    "members": [
+      "告",
+      "酷"
+    ]
+  },
+  {
+    "id": "phon_忍",
+    "component": "忍",
+    "reading": "ニン",
+    "members": [
+      "認",
+      "忍"
+    ]
+  },
+  {
+    "id": "phon_参",
+    "component": "参",
+    "reading": "サン",
+    "members": [
+      "参",
+      "惨"
+    ]
+  },
+  {
+    "id": "phon_利",
+    "component": "利",
+    "reading": "リ",
+    "members": [
+      "利",
+      "痢"
+    ]
+  },
+  {
+    "id": "phon_且",
+    "component": "且",
+    "reading": "ソ",
+    "members": [
+      "組",
+      "祖",
+      "阻",
+      "粗",
+      "租",
+      "且"
+    ]
+  },
+  {
+    "id": "phon_則",
+    "component": "則",
+    "reading": "ソク",
+    "members": [
+      "側",
+      "則",
+      "測"
+    ]
+  },
+  {
+    "id": "phon_壬",
+    "component": "壬",
+    "reading": "ニン",
+    "members": [
+      "任",
+      "妊"
+    ]
+  },
+  {
+    "id": "phon_求",
+    "component": "求",
+    "reading": "キュウ",
+    "members": [
+      "求",
+      "球",
+      "救"
+    ]
+  },
+  {
+    "id": "phon_戸",
+    "component": "戸",
+    "reading": "コ",
+    "members": [
+      "戸",
+      "雇"
+    ]
+  },
+  {
+    "id": "phon_侖",
+    "component": "侖",
+    "reading": "リン",
+    "members": [
+      "輪",
+      "倫"
+    ]
+  },
+  {
+    "id": "phon_曽",
+    "component": "曽",
+    "reading": "ゾウ",
+    "members": [
+      "増",
+      "贈",
+      "憎",
+      "曽"
+    ]
+  },
+  {
+    "id": "phon_系",
+    "component": "系",
+    "reading": "ケイ",
+    "members": [
+      "係",
+      "系"
+    ]
+  },
+  {
+    "id": "phon_感",
+    "component": "感",
+    "reading": "カン",
+    "members": [
+      "感",
+      "憾"
+    ]
+  },
+  {
+    "id": "phon_直",
+    "component": "直",
+    "reading": "チ",
+    "members": [
+      "置",
+      "値"
+    ]
+  },
+  {
+    "id": "phon_果",
+    "component": "果",
+    "reading": "カ",
+    "members": [
+      "果",
+      "課",
+      "菓"
+    ]
+  },
+  {
+    "id": "phon_谷",
+    "component": "谷",
+    "reading": "ヨク",
+    "members": [
+      "欲",
+      "浴"
+    ]
+  },
+  {
+    "id": "phon_容",
+    "component": "容",
+    "reading": "ヨウ",
+    "members": [
+      "容",
+      "溶"
+    ]
+  },
+  {
+    "id": "phon_必",
+    "component": "必",
+    "reading": "ヒ",
+    "members": [
+      "秘",
+      "泌"
+    ]
+  },
+  {
+    "id": "phon_各",
+    "component": "各",
+    "reading": "カク",
+    "members": [
+      "格",
+      "客",
+      "各",
+      "閣"
+    ]
+  },
+  {
+    "id": "phon_疑",
+    "component": "疑",
+    "reading": "ギ",
+    "members": [
+      "疑",
+      "擬"
+    ]
+  },
+  {
+    "id": "phon_咼",
+    "component": "咼",
+    "reading": "カ",
+    "members": [
+      "過",
+      "渦",
+      "禍"
+    ]
+  },
+  {
+    "id": "phon_放",
+    "component": "放",
+    "reading": "ホウ",
+    "members": [
+      "放",
+      "倣"
+    ]
+  },
+  {
+    "id": "phon_⺦",
+    "component": "⺦",
+    "reading": "ソウ",
+    "members": [
+      "将",
+      "壮"
+    ]
+  },
+  {
+    "id": "phon_戠",
+    "component": "戠",
+    "reading": "ショク",
+    "members": [
+      "職",
+      "織"
+    ]
+  },
+  {
+    "id": "phon_冓",
+    "component": "冓",
+    "reading": "コウ",
+    "members": [
+      "構",
+      "講",
+      "購",
+      "溝"
+    ]
+  },
+  {
+    "id": "phon_害",
+    "component": "害",
+    "reading": "カツ",
+    "members": [
+      "割",
+      "轄"
+    ]
+  },
+  {
+    "id": "phon_付",
+    "component": "付",
+    "reading": "フ",
+    "members": [
+      "付",
+      "府",
+      "符",
+      "附"
+    ]
+  },
+  {
+    "id": "phon_由",
+    "component": "由",
+    "reading": "ユ",
+    "members": [
+      "由",
+      "油"
+    ]
+  },
+  {
+    "id": "phon_兌",
+    "component": "兌",
+    "reading": "ゼイ",
+    "members": [
+      "説",
+      "税"
+    ]
+  },
+  {
+    "id": "phon_憂",
+    "component": "憂",
+    "reading": "ユウ",
+    "members": [
+      "優",
+      "憂"
+    ]
+  },
+  {
+    "id": "phon_夫",
+    "component": "夫",
+    "reading": "フ",
+    "members": [
+      "夫",
+      "扶"
+    ]
+  },
+  {
+    "id": "phon_韋",
+    "component": "韋",
+    "reading": "イ",
+    "members": [
+      "違",
+      "偉",
+      "緯"
+    ]
+  },
+  {
+    "id": "phon_肖",
+    "component": "肖",
+    "reading": "ショウ",
+    "members": [
+      "消",
+      "肖",
+      "硝",
+      "宵"
+    ]
+  },
+  {
+    "id": "phon_申",
+    "component": "申",
+    "reading": "シン",
+    "members": [
+      "神",
+      "申",
+      "伸",
+      "紳"
+    ]
+  },
+  {
+    "id": "phon_朮",
+    "component": "朮",
+    "reading": "ジュツ",
+    "members": [
+      "術",
+      "述"
+    ]
+  },
+  {
+    "id": "phon_乇",
+    "component": "乇",
+    "reading": "タク",
+    "members": [
+      "宅",
+      "託"
+    ]
+  },
+  {
+    "id": "phon_敬",
+    "component": "敬",
+    "reading": "ケイ",
+    "members": [
+      "警",
+      "敬"
+    ]
+  },
+  {
+    "id": "phon_乗",
+    "component": "乗",
+    "reading": "ジョウ",
+    "members": [
+      "乗",
+      "剰"
+    ]
+  },
+  {
+    "id": "phon_戋",
+    "component": "戋",
+    "reading": "セン",
+    "members": [
+      "浅",
+      "銭",
+      "践",
+      "桟"
+    ]
+  },
+  {
+    "id": "phon_列",
+    "component": "列",
+    "reading": "レツ",
+    "members": [
+      "列",
+      "裂",
+      "烈"
+    ]
+  },
+  {
+    "id": "phon_然",
+    "component": "然",
+    "reading": "ネン",
+    "members": [
+      "然",
+      "燃"
+    ]
+  },
+  {
+    "id": "phon_豆",
+    "component": "豆",
+    "reading": "トウ",
+    "members": [
+      "頭",
+      "闘",
+      "豆",
+      "痘"
+    ]
+  },
+  {
+    "id": "phon_失",
+    "component": "失",
+    "reading": "テツ",
+    "members": [
+      "鉄",
+      "迭"
+    ]
+  },
+  {
+    "id": "phon_末",
+    "component": "末",
+    "reading": "マツ",
+    "members": [
+      "末",
+      "抹"
+    ]
+  },
+  {
+    "id": "phon_守",
+    "component": "守",
+    "reading": "シュ",
+    "members": [
+      "守",
+      "狩"
+    ]
+  },
+  {
+    "id": "phon_畐",
+    "component": "畐",
+    "reading": "フク",
+    "members": [
+      "福",
+      "副",
+      "幅"
+    ]
+  },
+  {
+    "id": "phon_非",
+    "component": "非",
+    "reading": "ヒ",
+    "members": [
+      "非",
+      "悲",
+      "扉"
+    ]
+  },
+  {
+    "id": "phon_察",
+    "component": "察",
+    "reading": "サツ",
+    "members": [
+      "察",
+      "擦"
+    ]
+  },
+  {
+    "id": "phon_段",
+    "component": "段",
+    "reading": "タン",
+    "members": [
+      "段",
+      "鍛"
+    ]
+  },
+  {
+    "id": "phon_黄",
+    "component": "黄",
+    "reading": "オウ",
+    "members": [
+      "横",
+      "黄"
+    ]
+  },
+  {
+    "id": "phon_才",
+    "component": "才",
+    "reading": "ザイ",
+    "members": [
+      "財",
+      "材"
+    ]
+  },
+  {
+    "id": "phon_良",
+    "component": "良",
+    "reading": "ロウ",
+    "members": [
+      "郎",
+      "朗",
+      "浪"
+    ]
+  },
+  {
+    "id": "phon_呈",
+    "component": "呈",
+    "reading": "テイ",
+    "members": [
+      "程",
+      "呈"
+    ]
+  },
+  {
+    "id": "phon_路",
+    "component": "路",
+    "reading": "ロ",
+    "members": [
+      "路",
+      "露"
+    ]
+  },
+  {
+    "id": "phon_責",
+    "component": "責",
+    "reading": "セキ",
+    "members": [
+      "積",
+      "責",
+      "績"
+    ]
+  },
+  {
+    "id": "phon_太",
+    "component": "太",
+    "reading": "タ",
+    "members": [
+      "太",
+      "駄"
+    ]
+  },
+  {
+    "id": "phon_登",
+    "component": "登",
+    "reading": "チョウ",
+    "members": [
+      "登",
+      "澄"
+    ]
+  },
+  {
+    "id": "phon_束",
+    "component": "束",
+    "reading": "ソク",
+    "members": [
+      "速",
+      "束"
+    ]
+  },
+  {
+    "id": "phon_皮",
+    "component": "皮",
+    "reading": "ヒ",
+    "members": [
+      "彼",
+      "疲",
+      "被",
+      "皮",
+      "披"
+    ]
+  },
+  {
+    "id": "phon_余",
+    "component": "余",
+    "reading": "ジョ",
+    "members": [
+      "除",
+      "徐",
+      "叙"
+    ]
+  },
+  {
+    "id": "phon_甫",
+    "component": "甫",
+    "reading": "ホ",
+    "members": [
+      "捕",
+      "補",
+      "浦",
+      "舗"
+    ]
+  },
+  {
+    "id": "phon_袁",
+    "component": "袁",
+    "reading": "エン",
+    "members": [
+      "園",
+      "遠",
+      "猿"
+    ]
+  },
+  {
+    "id": "phon_因",
+    "component": "因",
+    "reading": "イン",
+    "members": [
+      "因",
+      "姻"
+    ]
+  },
+  {
+    "id": "phon_亡",
+    "component": "亡",
+    "reading": "ボウ",
+    "members": [
+      "亡",
+      "忘",
+      "妄"
+    ]
+  },
+  {
+    "id": "phon_令",
+    "component": "令",
+    "reading": "レイ",
+    "members": [
+      "冷",
+      "齢",
+      "令",
+      "零",
+      "鈴"
+    ]
+  },
+  {
+    "id": "phon_啇",
+    "component": "啇",
+    "reading": "テキ",
+    "members": [
+      "適",
+      "滴",
+      "摘",
+      "敵",
+      "嫡"
+    ]
+  },
+  {
+    "id": "phon_奇",
+    "component": "奇",
+    "reading": "キ",
+    "members": [
+      "寄",
+      "崎",
+      "奇",
+      "騎"
+    ]
+  },
+  {
+    "id": "phon_王",
+    "component": "王",
+    "reading": "オウ",
+    "members": [
+      "王",
+      "皇",
+      "往"
+    ]
+  },
+  {
+    "id": "phon_宿",
+    "component": "宿",
+    "reading": "シュク",
+    "members": [
+      "宿",
+      "縮"
+    ]
+  },
+  {
+    "id": "phon_頼",
+    "component": "頼",
+    "reading": "ライ",
+    "members": [
+      "頼",
+      "瀬"
+    ]
+  },
+  {
+    "id": "phon_㕣",
+    "component": "㕣",
+    "reading": "エン",
+    "members": [
+      "沿",
+      "鉛"
+    ]
+  },
+  {
+    "id": "phon_奴",
+    "component": "奴",
+    "reading": "ド",
+    "members": [
+      "努",
+      "怒",
+      "奴"
+    ]
+  },
+  {
+    "id": "phon_甲",
+    "component": "甲",
+    "reading": "コウ",
+    "members": [
+      "甲",
+      "岬"
+    ]
+  },
+  {
+    "id": "phon_到",
+    "component": "到",
+    "reading": "トウ",
+    "members": [
+      "倒",
+      "到"
+    ]
+  },
+  {
+    "id": "phon_廷",
+    "component": "廷",
+    "reading": "テイ",
+    "members": [
+      "庭",
+      "艇",
+      "廷"
+    ]
+  },
+  {
+    "id": "phon_居",
+    "component": "居",
+    "reading": "キョ",
+    "members": [
+      "居",
+      "据"
+    ]
+  },
+  {
+    "id": "phon_召",
+    "component": "召",
+    "reading": "ショウ",
+    "members": [
+      "招",
+      "紹",
+      "召",
+      "昭",
+      "沼",
+      "詔"
+    ]
+  },
+  {
+    "id": "phon_更",
+    "component": "更",
+    "reading": "コウ",
+    "members": [
+      "更",
+      "硬"
+    ]
+  },
+  {
+    "id": "phon_亥",
+    "component": "亥",
+    "reading": "ガイ",
+    "members": [
+      "該",
+      "劾"
+    ]
+  },
+  {
+    "id": "phon_包",
+    "component": "包",
+    "reading": "ホウ",
+    "members": [
+      "抱",
+      "包",
+      "砲",
+      "胞",
+      "飽",
+      "泡"
+    ]
+  },
+  {
+    "id": "phon_兆",
+    "component": "兆",
+    "reading": "チョウ",
+    "members": [
+      "兆",
+      "挑",
+      "跳",
+      "眺"
+    ]
+  },
+  {
+    "id": "phon_君",
+    "component": "君",
+    "reading": "グン",
+    "members": [
+      "群",
+      "郡"
+    ]
+  },
+  {
+    "id": "phon_折",
+    "component": "折",
+    "reading": "セイ",
+    "members": [
+      "誓",
+      "逝"
+    ]
+  },
+  {
+    "id": "phon_莫",
+    "component": "莫",
+    "reading": "ボ",
+    "members": [
+      "暮",
+      "募",
+      "模",
+      "墓",
+      "慕"
+    ]
+  },
+  {
+    "id": "phon_及",
+    "component": "及",
+    "reading": "キュウ",
+    "members": [
+      "吸",
+      "及",
+      "級",
+      "扱"
+    ]
+  },
+  {
+    "id": "phon_呉",
+    "component": "呉",
+    "reading": "ゴ",
+    "members": [
+      "誤",
+      "呉",
+      "娯"
+    ]
+  },
+  {
+    "id": "phon_貫",
+    "component": "貫",
+    "reading": "カン",
+    "members": [
+      "慣",
+      "貫"
+    ]
+  },
+  {
+    "id": "phon_分",
+    "component": "分",
+    "reading": "フン",
+    "members": [
+      "粉",
+      "紛",
+      "雰",
+      "分"
+    ]
+  },
+  {
+    "id": "phon_永",
+    "component": "永",
+    "reading": "エイ",
+    "members": [
+      "泳",
+      "永",
+      "詠"
+    ]
+  },
+  {
+    "id": "phon_皆",
+    "component": "皆",
+    "reading": "カイ",
+    "members": [
+      "皆",
+      "階"
+    ]
+  },
+  {
+    "id": "phon_复",
+    "component": "复",
+    "reading": "フク",
+    "members": [
+      "腹",
+      "復",
+      "複"
+    ]
+  },
+  {
+    "id": "phon_布",
+    "component": "布",
+    "reading": "フ",
+    "members": [
+      "怖",
+      "布"
+    ]
+  },
+  {
+    "id": "phon_禺",
+    "component": "禺",
+    "reading": "グウ",
+    "members": [
+      "偶",
+      "隅",
+      "遇"
+    ]
+  },
+  {
+    "id": "phon_苗",
+    "component": "苗",
+    "reading": "ビョウ",
+    "members": [
+      "猫",
+      "描",
+      "苗"
+    ]
+  },
+  {
+    "id": "phon_劦",
+    "component": "劦",
+    "reading": "キョウ",
+    "members": [
+      "協",
+      "脅"
+    ]
+  },
+  {
+    "id": "phon_区",
+    "component": "区",
+    "reading": "オウ",
+    "members": [
+      "区",
+      "欧",
+      "殴"
+    ]
+  },
+  {
+    "id": "phon_府",
+    "component": "府",
+    "reading": "フ",
+    "members": [
+      "府",
+      "腐"
+    ]
+  },
+  {
+    "id": "phon_比",
+    "component": "比",
+    "reading": "ヒ",
+    "members": [
+      "比",
+      "批"
+    ]
+  },
+  {
+    "id": "phon_竟",
+    "component": "竟",
+    "reading": "キョウ",
+    "members": [
+      "境",
+      "鏡"
+    ]
+  },
+  {
+    "id": "phon_俞",
+    "component": "俞",
+    "reading": "ユ",
+    "members": [
+      "輸",
+      "諭",
+      "愉"
+    ]
+  },
+  {
+    "id": "phon_泉",
+    "component": "泉",
+    "reading": "セン",
+    "members": [
+      "線",
+      "泉"
+    ]
+  },
+  {
+    "id": "phon_農",
+    "component": "農",
+    "reading": "ノウ",
+    "members": [
+      "農",
+      "濃"
+    ]
+  },
+  {
+    "id": "phon_州",
+    "component": "州",
+    "reading": "シュウ",
+    "members": [
+      "州",
+      "酬"
+    ]
+  },
+  {
+    "id": "phon_武",
+    "component": "武",
+    "reading": "ブ",
+    "members": [
+      "武",
+      "賦"
+    ]
+  },
+  {
+    "id": "phon_象",
+    "component": "象",
+    "reading": "ゾウ",
+    "members": [
+      "象",
+      "像"
+    ]
+  },
+  {
+    "id": "phon_旦",
+    "component": "旦",
+    "reading": "タン",
+    "members": [
+      "担",
+      "胆",
+      "旦"
+    ]
+  },
+  {
+    "id": "phon_賞",
+    "component": "賞",
+    "reading": "ショウ",
+    "members": [
+      "賞",
+      "償"
+    ]
+  },
+  {
+    "id": "phon_復",
+    "component": "復",
+    "reading": "フク",
+    "members": [
+      "復",
+      "覆"
+    ]
+  },
+  {
+    "id": "phon_固",
+    "component": "固",
+    "reading": "コ",
+    "members": [
+      "個",
+      "固",
+      "箇"
+    ]
+  },
+  {
+    "id": "phon_蔵",
+    "component": "蔵",
+    "reading": "ゾウ",
+    "members": [
+      "蔵",
+      "臓"
+    ]
+  },
+  {
+    "id": "phon_量",
+    "component": "量",
+    "reading": "リョウ",
+    "members": [
+      "量",
+      "糧"
+    ]
+  },
+  {
+    "id": "phon_刑",
+    "component": "刑",
+    "reading": "ケイ",
+    "members": [
+      "型",
+      "刑"
+    ]
+  },
+  {
+    "id": "phon_彔",
+    "component": "彔",
+    "reading": "ロク",
+    "members": [
+      "録",
+      "緑"
+    ]
+  },
+  {
+    "id": "phon_喬",
+    "component": "喬",
+    "reading": "キョウ",
+    "members": [
+      "橋",
+      "矯"
+    ]
+  },
+  {
+    "id": "phon_𠔉",
+    "component": "𠔉",
+    "reading": "ケン",
+    "members": [
+      "券",
+      "巻"
+    ]
+  },
+  {
+    "id": "phon_扁",
+    "component": "扁",
+    "reading": "ヘン",
+    "members": [
+      "編",
+      "偏",
+      "遍"
+    ]
+  },
+  {
+    "id": "phon_竹",
+    "component": "竹",
+    "reading": "チク",
+    "members": [
+      "竹",
+      "築"
+    ]
+  },
+  {
+    "id": "phon_尞",
+    "component": "尞",
+    "reading": "リョウ",
+    "members": [
+      "療",
+      "僚",
+      "寮"
+    ]
+  },
+  {
+    "id": "phon_采",
+    "component": "采",
+    "reading": "サイ",
+    "members": [
+      "採",
+      "菜",
+      "彩",
+      "采"
+    ]
+  },
+  {
+    "id": "phon_将",
+    "component": "将",
+    "reading": "ショウ",
+    "members": [
+      "将",
+      "奨"
+    ]
+  },
+  {
+    "id": "phon_般",
+    "component": "般",
+    "reading": "ハン",
+    "members": [
+      "般",
+      "搬"
+    ]
+  },
+  {
+    "id": "phon_壮",
+    "component": "壮",
+    "reading": "ソウ",
+    "members": [
+      "装",
+      "荘",
+      "壮"
+    ]
+  },
+  {
+    "id": "phon_亢",
+    "component": "亢",
+    "reading": "コウ",
+    "members": [
+      "航",
+      "抗",
+      "坑"
+    ]
+  },
+  {
+    "id": "phon_禁",
+    "component": "禁",
+    "reading": "キン",
+    "members": [
+      "禁",
+      "襟"
+    ]
+  },
+  {
+    "id": "phon_奐",
+    "component": "奐",
+    "reading": "カン",
+    "members": [
+      "換",
+      "喚"
+    ]
+  },
+  {
+    "id": "phon_暴",
+    "component": "暴",
+    "reading": "バク",
+    "members": [
+      "暴",
+      "爆"
+    ]
+  },
+  {
+    "id": "phon_亭",
+    "component": "亭",
+    "reading": "テイ",
+    "members": [
+      "停",
+      "亭"
+    ]
+  },
+  {
+    "id": "phon_帯",
+    "component": "帯",
+    "reading": "タイ",
+    "members": [
+      "帯",
+      "滞"
+    ]
+  },
+  {
+    "id": "phon_普",
+    "component": "普",
+    "reading": "フ",
+    "members": [
+      "普",
+      "譜"
+    ]
+  },
+  {
+    "id": "phon_串",
+    "component": "串",
+    "reading": "カン",
+    "members": [
+      "患",
+      "串"
+    ]
+  },
+  {
+    "id": "phon_昆",
+    "component": "昆",
+    "reading": "コン",
+    "members": [
+      "混",
+      "昆"
+    ]
+  },
+  {
+    "id": "phon_升",
+    "component": "升",
+    "reading": "ショウ",
+    "members": [
+      "昇",
+      "升"
+    ]
+  },
+  {
+    "id": "phon_志",
+    "component": "志",
+    "reading": "シ",
+    "members": [
+      "誌",
+      "志"
+    ]
+  },
+  {
+    "id": "phon_干",
+    "component": "干",
+    "reading": "カン",
+    "members": [
+      "刊",
+      "干",
+      "汗",
+      "幹",
+      "肝"
+    ]
+  },
+  {
+    "id": "phon_氐",
+    "component": "氐",
+    "reading": "テイ",
+    "members": [
+      "底",
+      "邸",
+      "抵"
+    ]
+  },
+  {
+    "id": "phon_于",
+    "component": "于",
+    "reading": "ウ",
+    "members": [
+      "宇",
+      "芋"
+    ]
+  },
+  {
+    "id": "phon_巨",
+    "component": "巨",
+    "reading": "キョ",
+    "members": [
+      "巨",
+      "拒",
+      "距"
+    ]
+  },
+  {
+    "id": "phon_辰",
+    "component": "辰",
+    "reading": "シン",
+    "members": [
+      "震",
+      "振",
+      "娠",
+      "唇"
+    ]
+  },
+  {
+    "id": "phon_衣",
+    "component": "衣",
+    "reading": "エ",
+    "members": [
+      "依",
+      "衣"
+    ]
+  },
+  {
+    "id": "phon_骨",
+    "component": "骨",
+    "reading": "コツ",
+    "members": [
+      "骨",
+      "滑"
+    ]
+  },
+  {
+    "id": "phon_頃",
+    "component": "頃",
+    "reading": "ケイ",
+    "members": [
+      "傾",
+      "頃"
+    ]
+  },
+  {
+    "id": "phon_巻",
+    "component": "巻",
+    "reading": "ケン",
+    "members": [
+      "巻",
+      "圏"
+    ]
+  },
+  {
+    "id": "phon_雇",
+    "component": "雇",
+    "reading": "コ",
+    "members": [
+      "雇",
+      "顧"
+    ]
+  },
+  {
+    "id": "phon_章",
+    "component": "章",
+    "reading": "ショウ",
+    "members": [
+      "章",
+      "障",
+      "彰"
+    ]
+  },
+  {
+    "id": "phon_昭",
+    "component": "昭",
+    "reading": "ショウ",
+    "members": [
+      "照",
+      "昭"
+    ]
+  },
+  {
+    "id": "phon_吉",
+    "component": "吉",
+    "reading": "キツ",
+    "members": [
+      "詰",
+      "吉"
+    ]
+  },
+  {
+    "id": "phon_荒",
+    "component": "荒",
+    "reading": "コウ",
+    "members": [
+      "荒",
+      "慌"
+    ]
+  },
+  {
+    "id": "phon_毛",
+    "component": "毛",
+    "reading": "モウ",
+    "members": [
+      "毛",
+      "耗"
+    ]
+  },
+  {
+    "id": "phon_屈",
+    "component": "屈",
+    "reading": "クツ",
+    "members": [
+      "掘",
+      "堀",
+      "屈"
+    ]
+  },
+  {
+    "id": "phon_舎",
+    "component": "舎",
+    "reading": "シャ",
+    "members": [
+      "捨",
+      "舎"
+    ]
+  },
+  {
+    "id": "phon_戒",
+    "component": "戒",
+    "reading": "カイ",
+    "members": [
+      "械",
+      "戒"
+    ]
+  },
+  {
+    "id": "phon_奉",
+    "component": "奉",
+    "reading": "ホウ",
+    "members": [
+      "奉",
+      "俸"
+    ]
+  },
+  {
+    "id": "phon_并",
+    "component": "并",
+    "reading": "ヘイ",
+    "members": [
+      "瓶",
+      "併"
+    ]
+  },
+  {
+    "id": "phon_尼",
+    "component": "尼",
+    "reading": "ニ",
+    "members": [
+      "泥",
+      "尼"
+    ]
+  },
+  {
+    "id": "phon_麻",
+    "component": "麻",
+    "reading": "マ",
+    "members": [
+      "磨",
+      "麻",
+      "摩",
+      "魔"
+    ]
+  },
+  {
+    "id": "phon_司",
+    "component": "司",
+    "reading": "シ",
+    "members": [
+      "詞",
+      "伺",
+      "司",
+      "飼",
+      "嗣"
+    ]
+  },
+  {
+    "id": "phon_荅",
+    "component": "荅",
+    "reading": "トウ",
+    "members": [
+      "塔",
+      "搭"
+    ]
+  },
+  {
+    "id": "phon_冒",
+    "component": "冒",
+    "reading": "ボウ",
+    "members": [
+      "帽",
+      "冒"
+    ]
+  },
+  {
+    "id": "phon_喿",
+    "component": "喿",
+    "reading": "ソウ",
+    "members": [
+      "燥",
+      "繰",
+      "操"
+    ]
+  },
+  {
+    "id": "phon_畜",
+    "component": "畜",
+    "reading": "チク",
+    "members": [
+      "畜",
+      "蓄"
+    ]
+  },
+  {
+    "id": "phon_夹",
+    "component": "夹",
+    "reading": "キョウ",
+    "members": [
+      "挟",
+      "狭",
+      "峡"
+    ]
+  },
+  {
+    "id": "phon_充",
+    "component": "充",
+    "reading": "ジュウ",
+    "members": [
+      "充",
+      "銃"
+    ]
+  },
+  {
+    "id": "phon_保",
+    "component": "保",
+    "reading": "ホウ",
+    "members": [
+      "保",
+      "褒"
+    ]
+  },
+  {
+    "id": "phon_蒦",
+    "component": "蒦",
+    "reading": "カク",
+    "members": [
+      "獲",
+      "穫"
+    ]
+  },
+  {
+    "id": "phon_監",
+    "component": "監",
+    "reading": "カン",
+    "members": [
+      "監",
+      "艦",
+      "鑑"
+    ]
+  },
+  {
+    "id": "phon_睘",
+    "component": "睘",
+    "reading": "カン",
+    "members": [
+      "環",
+      "還"
+    ]
+  },
+  {
+    "id": "phon_我",
+    "component": "我",
+    "reading": "ガ",
+    "members": [
+      "我",
+      "餓"
+    ]
+  },
+  {
+    "id": "phon_朱",
+    "component": "朱",
+    "reading": "シュ",
+    "members": [
+      "株",
+      "殊",
+      "珠",
+      "朱"
+    ]
+  },
+  {
+    "id": "phon_票",
+    "component": "票",
+    "reading": "ヒョウ",
+    "members": [
+      "票",
+      "標",
+      "漂"
+    ]
+  },
+  {
+    "id": "phon_郷",
+    "component": "郷",
+    "reading": "キョウ",
+    "members": [
+      "響",
+      "郷"
+    ]
+  },
+  {
+    "id": "phon_隹",
+    "component": "隹",
+    "reading": "イ",
+    "members": [
+      "維",
+      "唯"
+    ]
+  },
+  {
+    "id": "phon_叔",
+    "component": "叔",
+    "reading": "シュク",
+    "members": [
+      "淑",
+      "叔"
+    ]
+  },
+  {
+    "id": "phon_郎",
+    "component": "郎",
+    "reading": "ロウ",
+    "members": [
+      "郎",
+      "廊"
+    ]
+  },
+  {
+    "id": "phon_従",
+    "component": "従",
+    "reading": "ジュウ",
+    "members": [
+      "従",
+      "縦"
+    ]
+  },
+  {
+    "id": "phon_丰",
+    "component": "丰",
+    "reading": "ホウ",
+    "members": [
+      "邦",
+      "峰",
+      "蜂"
+    ]
+  },
+  {
+    "id": "phon_倉",
+    "component": "倉",
+    "reading": "ソウ",
+    "members": [
+      "創",
+      "倉"
+    ]
+  },
+  {
+    "id": "phon_辟",
+    "component": "辟",
+    "reading": "ヘキ",
+    "members": [
+      "壁",
+      "癖"
+    ]
+  },
+  {
+    "id": "phon_善",
+    "component": "善",
+    "reading": "ゼン",
+    "members": [
+      "善",
+      "繕"
+    ]
+  },
+  {
+    "id": "phon_朋",
+    "component": "朋",
+    "reading": "ホウ",
+    "members": [
+      "崩",
+      "棚"
+    ]
+  },
+  {
+    "id": "phon_尃",
+    "component": "尃",
+    "reading": "バク",
+    "members": [
+      "博",
+      "縛"
+    ]
+  },
+  {
+    "id": "phon_帝",
+    "component": "帝",
+    "reading": "テイ",
+    "members": [
+      "締",
+      "帝"
+    ]
+  },
+  {
+    "id": "phon_徴",
+    "component": "徴",
+    "reading": "チョウ",
+    "members": [
+      "徴",
+      "懲"
+    ]
+  },
+  {
+    "id": "phon_曷",
+    "component": "曷",
+    "reading": "カツ",
+    "members": [
+      "喝",
+      "渇",
+      "褐"
+    ]
+  },
+  {
+    "id": "phon_属",
+    "component": "属",
+    "reading": "ショク",
+    "members": [
+      "属",
+      "嘱"
+    ]
+  },
+  {
+    "id": "phon_虍",
+    "component": "虍",
+    "reading": "リョ",
+    "members": [
+      "慮",
+      "虜"
+    ]
+  },
+  {
+    "id": "phon_需",
+    "component": "需",
+    "reading": "ジュ",
+    "members": [
+      "需",
+      "儒"
+    ]
+  },
+  {
+    "id": "phon_射",
+    "component": "射",
+    "reading": "シャ",
+    "members": [
+      "射",
+      "謝"
+    ]
+  },
+  {
+    "id": "phon_却",
+    "component": "却",
+    "reading": "キャク",
+    "members": [
+      "却",
+      "脚"
+    ]
+  },
+  {
+    "id": "phon_焦",
+    "component": "焦",
+    "reading": "ショウ",
+    "members": [
+      "焦",
+      "礁"
+    ]
+  },
+  {
+    "id": "phon_㐮",
+    "component": "㐮",
+    "reading": "ジョウ",
+    "members": [
+      "譲",
+      "壌",
+      "醸",
+      "嬢"
+    ]
+  },
+  {
+    "id": "phon_岡",
+    "component": "岡",
+    "reading": "コウ",
+    "members": [
+      "綱",
+      "鋼",
+      "岡"
+    ]
+  },
+  {
+    "id": "phon_伐",
+    "component": "伐",
+    "reading": "バツ",
+    "members": [
+      "閥",
+      "伐"
+    ]
+  },
+  {
+    "id": "phon_䍃",
+    "component": "䍃",
+    "reading": "ヨウ",
+    "members": [
+      "揺",
+      "謡"
+    ]
+  },
+  {
+    "id": "phon_既",
+    "component": "既",
+    "reading": "ガイ",
+    "members": [
+      "概",
+      "慨"
+    ]
+  },
+  {
+    "id": "phon_斬",
+    "component": "斬",
+    "reading": "ザン",
+    "members": [
+      "暫",
+      "斬"
+    ]
+  },
+  {
+    "id": "phon_尉",
+    "component": "尉",
+    "reading": "イ",
+    "members": [
+      "慰",
+      "尉"
+    ]
+  },
+  {
+    "id": "phon_旬",
+    "component": "旬",
+    "reading": "ジュン",
+    "members": [
+      "旬",
+      "殉"
+    ]
+  },
+  {
+    "id": "phon_兼",
+    "component": "兼",
+    "reading": "ケン",
+    "members": [
+      "兼",
+      "嫌",
+      "謙"
+    ]
+  },
+  {
+    "id": "phon_牙",
+    "component": "牙",
+    "reading": "ガ",
+    "members": [
+      "雅",
+      "芽",
+      "牙"
+    ]
+  },
+  {
+    "id": "phon_竜",
+    "component": "竜",
+    "reading": "ロウ",
+    "members": [
+      "竜",
+      "滝"
+    ]
+  },
+  {
+    "id": "phon_菐",
+    "component": "菐",
+    "reading": "ボク",
+    "members": [
+      "僕",
+      "撲"
+    ]
+  },
+  {
+    "id": "phon_瓜",
+    "component": "瓜",
+    "reading": "コ",
+    "members": [
+      "孤",
+      "弧"
+    ]
+  },
+  {
+    "id": "phon_賁",
+    "component": "賁",
+    "reading": "フン",
+    "members": [
+      "噴",
+      "墳",
+      "憤"
+    ]
+  },
+  {
+    "id": "phon_曼",
+    "component": "曼",
+    "reading": "マン",
+    "members": [
+      "慢",
+      "漫"
+    ]
+  },
+  {
+    "id": "phon_某",
+    "component": "某",
+    "reading": "ボウ",
+    "members": [
+      "謀",
+      "某"
+    ]
+  },
+  {
+    "id": "phon_貞",
+    "component": "貞",
+    "reading": "テイ",
+    "members": [
+      "貞",
+      "偵"
+    ]
+  },
+  {
+    "id": "phon_玄",
+    "component": "玄",
+    "reading": "ゲン",
+    "members": [
+      "玄",
+      "弦"
+    ]
+  },
+  {
+    "id": "phon_唐",
+    "component": "唐",
+    "reading": "トウ",
+    "members": [
+      "糖",
+      "唐"
+    ]
+  },
+  {
+    "id": "phon_盾",
+    "component": "盾",
+    "reading": "ジュン",
+    "members": [
+      "盾",
+      "循"
+    ]
+  },
+  {
+    "id": "phon_甚",
+    "component": "甚",
+    "reading": "カン",
+    "members": [
+      "勘",
+      "堪"
+    ]
+  },
+  {
+    "id": "phon_此",
+    "component": "此",
+    "reading": "シ",
+    "members": [
+      "紫",
+      "雌"
+    ]
+  },
+  {
+    "id": "phon_曹",
+    "component": "曹",
+    "reading": "ソウ",
+    "members": [
+      "遭",
+      "槽",
+      "曹"
+    ]
+  },
+  {
+    "id": "phon_兹",
+    "component": "兹",
+    "reading": "ジ",
+    "members": [
+      "滋",
+      "磁",
+      "慈"
+    ]
+  },
+  {
+    "id": "phon_卆",
+    "component": "卆",
+    "reading": "スイ",
+    "members": [
+      "酔",
+      "粋"
+    ]
+  },
+  {
+    "id": "phon_刃",
+    "component": "刃",
+    "reading": "ニン",
+    "members": [
+      "忍",
+      "刃"
+    ]
+  },
+  {
+    "id": "phon_垂",
+    "component": "垂",
+    "reading": "スイ",
+    "members": [
+      "垂",
+      "睡"
+    ]
+  },
+  {
+    "id": "phon_凡",
+    "component": "凡",
+    "reading": "ハン",
+    "members": [
+      "凡",
+      "帆"
+    ]
+  },
+  {
+    "id": "phon_敝",
+    "component": "敝",
+    "reading": "ヘイ",
+    "members": [
+      "弊",
+      "幣"
+    ]
+  },
+  {
+    "id": "phon_卑",
+    "component": "卑",
+    "reading": "ヒ",
+    "members": [
+      "碑",
+      "卑"
+    ]
+  },
+  {
+    "id": "phon_奚",
+    "component": "奚",
+    "reading": "ケイ",
+    "members": [
+      "鶏",
+      "渓"
+    ]
+  },
+  {
+    "id": "phon_寿",
+    "component": "寿",
+    "reading": "シュウ",
+    "members": [
+      "鋳",
+      "寿"
+    ]
+  }
+]

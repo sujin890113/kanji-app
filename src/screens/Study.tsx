@@ -6,14 +6,16 @@ import { ProgressBar } from '../components/ProgressBar';
 import { Sheet } from '../components/Sheet';
 import { Button } from '../components/Button';
 import { Stamp } from '../components/Stamp';
-import { CloseIcon, StarIcon, UndoIcon } from '../components/icons';
+import { BackIcon, CloseIcon, StarIcon, UndoIcon } from '../components/icons';
+import { KoLine, PhoneticChips, ReadingLines, RuleHints, RuleSheet, SimilarBlock } from '../components/KanjiSections';
+import { useRelations, type Relations } from '../content/relations';
+import { DetailBody } from './Detail';
 import { getChapter, levelName, type Chapter, type Content, type Kanji } from '../content/content';
 import { chapterKey, nextChapter, summarizeChapters } from '../domain/progress';
 import { newCard, roundDone, roundNumber, shuffle } from '../domain/scheduler';
 import {
   addCount,
   emptyCounts,
-  formatKun,
   REQUEUE_GAP,
   requeue,
   sessionLimit,
@@ -126,6 +128,10 @@ function StudySession({ content, scope, retryIds }: Props) {
   const [busy, setBusy] = useState(false);
   const [undo, setUndo] = useState<{ snapshot: UndoSnapshot; ui: UiSnapshot; id: string } | null>(null);
   const [confirmExit, setConfirmExit] = useState(false);
+  /** 카드 위에 겹쳐 연 한자 상세 (세션을 잃지 않도록 화면을 옮기지 않는다). 뒤로 가기용 목록 */
+  const [peek, setPeek] = useState<string[]>([]);
+  const [ruleSheet, setRuleSheet] = useState<string | null>(null);
+  const relations = useRelations();
   const shownAt = useRef(Date.now());
   const sessionId = useRef<number | null>(null);
   const startedAt = useRef(Date.now());
@@ -390,7 +396,19 @@ function StudySession({ content, scope, retryIds }: Props) {
           <div className={`${styles.kanji} ${anyOpen ? styles.kanjiSmall : ''}`} lang="ja">
             {kanji.id}
           </div>
-          {anyOpen && <Answer kanji={kanji} reveal={reveal} />}
+          {anyOpen && (
+            <Answer
+              key={kanji.id}
+              content={content}
+              kanji={kanji}
+              reveal={reveal}
+              settings={settings}
+              relations={relations}
+              studyMarks={cards.get(kanji.id)?.study_marks ?? 0}
+              onRule={setRuleSheet}
+              onOpen={(id) => setPeek([id])}
+            />
+          )}
         </div>
 
         <div className={styles.chips}>
@@ -407,6 +425,34 @@ function StudySession({ content, scope, retryIds }: Props) {
           onGrade={(r) => void grade(r)}
         />
       </footer>
+
+      <RuleSheet
+        content={content}
+        relations={relations}
+        ruleId={ruleSheet}
+        self={kanji.id}
+        onClose={() => setRuleSheet(null)}
+        onOpenKanji={(id) => {
+          setRuleSheet(null);
+          setPeek([id]);
+        }}
+      />
+      {peek.length > 0 && (
+        <div className={styles.overlay} role="dialog" aria-modal="true" aria-label="한자 상세">
+          <header className={styles.overlayHeader}>
+            <button type="button" className={styles.iconButton} aria-label="뒤로" onClick={() => setPeek(peek.slice(0, -1))}>
+              <BackIcon />
+            </button>
+            <p className={styles.title}>한자 상세</p>
+            <button type="button" className={styles.iconButton} aria-label="학습 카드로" onClick={() => setPeek([])}>
+              <CloseIcon />
+            </button>
+          </header>
+          <div className={styles.overlayBody}>
+            <DetailBody key={peek[peek.length - 1]} content={content} id={peek[peek.length - 1]} onOpen={(id) => setPeek([...peek, id])} />
+          </div>
+        </div>
+      )}
 
       <Sheet open={confirmExit} title="세션을 끝낼까요?" onClose={() => setConfirmExit(false)}>
         <p className={styles.sheetText}>
@@ -518,42 +564,46 @@ function RevealChip({ label, pressed, onToggle }: { label: string; pressed: bool
   );
 }
 
-/** 답 영역 (M2 기본형. F1·F2 등 세부 구역은 M4) */
-function Answer({ kanji, reveal }: { kanji: Kanji; reveal: RevealState }) {
+/**
+ * 답 영역 (SPEC S3 펼친 뒤, 2.3)
+ * - [한국어] : 한국 훈음 줄(F1 켬 : 대표 크게·나머지 작게·뜻 풀이 / 끔 : 뜻 풀이 또는 대표 훈음) + 정자체(F2)
+ * - [읽기] : 음독·훈독 줄
+ * - 전부 펼침일 때만 : 💡 음 대응(F3), 같은 음부(F4), 닮은 한자(F8)
+ */
+function Answer({
+  content,
+  kanji,
+  reveal,
+  settings,
+  relations,
+  studyMarks,
+  onRule,
+  onOpen,
+}: {
+  content: Content;
+  kanji: Kanji;
+  reveal: RevealState;
+  settings: Settings;
+  relations: Relations | null;
+  studyMarks: number;
+  onRule: (ruleId: string) => void;
+  onOpen: (id: string) => void;
+}) {
+  const all = reveal.ko && reveal.reading;
   return (
     <div className={styles.answer}>
-      {reveal.ko && (
-        <div className={`${styles.row} ${styles.rowKo}`}>
-          <span className={styles.rowLabel}>한</span>
-          <div>
-            {kanji.kokuji || !kanji.ko_main ? (
-              <span className={styles.kokuji}>일본 고유 한자</span>
-            ) : (
-              <span className={styles.koMain}>{`${kanji.ko_main.hun} ${kanji.ko_main.eum}`.trim()}</span>
-            )}
-            {kanji.meaning_ko && <p className={styles.meaning}>{kanji.meaning_ko}</p>}
-          </div>
-        </div>
-      )}
-      {reveal.reading && (
-        <>
-          <div className={`${styles.row} ${styles.rowOn}`}>
-            <span className={styles.rowLabel} lang="ja">
-              音
-            </span>
-            <span className={styles.reading} lang="ja">
-              {kanji.on.length ? kanji.on.join('・') : '—'}
-            </span>
-          </div>
-          <div className={`${styles.row} ${styles.rowKun}`}>
-            <span className={styles.rowLabel} lang="ja">
-              訓
-            </span>
-            <span className={styles.reading} lang="ja">
-              {kanji.kun.length ? kanji.kun.map(formatKun).join('・') : '—'}
-            </span>
-          </div>
-        </>
+      {reveal.ko && <KoLine kanji={kanji} f1={settings.f1_hunum} f2={settings.f2_ko_form} />}
+      {reveal.reading && <ReadingLines kanji={kanji} f1={settings.f1_hunum} />}
+      {all && settings.f3_sound_rule && <RuleHints kanji={kanji} relations={relations} onOpen={onRule} />}
+      {all && settings.f4_phonetic && <PhoneticChips kanji={kanji} content={content} relations={relations} onOpen={onOpen} />}
+      {all && settings.f8_similar && (
+        <SimilarBlock
+          kanji={kanji}
+          content={content}
+          autoOpen={settings.similar_auto_open && studyMarks >= 2}
+          onOpen={onOpen}
+          onDetail={() => onOpen(kanji.id)}
+        />
       )}
     </div>
   );

@@ -1,0 +1,265 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.muted {
+  color: var(--ink-2);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.bigKanji {
+  color: var(--ink);
+  font-family: var(--font-kanji);
+  font-size: var(--size-kanji-detail);
+  font-weight: var(--weight-kanji);
+  line-height: 1.1;
+}
+
+.headSide {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-chip);
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.statusDot {
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+
+.star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-left: calc(var(--space-2) * -1);
+  border: 0;
+  border-radius: var(--radius-chip);
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+}
+
+.starOn {
+  color: var(--yamabuki);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.sectionTitle {
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.line {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.lineLabel {
+  color: var(--ink-3);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.lineBody {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-3);
+}
+
+.lineKo {
+  color: var(--color-ko-hunum);
+}
+
+.lineOn {
+  color: var(--color-on);
+}
+
+.lineKun {
+  color: var(--color-kun);
+}
+
+.koMain {
+  font-size: var(--size-title);
+  font-weight: 700;
+}
+
+.koMore {
+  font-size: var(--size-body);
+}
+
+.meaning {
+  flex-basis: 100%;
+  color: var(--ink-2);
+}
+
+.reading {
+  font-family: var(--font-ja);
+  font-size: var(--size-ja);
+  font-weight: var(--weight-ja);
+}
+
+.forms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-button);
+  background: var(--surface-2);
+}
+
+/* 같은 크기로 나란히 (SPEC S5) */
+.formChar {
+  color: var(--ink);
+  font-family: var(--font-kanji);
+  font-size: var(--size-kanji-card-open);
+  line-height: 1.15;
+}
+
+.formKo {
+  font-family: var(--font-ko-form);
+}
+
+.formLabel {
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.rule {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.rule + .rule {
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+
+.ruleTitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-weight: 700;
+}
+
+.ruleExample {
+  color: var(--ink-2);
+  font-family: var(--font-ja);
+  font-weight: var(--weight-ja);
+}
+
+.ruleText {
+  color: var(--ink-2);
+}
+
+.groupLabel {
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.recordRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.recordLabel {
+  width: 72px;
+  flex-shrink: 0;
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.dots {
+  display: inline-flex;
+  gap: var(--space-1);
+}
+
+.dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+.dotStudy {
+  background: var(--grade-study);
+}
+
+.dotVague {
+  background: var(--grade-vague);
+}
+
+.dotKnow {
+  background: var(--grade-know);
+}
+
+.dotGraduate {
+  background: var(--matsu-deep);
+}

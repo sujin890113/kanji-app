@@ -9,11 +9,23 @@ Windows 콘솔에서 한글이 깨지면 먼저 `set PYTHONUTF8=1`(PowerShell은
 python fetch.py            # 1. 원본 내려받기 → raw/, SOURCES.lock
 python build_kanji.py      # 2. 상용한자 2,136자, 급수·장·순번  (N5만 : --level 5)
 python build_korean.py     # 3. 한국 훈음, 정자체 후보, 검수 CSV → review/
+python build_relations.py  # 5. 음부 묶음·유사 한자(KanjiVG), 음 대응 규칙 정의 → build/
 python apply_overrides.py  # 7. overrides/ 반영 → public/data/kanji.json, meta.json
 python validate.py         # 8. 전수 검사 → review/build_report.md
 ```
 
-4~6단계(단어, 관계, 획순)는 M4·M5에서 추가한다.
+4단계(단어)와 6단계(획순)는 M5에서 추가한다. 5단계는 `python fetch.py --only kanjivg`로 KanjiVG를 먼저 받아 둔다.
+
+### 5단계 : 관계 데이터 (F3·F4·F8)
+
+- **음 대응 규칙** : 규칙 정의는 `overrides/sound_rules.csv`가 있으면 그것을, 없으면 SPEC 2.3 초안(build_relations.py의 `DRAFT_RULES`)을 쓴다.
+  한자별 판정은 apply_overrides.py가 검수 반영 뒤 대표 음으로 한다. 일본 고유 한자는 규칙을 붙이지 않는다.
+  결과는 `review/sound_rules_review.csv`(규칙별 해당 한자 수와 예시)로 나온다. 고치려면 이 파일을 복사해
+  `overrides/sound_rules.csv`로 저장하고 `id, title, ko_pattern, ja_pattern, description` 열을 고친다.
+  - `ko_pattern` : `받침:ㄱ`, `받침:ㄴ|ㅁ`, `초성:ㅎ`
+  - `ja_pattern` : `끝:ク|キ`(음독의 마지막 글자), `행:カ|ガ`(음독 첫 글자의 행. 탁음 행은 따로 적는다)
+- **음부 묶음** : KanjiVG의 `kvg:phon` 표시가 같은 구성 요소이고 같은 음독을 공유하는 상용한자 2자 이상.
+- **유사 한자** : KanjiVG 구성 요소가 많이 겹치고 획수 차가 4 이하인 한자 최대 3자. 자동 계산이며 예시는 build_report.md에 있다.
 
 ## 폴더
 

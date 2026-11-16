@@ -7,6 +7,7 @@ SOURCES.lock에 기록한다. GitHub 원본은 커밋 번호로 고정한다.
   python fetch.py            # M1에 필요한 원본만 (kanjidic2, kanji_data, hanja, unihan)
   python fetch.py --all      # 이후 단계 원본까지 (kanjivg, jmdict)
   python fetch.py --force    # 이미 받은 파일도 다시 받기
+  python fetch.py --only kanjivg   # 이름을 고른 원본만
 """
 
 from __future__ import annotations
@@ -113,11 +114,15 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--all", action="store_true", help="이후 단계 원본까지 받기")
     ap.add_argument("--force", action="store_true", help="이미 받은 파일도 다시 받기")
+    ap.add_argument("--only", choices=sorted(SOURCES), help="이 원본만 받기")
     args = ap.parse_args()
 
     lock = load_lock()
     for name, src in SOURCES.items():
-        if src["milestone"] != "M1" and not args.all:
+        if args.only:
+            if name != args.only:
+                continue
+        elif src["milestone"] != "M1" and not args.all:
             continue
         dest_dir = RAW / name
         dest_dir.mkdir(parents=True, exist_ok=True)
