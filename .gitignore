@@ -9,3 +9,5 @@ data-pipeline/raw/*
 !data-pipeline/raw/.gitkeep
 __pycache__/
 .venv/
+
+data-pipeline/build/

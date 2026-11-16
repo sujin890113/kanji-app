@@ -1,0 +1,52 @@
+{
+  "note": "fetch.py가 관리한다. 직접 고치지 않는다.",
+  "sources": {
+    "kanjidic2": {
+      "url": "https://www.edrdg.org/kanjidic/kanjidic2.xml.gz",
+      "file": "raw/kanjidic2/kanjidic2.xml.gz",
+      "version": "Last-Modified Sun, 15 Nov 2026 02:35:04 GMT",
+      "license": "CC BY-SA 4.0 (출처 표시 필수)",
+      "license_url": "https://www.edrdg.org/edrdg/licence.html",
+      "attribution": "KANJIDIC2 © Electronic Dictionary Research and Development Group",
+      "sha256": "61f8bcbf3a1f41d3ec9e438e106659281aa32003430f2cc6fed5148b91d2e226",
+      "bytes": 1488573,
+      "fetched_at": "2026-11-16T02:21:09Z",
+      "used_fields": "상용한자 판별(grade), 획수, 음독·훈독(ja_on/ja_kun), 신문 빈도(freq), 한국 음(korean_h)"
+    },
+    "kanji_data": {
+      "url": "https://raw.githubusercontent.com/davidluzgouveia/kanji-data/00fd7079c3890f430759536f91aa5e854ec0ca4f/kanji-jouyou.json",
+      "file": "raw/kanji_data/kanji-jouyou.json",
+      "version": "git 00fd7079c3890f430759536f91aa5e854ec0ca4f (2026-02-27)",
+      "license": "저장소 MIT. 데이터는 KANJIDIC(CC BY-SA 4.0)과 tanos JLPT 목록(Jonathan Waller)에서 나옴. wk_*(WaniKani) 항목은 쓰지 않음",
+      "license_url": "https://github.com/davidluzgouveia/kanji-data/blob/00fd7079c3890f430759536f91aa5e854ec0ca4f/LICENSE",
+      "attribution": "kanji-data by David Gouveia; JLPT levels from Jonathan Waller (tanos.co.uk)",
+      "sha256": "af98d524ab5abad0233e78451fae4780c573756952e59f3a4104d03c000661d7",
+      "bytes": 984796,
+      "fetched_at": "2026-11-16T02:21:10Z",
+      "used_fields": "jlpt_new"
+    },
+    "hanja": {
+      "url": "https://raw.githubusercontent.com/libhangul/libhangul/717409ce61524bb3d8426060a384822f21354c62/data/hanja/hanja.txt",
+      "file": "raw/hanja/hanja.txt",
+      "version": "git 717409ce61524bb3d8426060a384822f21354c62 (2026-02-15)",
+      "license": "BSD-3-Clause (hanja.txt 파일 머리글). 저장소 전체는 LGPL-2.1이지만 이 파일은 머리글의 BSD-3 조항을 따름",
+      "license_url": "https://github.com/libhangul/libhangul/blob/717409ce61524bb3d8426060a384822f21354c62/data/hanja/hanja.txt",
+      "attribution": "hanja.txt © 2005,2006 Choe Hwanjin (libhangul)",
+      "sha256": "b1004034589f1357daaea3534a6136f6b5ef825afa8779886b20f0b7908bbe3b",
+      "bytes": 6452537,
+      "fetched_at": "2026-11-16T02:21:11Z"
+    },
+    "unihan": {
+      "url": "https://www.unicode.org/Public/18.0.0/ucd/Unihan.zip",
+      "file": "raw/unihan/Unihan.zip",
+      "version": "Unicode 18.0.0",
+      "license": "Unicode License V3",
+      "license_url": "https://www.unicode.org/license.txt",
+      "attribution": "Unihan Database © Unicode, Inc.",
+      "sha256": "4c93ea9c1f636451729a840978f1667a53886af37ba854fdcce109721c63d43e",
+      "bytes": 8340649,
+      "fetched_at": "2026-11-16T02:21:15Z",
+      "used_fields": "kJinmeiyoKanji, kJoyoKanji, kKoreanEducationHanja, kKoreanName, kSemanticVariant, kZVariant"
+    }
+  }
+}
