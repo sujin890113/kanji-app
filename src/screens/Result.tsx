@@ -15,7 +15,8 @@ export interface ResultState {
   counts: SessionCounts;
   startedAt: number;
   endedAt: number;
-  items: { id: string; rating: Rating }[];
+  /** reverse : 역방향(F7) 카드 */
+  items: { id: string; rating: Rating; reverse?: boolean }[];
   roundCompleted: boolean;
   /** 이번 세션의 회독 번호 (회독 방식) */
   roundNo: number;
@@ -54,7 +55,7 @@ function ResultView({ state }: { state: ResultState }) {
   const { counts, items } = state;
   const total = items.length;
   const seconds = Math.max(0, Math.round((state.endedAt - state.startedAt) / 1000));
-  const studyIds = [...new Set(items.filter((i) => i.rating === 'study').map((i) => i.id))];
+  const studyIds = [...new Set(items.filter((i) => i.rating === 'study' && !i.reverse).map((i) => i.id))];
   // 같은 한자를 여러 번 판정했으면 마지막 판정으로 칸을 칠한다
   const last = new Map(items.map((i) => [i.id, i.rating]));
 

@@ -10,7 +10,7 @@ import { capElapsed, dateKey } from '../domain/session';
 import { advanceSrsChapter, gradeSrs, type SrsOptions } from '../domain/srs';
 import { rechunkProgress, type ChapterIds } from '../domain/progress';
 import type { SessionCounts } from '../domain/session';
-import type { CardOrder, CardState, ChapterProgress, Rating } from '../domain/types';
+import type { CardOrder, CardState, ChapterProgress, Direction, Rating } from '../domain/types';
 
 const FORWARD = 'forward' as const;
 
@@ -24,6 +24,12 @@ export async function getCards(ids: readonly string[]): Promise<Map<string, Card
 export async function getAllCards(): Promise<Map<string, CardState>> {
   const rows = await db.cards.toArray();
   return new Map(rows.filter((r) => r.direction === FORWARD).map((r) => [r.kanji_id, r]));
+}
+
+/** 역방향(F7) 카드 전체 */
+export async function getAllReverseCards(): Promise<Map<string, CardState>> {
+  const rows = await db.cards.toArray();
+  return new Map(rows.filter((r) => r.direction === 'reverse').map((r) => [r.kanji_id, r]));
 }
 
 export async function getAllChapters(): Promise<ChapterRow[]> {
@@ -73,10 +79,13 @@ export interface UndoSnapshot {
   progressBefore: ChapterProgress | undefined;
   progressKey: [number, number] | null;
   dailyBefore: DailyRow | undefined;
+  direction: Direction;
 }
 
 export interface GradeInput {
   kanjiId: string;
+  /** 카드 방향. 역방향(F7)은 장 진행에 반영하지 않는다 (chapter : null) */
+  direction?: Direction;
   rating: Rating;
   elapsedMs: number;
   sessionId: number;
@@ -100,8 +109,9 @@ export async function recordGrade(input: GradeInput): Promise<GradeOutput> {
   const now = Date.now();
   const elapsed = capElapsed(input.elapsedMs);
   return db.transaction('rw', [db.cards, db.chapters, db.review_logs, db.daily], async () => {
-    const cardBefore = await db.cards.get([input.kanjiId, FORWARD]);
-    const start = cardBefore ?? newCard(input.kanjiId);
+    const direction = input.direction ?? FORWARD;
+    const cardBefore = await db.cards.get([input.kanjiId, direction]);
+    const start = cardBefore ?? newCard(input.kanjiId, direction);
     const card =
       input.scheduler.kind === 'srs'
         ? gradeSrs(start, input.rating, now, input.scheduler.options)
@@ -110,7 +120,7 @@ export async function recordGrade(input: GradeInput): Promise<GradeOutput> {
 
     const logId = (await db.review_logs.add({
       kanji_id: input.kanjiId,
-      direction: FORWARD,
+      direction,
       rating: input.rating,
       ts: now,
       elapsed_ms: elapsed,
@@ -131,7 +141,8 @@ export async function recordGrade(input: GradeInput): Promise<GradeOutput> {
     let chapterCompleted = false;
     let progressBefore: ChapterProgress | undefined;
     let progressKey: [number, number] | null = null;
-    const ch = input.chapter;
+    // 역방향 판정은 장 진행·회독에 반영하지 않는다
+    const ch = direction === FORWARD ? input.chapter : null;
     if (ch) {
       progressKey = [ch.level, ch.chapter];
       progressBefore = await db.chapters.get(progressKey);
@@ -155,7 +166,7 @@ export async function recordGrade(input: GradeInput): Promise<GradeOutput> {
       progress,
       roundCompleted,
       chapterCompleted,
-      undo: { logId, cardBefore, progressBefore, progressKey, dailyBefore },
+      undo: { logId, cardBefore, progressBefore, progressKey, dailyBefore, direction },
     };
   });
 }
@@ -165,7 +176,7 @@ export async function undoGrade(s: UndoSnapshot, kanjiId: string): Promise<void>
   await db.transaction('rw', [db.cards, db.chapters, db.review_logs, db.daily], async () => {
     await db.review_logs.delete(s.logId);
     if (s.cardBefore) await db.cards.put(s.cardBefore);
-    else await db.cards.delete([kanjiId, FORWARD]);
+    else await db.cards.delete([kanjiId, s.direction]);
     if (s.progressBefore) await db.chapters.put(s.progressBefore);
     else if (s.progressKey) await db.chapters.delete(s.progressKey);
     const key = dateKey(Date.now());
@@ -238,6 +249,8 @@ export async function resetKanji(kanjiId: string): Promise<void> {
   await db.transaction('rw', db.cards, async () => {
     const card = await db.cards.get([kanjiId, FORWARD]);
     if (card) await db.cards.put(resetCard(card));
+    // 역방향(F7) 카드도 처음부터
+    await db.cards.delete([kanjiId, 'reverse']);
   });
 }
 

@@ -113,8 +113,6 @@ export function StrokeSection({ kanji }: { kanji: Kanji }) {
   );
 }
 
-type Point = [number, number];
-
 function toPath(points: Point[]): string {
   if (points.length === 0) return '';
   const [first, ...rest] = points;
@@ -123,41 +121,116 @@ function toPath(points: Point[]): string {
   return `M${first[0].toFixed(1)} ${first[1].toFixed(1)}` + tail.map(([x, y]) => `L${x.toFixed(1)} ${y.toFixed(1)}`).join('');
 }
 
+export type Point = [number, number];
+
+interface PadProps {
+  /** 본보기 획. 없으면(불러오는 중·실패) 빈 칸에만 쓴다 */
+  data: StrokeData | null | undefined;
+  lines: Point[][];
+  onLines: (lines: Point[][]) => void;
+  showModel: boolean;
+  label: string;
+  className?: string;
+}
+
+/** 손가락·펜으로 쓰는 칸. 흐린 본보기를 겹쳐 보일 수 있다 (따라 쓰기, 역방향 카드의 써 보기) */
+export function WritingPad({ data, lines, onLines, showModel, label, className }: PadProps) {
+  const [settings] = useSettings();
+  const [current, setCurrentState] = useState<Point[] | null>(null);
+  // 빠른 입력에서도 점을 잃지 않도록 쓰는 중인 획은 ref에도 둔다 (상태는 그리기용)
+  const currentRef = useRef<Point[] | null>(null);
+  const setCurrent = (pts: Point[] | null) => {
+    currentRef.current = pts;
+    setCurrentState(pts);
+  };
+  const svgRef = useRef<SVGSVGElement>(null);
+  // 획을 연달아 빨리 써도 앞 획을 잃지 않게 마지막으로 넘긴 획 목록을 기억한다
+  const linesRef = useRef(lines);
+  useEffect(() => {
+    linesRef.current = lines;
+  }, [lines]);
+
+  const pointOf = (e: PointerEvent<SVGSVGElement>): Point => {
+    const r = svgRef.current!.getBoundingClientRect();
+    return [((e.clientX - r.left) / r.width) * 109, ((e.clientY - r.top) / r.height) * 109];
+  };
+  const down = (e: PointerEvent<SVGSVGElement>) => {
+    if (e.button !== 0) return;
+    e.stopPropagation();
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // 포인터를 잡지 못해도 쓰기는 계속한다
+    }
+    setCurrent([pointOf(e)]);
+  };
+  const move = (e: PointerEvent<SVGSVGElement>) => {
+    const cur = currentRef.current;
+    if (!cur) return;
+    const p = pointOf(e);
+    const last = cur[cur.length - 1];
+    if (Math.hypot(p[0] - last[0], p[1] - last[1]) < 0.6) return;
+    setCurrent([...cur, p]);
+  };
+  const up = () => {
+    const cur = currentRef.current;
+    if (cur) {
+      linesRef.current = [...linesRef.current, cur];
+      onLines(linesRef.current);
+    }
+    setCurrent(null);
+  };
+
+  return (
+    <svg
+      ref={svgRef}
+      viewBox="0 0 109 109"
+      className={className ?? styles.pad}
+      lang="ja"
+      aria-label={label}
+      onPointerDown={down}
+      onPointerMove={move}
+      onPointerUp={up}
+      onPointerCancel={up}
+      onClick={(e) => e.stopPropagation()}
+    >
+      <Guides />
+      {showModel && data && (
+        <g className={styles.model}>
+          {data.strokes.map((d, i) => (
+            <path key={i} d={d} />
+          ))}
+        </g>
+      )}
+      {showModel && data && settings.stroke_numbers && (
+        <g className={styles.modelNumbers}>
+          {data.numbers.map(([x, y], i) => (
+            <text key={i} x={x} y={y}>
+              {i + 1}
+            </text>
+          ))}
+        </g>
+      )}
+      <g className={styles.user}>
+        {lines.map((l, i) => (
+          <path key={i} d={toPath(l)} />
+        ))}
+        {current && <path d={toPath(current)} />}
+      </g>
+    </svg>
+  );
+}
+
 /** 따라 쓰기 전체 화면 시트. 쓴 선은 시트를 닫으면 사라진다 */
 function TracingSheet({ kanji, data, onClose }: { kanji: Kanji; data: StrokeData; onClose: () => void }) {
-  const [settings] = useSettings();
   const [lines, setLines] = useState<Point[][]>([]);
-  const [current, setCurrent] = useState<Point[] | null>(null);
   const [showModel, setShowModel] = useState(true);
-  const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
-
-  const pointOf = (e: PointerEvent<SVGSVGElement>): Point => {
-    const r = svgRef.current!.getBoundingClientRect();
-    return [((e.clientX - r.left) / r.width) * 109, ((e.clientY - r.top) / r.height) * 109];
-  };
-
-  const down = (e: PointerEvent<SVGSVGElement>) => {
-    if (e.button !== 0) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
-    setCurrent([pointOf(e)]);
-  };
-  const move = (e: PointerEvent<SVGSVGElement>) => {
-    if (!current) return;
-    const p = pointOf(e);
-    const last = current[current.length - 1];
-    if (Math.hypot(p[0] - last[0], p[1] - last[1]) < 0.6) return;
-    setCurrent([...current, p]);
-  };
-  const up = () => {
-    if (current) setLines((ls) => [...ls, current]);
-    setCurrent(null);
-  };
 
   return (
     <div className={styles.trace} role="dialog" aria-modal="true" aria-label={`${kanji.id} 따라 쓰기`}>
@@ -174,41 +247,7 @@ function TracingSheet({ kanji, data, onClose }: { kanji: Kanji; data: StrokeData
       </header>
 
       <div className={styles.padWrap}>
-        <svg
-          ref={svgRef}
-          viewBox="0 0 109 109"
-          className={styles.pad}
-          lang="ja"
-          aria-label="쓰는 칸. 손가락이나 펜으로 쓰세요"
-          onPointerDown={down}
-          onPointerMove={move}
-          onPointerUp={up}
-          onPointerCancel={up}
-        >
-          <Guides />
-          {showModel && (
-            <g className={styles.model}>
-              {data.strokes.map((d, i) => (
-                <path key={i} d={d} />
-              ))}
-            </g>
-          )}
-          {showModel && settings.stroke_numbers && (
-            <g className={styles.modelNumbers}>
-              {data.numbers.map(([x, y], i) => (
-                <text key={i} x={x} y={y}>
-                  {i + 1}
-                </text>
-              ))}
-            </g>
-          )}
-          <g className={styles.user}>
-            {lines.map((l, i) => (
-              <path key={i} d={toPath(l)} />
-            ))}
-            {current && <path d={toPath(current)} />}
-          </g>
-        </svg>
+        <WritingPad data={data} lines={lines} onLines={setLines} showModel={showModel} label="쓰는 칸. 손가락이나 펜으로 쓰세요" />
       </div>
 
       <p className={styles.traceHint}>채점은 하지 않습니다. 본보기와 겹쳐 보며 비교해 보세요.</p>

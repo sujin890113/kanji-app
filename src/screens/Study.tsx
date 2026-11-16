@@ -26,11 +26,15 @@ import {
   type SessionCounts,
 } from '../domain/session';
 import { buildSrsQueue, dailyRoom } from '../domain/srs';
+import { planReverse, reverseCandidates, reversePrompt, type ReverseItem } from '../domain/reverse';
+import { WritingPad, type Point } from '../components/Strokes';
+import { useStrokes } from '../content/lazyData';
 import type { CardState, ChapterProgress, Rating } from '../domain/types';
 import {
   finishSession,
   getAllCards,
   getAllChapters,
+  getAllReverseCards,
   getToday,
   openChapter,
   recordGrade,
@@ -100,13 +104,20 @@ interface UiSnapshot {
   progress: ChapterProgress | null;
   queue: string[];
   counts: SessionCounts;
-  items: { id: string; rating: Rating }[];
+  items: SessionItem[];
   card: CardState | undefined;
   seen: Set<string>;
   repeated: Set<string>;
   pending: Set<string>;
   completed: { level: number; chapter: number }[];
+  rev: ReverseItem[];
+  revCards: Map<string, CardState>;
+  fwdDone: number;
+  fwdFinished: boolean;
 }
+
+/** 세션에서 판정한 카드 한 장. reverse : 역방향(F7) 카드 */
+type SessionItem = { id: string; rating: Rating; reverse?: boolean };
 
 interface Props {
   content: Content;
@@ -128,7 +139,7 @@ function StudySession({ content, scope, retryIds }: Props) {
   const [queue, setQueue] = useState<string[]>([]);
   const [cards, setCards] = useState<Map<string, CardState>>(new Map());
   const [counts, setCounts] = useState<SessionCounts>(emptyCounts);
-  const [items, setItems] = useState<{ id: string; rating: Rating }[]>([]);
+  const [items, setItems] = useState<SessionItem[]>([]);
   /** 이번 세션에서 한 번 이상 판정한 한자 */
   const [seen, setSeen] = useState<Set<string>>(new Set());
   /** 애매함으로 이미 한 번 더 낸 한자 */
@@ -136,6 +147,16 @@ function StudySession({ content, scope, retryIds }: Props) {
   /** 다시 내기로 했지만 아직 다시 판정하지 않은 한자 */
   const [pending, setPending] = useState<Set<string>>(new Set());
   const [completed, setCompleted] = useState<{ level: number; chapter: number }[]>([]);
+  /** F7 : 아직 내지 않은 역방향 카드 (정방향을 at장 판정한 뒤에 낸다) */
+  const [rev, setRev] = useState<ReverseItem[]>([]);
+  const [revCards, setRevCards] = useState<Map<string, CardState>>(new Map());
+  /** 이번 세션에서 판정한 정방향 카드 수 */
+  const [fwdDone, setFwdDone] = useState(0);
+  /** 정방향 분량을 마치고 남은 역방향 카드만 내는 중 */
+  const [fwdFinished, setFwdFinished] = useState(false);
+  /** 역방향 카드 : 한자를 펼쳤는가, 써 본 획 */
+  const [revOpen, setRevOpen] = useState(false);
+  const [revLines, setRevLines] = useState<Point[][]>([]);
   const [reveal, setReveal] = useState<RevealState>(() => initialReveal(settings.auto_reveal));
   const [busy, setBusy] = useState(false);
   const [undo, setUndo] = useState<{ snapshot: UndoSnapshot; ui: UiSnapshot; id: string } | null>(null);
@@ -147,6 +168,8 @@ function StudySession({ content, scope, retryIds }: Props) {
   const shownAt = useRef(Date.now());
   const sessionId = useRef<number | null>(null);
   const startedAt = useRef(Date.now());
+  /** 정방향 분량이 끝났을 때의 회독 결과 (남은 역방향 카드를 마친 뒤 결과 화면에 넘긴다) */
+  const deferred = useRef<{ roundCompleted: boolean; progress: ChapterProgress | null } | null>(null);
 
   useEffect(() => {
     if (scope.kind === 'chapter' && !ch) return;
@@ -159,6 +182,7 @@ function StudySession({ content, scope, retryIds }: Props) {
         if (!cancelled) setBlocked(true);
         return;
       }
+      let forwardCount = 0;
       if (scope.kind === 'list' && retryIds) {
         // 고른 한자 : 주어진 순서(자주 틀린 순) 또는 섞어서
         const valid = [...new Set(retryIds)].filter((id) => content.byId.has(id));
@@ -170,16 +194,42 @@ function StudySession({ content, scope, retryIds }: Props) {
         if (cancelled) return;
         setCards(allCards);
         setQueue(q);
+        forwardCount = q.length;
       } else if (ch) {
         // 회독 : 진행 기록이 있으면 같은 회독의 남은 한자부터 이어진다
         const { progress: p, cards: c } = await openChapter(ch.level, ch.chapter, ch.ids, settings.card_order);
         if (cancelled) return;
         setProgress(p);
         setCards(c);
+        if (!retryIds) forwardCount = Math.min(sessionLimit(settings.session_size), p.round_queue.length);
         if (retryIds) {
           const valid = retryIds.filter((id) => ch.ids.includes(id));
           setQueue(settings.card_order === 'shuffle' ? shuffle(valid, Math.random) : ch.ids.filter((id) => valid.includes(id)));
         }
+      }
+      // F7 역방향 : 정방향 카드 사이에 비율만큼 끼워 넣는다 ([다시]·고른 한자 학습에서는 내지 않음)
+      if (settings.f7_reverse && mode !== 'retry' && forwardCount > 0) {
+        const reverse = await getAllReverseCards();
+        const allIds = content.levelIds.flatMap((l) => l.ids);
+        const candidates = reverseCandidates({
+          // 이 장의 한자를 먼저, 그다음 다른 장에서 이미 익힌 한자
+          ids: ch ? [...ch.ids, ...allIds.filter((id) => !ch.ids.includes(id))] : allIds,
+          forward: allCards,
+          reverse,
+          srs: mode === 'srs',
+          now: Date.now(),
+        });
+        const plan = planReverse({
+          candidates,
+          sources: content.byId,
+          forwardCount,
+          ratio: settings.reverse_ratio,
+          setting: settings.reverse_types,
+          rng: Math.random,
+        });
+        if (cancelled) return;
+        setRevCards(reverse);
+        setRev(plan);
       }
       shownAt.current = Date.now();
       setLoaded(true);
@@ -191,26 +241,31 @@ function StudySession({ content, scope, retryIds }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const currentId = mode === 'round' ? progress?.round_queue[0] : queue[0];
+  const currentId = fwdFinished ? undefined : mode === 'round' ? progress?.round_queue[0] : queue[0];
   const kanji = currentId ? content.byId.get(currentId) : undefined;
+  // 지금 낼 역방향 카드 : 정해 둔 위치에 왔거나, 정방향 카드가 더 없을 때
+  const revItem = rev.length > 0 && (rev[0].at <= fwdDone || !currentId) ? rev[0] : null;
+  const revKanji = revItem ? content.byId.get(revItem.id) : undefined;
   const limit = sessionLimit(settings.session_size);
 
   // F11 자동 재생 : 읽기를 펼칠 때 음독·훈독을 읽는다 (tts_auto). 카드를 넘기면 읽던 것을 멈춘다
   const canSpeak = useCanSpeak();
   const readingOpen = reveal.reading;
   useEffect(() => {
-    if (kanji && readingOpen && canSpeak && settings.tts_auto) speak(readingSpeech(kanji.on, kanji.kun), settings.tts_rate);
+    if (kanji && !revItem && readingOpen && canSpeak && settings.tts_auto) speak(readingSpeech(kanji.on, kanji.kun), settings.tts_rate);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kanji?.id, readingOpen]);
-  useEffect(() => stopSpeaking, [kanji?.id]);
+  }, [kanji?.id, revItem?.id, readingOpen]);
+  useEffect(() => stopSpeaking, [kanji?.id, revItem?.id]);
 
   const resetForNextCard = () => {
     setReveal(initialReveal(settings.auto_reveal));
+    setRevOpen(false);
+    setRevLines([]);
     shownAt.current = Date.now();
   };
 
   const finish = async (
-    final: { counts: SessionCounts; items: { id: string; rating: Rating }[]; completed: { level: number; chapter: number }[] },
+    final: { counts: SessionCounts; items: SessionItem[]; completed: { level: number; chapter: number }[] },
     roundCompleted: boolean,
     p: ChapterProgress | null,
   ) => {
@@ -281,7 +336,21 @@ function StudySession({ content, scope, retryIds }: Props) {
       });
       if (settings.haptics) navigator.vibrate?.(15);
 
-      const ui: UiSnapshot = { progress, queue, counts, items, card: cards.get(currentId), seen, repeated, pending, completed };
+      const ui: UiSnapshot = {
+        progress,
+        queue,
+        counts,
+        items,
+        card: cards.get(currentId),
+        seen,
+        repeated,
+        pending,
+        completed,
+        rev,
+        revCards,
+        fwdDone,
+        fwdFinished,
+      };
       const nextCounts = addCount(counts, rating);
       const nextItems = [...items, { id: currentId, rating }];
       const nextCompleted =
@@ -295,13 +364,18 @@ function StudySession({ content, scope, retryIds }: Props) {
       setPending(nextPending);
       setCompleted(nextCompleted);
       if (mode === 'round' && res.progress) setProgress(res.progress);
+      setFwdDone(fwdDone + 1);
 
       const firstCount = firstTime ? nextSeen.size : seen.size;
       const finished =
         mode === 'round'
           ? res.roundCompleted || (firstCount >= limit && nextPending.size === 0)
           : nextQueue.length === 0;
-      if (finished) {
+      if (finished && rev.length > 0) {
+        // 정방향 분량은 끝났지만 역방향 카드가 남았다 : 그것만 마저 낸다
+        setFwdFinished(true);
+        deferred.current = { roundCompleted: mode === 'round' && res.roundCompleted, progress: mode === 'round' ? res.progress : null };
+      } else if (finished) {
         await finish(
           { counts: nextCounts, items: nextItems, completed: nextCompleted },
           mode === 'round' && res.roundCompleted,
@@ -310,6 +384,56 @@ function StudySession({ content, scope, retryIds }: Props) {
         return;
       }
       setUndo({ snapshot: res.undo, ui, id: currentId });
+      resetForNextCard();
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  /** 역방향(F7) 카드 판정 : 역방향 카드만 스케줄하고 장 진행에는 반영하지 않는다 */
+  const gradeReverse = async (item: ReverseItem, rating: Rating) => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      sessionId.current ??= await startSession(ch?.level ?? -1, ch?.chapter ?? 0);
+      const res = await recordGrade({
+        kanjiId: item.id,
+        direction: 'reverse',
+        rating,
+        elapsedMs: Date.now() - shownAt.current,
+        sessionId: sessionId.current,
+        scheduler: mode === 'srs' ? { kind: 'srs', options: { retention: settings.srs_retention, fuzz: true } } : { kind: 'round' },
+        chapter: null,
+      });
+      if (settings.haptics) navigator.vibrate?.(15);
+      const ui: UiSnapshot = {
+        progress,
+        queue,
+        counts,
+        items,
+        card: undefined,
+        seen,
+        repeated,
+        pending,
+        completed,
+        rev,
+        revCards,
+        fwdDone,
+        fwdFinished,
+      };
+      const nextCounts = addCount(counts, rating);
+      const nextItems = [...items, { id: item.id, rating, reverse: true }];
+      const nextRev = rev.slice(1);
+      setRevCards(new Map(revCards).set(item.id, res.card));
+      setCounts(nextCounts);
+      setItems(nextItems);
+      setRev(nextRev);
+      if (nextRev.length === 0 && !currentId) {
+        const d = deferred.current ?? { roundCompleted: false, progress: mode === 'round' ? progress : null };
+        await finish({ counts: nextCounts, items: nextItems, completed }, d.roundCompleted, d.progress);
+        return;
+      }
+      setUndo({ snapshot: res.undo, ui, id: item.id });
       resetForNextCard();
     } finally {
       setBusy(false);
@@ -330,10 +454,18 @@ function StudySession({ content, scope, retryIds }: Props) {
       setRepeated(ui.repeated);
       setPending(ui.pending);
       setCompleted(ui.completed);
-      const restored = new Map(cards);
-      if (ui.card) restored.set(undo.id, ui.card);
-      else restored.delete(undo.id);
-      setCards(restored);
+      setRev(ui.rev);
+      setFwdDone(ui.fwdDone);
+      setFwdFinished(ui.fwdFinished);
+      if (!ui.fwdFinished) deferred.current = null;
+      if (undo.snapshot.direction === 'reverse') {
+        setRevCards(ui.revCards);
+      } else {
+        const restored = new Map(cards);
+        if (ui.card) restored.set(undo.id, ui.card);
+        else restored.delete(undo.id);
+        setCards(restored);
+      }
       setUndo(null);
       resetForNextCard();
     } finally {
@@ -362,8 +494,8 @@ function StudySession({ content, scope, retryIds }: Props) {
     return <CompletedChapter content={content} progress={progress} />;
   }
   // 간격 반복 : 지금 낼 카드가 없음
-  if (mode === 'srs' && !currentId) return <NothingToday content={content} chapter={ch} />;
-  if (!kanji || (mode === 'round' && !progress)) return <Navigate replace to="/levels" />;
+  if (mode === 'srs' && !currentId && !revItem) return <NothingToday content={content} chapter={ch} />;
+  if ((!kanji && !revKanji) || (mode === 'round' && !progress)) return <Navigate replace to="/levels" />;
 
   let title: string;
   let done: number;
@@ -374,9 +506,10 @@ function StudySession({ content, scope, retryIds }: Props) {
     total = progress.round_size;
   } else {
     done = items.length;
-    total = items.length + queue.length;
+    total = items.length + queue.length + rev.length;
     if (scope.kind === 'list') title = scope.label;
     else if (mode === 'retry' && ch) title = `${levelName(ch.level)} · ${ch.chapter}장 · 다시`;
+    else if (revItem || !kanji) title = ch ? `${levelName(ch.level)} · ${ch.chapter}장 · 역방향` : '오늘 · 역방향';
     else {
       const isNew = (cards.get(kanji.id)?.status ?? 'new') === 'new';
       const home = content.chapterOf.get(kanji.id);
@@ -385,8 +518,6 @@ function StudySession({ content, scope, retryIds }: Props) {
     }
   }
   const anyOpen = reveal.ko || reveal.reading;
-  const favorite = cards.get(kanji.id)?.favorite ?? false;
-  const again = pending.has(kanji.id);
 
   return (
     <div className={styles.screen}>
@@ -403,69 +534,101 @@ function StudySession({ content, scope, retryIds }: Props) {
       </header>
       <ProgressBar value={done} max={total} label="이번 세션 진행" />
 
-      <section
-        className={styles.card}
-        onClick={() => setReveal(anyOpen && reveal.ko && reveal.reading ? { ko: false, reading: false } : { ko: true, reading: true })}
-        aria-label="학습 카드. 누르면 전부 펼치거나 접습니다"
-      >
-        {again && <span className={styles.againTag}>다시</span>}
-        <button
-          type="button"
-          className={`${styles.star} ${favorite ? styles.starOn : ''}`}
-          aria-label={favorite ? '즐겨찾기 해제' : '즐겨찾기'}
-          aria-pressed={favorite}
-          onClick={(e) => {
-            e.stopPropagation();
-            void onFavorite();
-          }}
-        >
-          <StarIcon filled={favorite} />
-        </button>
-
-        <div className={styles.cardBody}>
-          <div className={styles.kanjiRow}>
-            <div className={`${styles.kanji} ${anyOpen ? styles.kanjiSmall : ''}`} lang="ja">
-              {kanji.id}
-            </div>
-            {anyOpen && (
-              <SpeakButton className={styles.kanjiSpeak} texts={readingSpeech(kanji.on, kanji.kun)} label={`${kanji.id} 읽기 듣기`} />
+      {revItem && revKanji ? (
+        <>
+          <ReverseCard
+            kanji={revKanji}
+            item={revItem}
+            open={revOpen}
+            onOpen={() => setRevOpen(true)}
+            lines={revLines}
+            onLines={setRevLines}
+            settings={settings}
+          />
+          <footer className={styles.footer}>
+            {revOpen ? (
+              <GradeButtons
+                threeGrade={settings.f6_three_grade}
+                longPress={settings.longpress_graduate}
+                disabled={busy}
+                onGrade={(r) => void gradeReverse(revItem, r)}
+              />
+            ) : (
+              <Button tone="primary" block className={styles.revealButton} onClick={() => setRevOpen(true)}>
+                한자 보기
+              </Button>
             )}
-          </div>
-          {anyOpen && (
-            <Answer
-              key={kanji.id}
-              content={content}
-              kanji={kanji}
-              reveal={reveal}
-              settings={settings}
-              relations={relations}
-              studyMarks={cards.get(kanji.id)?.study_marks ?? 0}
-              onRule={setRuleSheet}
-              onOpen={(id) => setPeek([id])}
+          </footer>
+        </>
+      ) : (
+        kanji && (
+          <>
+          <section
+            className={styles.card}
+            onClick={() => setReveal(anyOpen && reveal.ko && reveal.reading ? { ko: false, reading: false } : { ko: true, reading: true })}
+            aria-label="학습 카드. 누르면 전부 펼치거나 접습니다"
+          >
+            {pending.has(kanji.id) && <span className={styles.againTag}>다시</span>}
+            <button
+              type="button"
+              className={`${styles.star} ${cards.get(kanji.id)?.favorite ? styles.starOn : ''}`}
+              aria-label={cards.get(kanji.id)?.favorite ? '즐겨찾기 해제' : '즐겨찾기'}
+              aria-pressed={cards.get(kanji.id)?.favorite ?? false}
+              onClick={(e) => {
+                e.stopPropagation();
+                void onFavorite();
+              }}
+            >
+              <StarIcon filled={cards.get(kanji.id)?.favorite ?? false} />
+            </button>
+
+            <div className={styles.cardBody}>
+              <div className={styles.kanjiRow}>
+                <div className={`${styles.kanji} ${anyOpen ? styles.kanjiSmall : ''}`} lang="ja">
+                  {kanji.id}
+                </div>
+                {anyOpen && (
+                  <SpeakButton className={styles.kanjiSpeak} texts={readingSpeech(kanji.on, kanji.kun)} label={`${kanji.id} 읽기 듣기`} />
+                )}
+              </div>
+              {anyOpen && (
+                <Answer
+                  key={kanji.id}
+                  content={content}
+                  kanji={kanji}
+                  reveal={reveal}
+                  settings={settings}
+                  relations={relations}
+                  studyMarks={cards.get(kanji.id)?.study_marks ?? 0}
+                  onRule={setRuleSheet}
+                  onOpen={(id) => setPeek([id])}
+                />
+              )}
+            </div>
+
+            <div className={styles.chips}>
+              <RevealChip label="한국어" pressed={reveal.ko} onToggle={() => setReveal({ ...reveal, ko: !reveal.ko })} />
+              <RevealChip label="읽기" pressed={reveal.reading} onToggle={() => setReveal({ ...reveal, reading: !reveal.reading })} />
+            </div>
+          </section>
+
+          <footer className={styles.footer}>
+            <GradeButtons
+              threeGrade={settings.f6_three_grade}
+              longPress={settings.longpress_graduate}
+              disabled={busy}
+              onGrade={(r) => void grade(r)}
             />
-          )}
-        </div>
-
-        <div className={styles.chips}>
-          <RevealChip label="한국어" pressed={reveal.ko} onToggle={() => setReveal({ ...reveal, ko: !reveal.ko })} />
-          <RevealChip label="읽기" pressed={reveal.reading} onToggle={() => setReveal({ ...reveal, reading: !reveal.reading })} />
-        </div>
-      </section>
-
-      <footer className={styles.footer}>
-        <GradeButtons
-          threeGrade={settings.f6_three_grade}
-          longPress={settings.longpress_graduate}
-          disabled={busy}
-          onGrade={(r) => void grade(r)}
-        />
-      </footer>
+          </footer>
+          </>
+        )
+      )}
 
       <RuleSheet
         content={content}
         relations={relations}
         ruleId={ruleSheet}
-        self={kanji.id}
+        self={(revKanji ?? kanji)!.id}
         onClose={() => setRuleSheet(null)}
         onOpenKanji={(id) => {
           setRuleSheet(null);
@@ -582,6 +745,85 @@ function NothingToday({ content, chapter }: { content: Content; chapter: Chapter
 
 function initialReveal(auto: 'none' | 'ko' | 'reading' | 'all'): RevealState {
   return { ko: auto === 'ko' || auto === 'all', reading: auto === 'reading' || auto === 'all' };
+}
+
+/**
+ * 역방향 카드 (F7, SPEC S3) : 앞면에 한국 훈음 또는 히라가나를 48px로, 상단에 '한자 떠올리기' 라벨.
+ * 카드를 누르거나 [한자 보기]로 한자를 펼친 뒤 자기 판정한다.
+ * F10이 켜져 있으면 펼치기 전에 칸에 직접 써 보고, 펼치면 본보기를 겹쳐 비교한다 (채점 없음).
+ */
+function ReverseCard({
+  kanji,
+  item,
+  open,
+  onOpen,
+  lines,
+  onLines,
+  settings,
+}: {
+  kanji: Kanji;
+  item: ReverseItem;
+  open: boolean;
+  onOpen: () => void;
+  lines: Point[][];
+  onLines: (lines: Point[][]) => void;
+  settings: Settings;
+}) {
+  const strokes = useStrokes(kanji.id);
+  const prompt = reversePrompt(kanji, item.type);
+  const write = settings.f10_stroke;
+  return (
+    <section
+      className={`${styles.card} ${styles.reverseCard}`}
+      onClick={() => !open && onOpen()}
+      aria-label={open ? '역방향 카드' : '역방향 카드. 누르면 한자를 펼칩니다'}
+    >
+      <span className={styles.reverseLabel}>한자 떠올리기</span>
+      <div className={styles.cardBody}>
+        <p className={styles.reverseHint}>{item.type === 'ko' ? '한국 훈음' : '읽기'}</p>
+        <p
+          className={`${styles.reversePrompt} ${item.type === 'ko' ? styles.reverseKo : styles.reverseKana}`}
+          lang={item.type === 'ko' ? 'ko' : 'ja'}
+        >
+          {prompt.join('・')}
+        </p>
+        {write && (
+          <div className={styles.recall}>
+            <WritingPad
+              data={strokes}
+              lines={lines}
+              onLines={onLines}
+              showModel={open}
+              label={open ? '쓴 획과 본보기를 겹쳐 보는 칸' : '써 보는 칸. 손가락이나 펜으로 쓰세요'}
+              className={styles.recallPad}
+            />
+            {!open && (
+              <button
+                type="button"
+                className={styles.recallClear}
+                disabled={lines.length === 0}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onLines([]);
+                }}
+              >
+                지우기
+              </button>
+            )}
+          </div>
+        )}
+        {open && (
+          <div className={styles.answer}>
+            <div className={`${styles.kanji} ${styles.kanjiSmall}`} lang="ja">
+              {kanji.id}
+            </div>
+            <KoLine kanji={kanji} f1={settings.f1_hunum} f2={settings.f2_ko_form} />
+            <ReadingLines kanji={kanji} f1={settings.f1_hunum} />
+          </div>
+        )}
+      </div>
+    </section>
+  );
 }
 
 function RevealChip({ label, pressed, onToggle }: { label: string; pressed: boolean; onToggle: () => void }) {
