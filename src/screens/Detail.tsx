@@ -24,6 +24,9 @@ import { getKanjiLogs, resetKanji, toggleFavorite } from '../db/study';
 import { db } from '../db/database';
 import { useLive } from '../db/useLive';
 import { useSettings } from '../settings/useSettings';
+import { SpeakButton, WordList } from '../components/Words';
+import { StrokeSection } from '../components/Strokes';
+import { readingSpeech } from '../domain/speech';
 import styles from './Detail.module.css';
 
 /** S5 한자 상세 (탭 숨김) */
@@ -45,7 +48,7 @@ const dueFormat = new Intl.DateTimeFormat('ko-KR', { month: 'long', day: 'numeri
 
 /**
  * 상세 본문. 위에서부터 머리 → 음훈(F1) → 정자체 대조(F2) → 음 대응(F3) → 같은 음부(F4)·닮은 한자(F8) → 내 기록.
- * 꺼진 기능의 구역은 그리지 않는다. 획순(F10)·대표 단어(F9)는 M5.
+ * 꺼진 기능의 구역은 그리지 않는다. 음 대응 다음에 획순(F10), 대표 단어(F9)를 놓는다 (SPEC S5).
  * 학습 카드 위에 겹쳐 열 때도 이 본문을 쓴다 (onOpen으로 다음 한자를 여는 방법만 다르다).
  */
 export function DetailBody({ content, id, onOpen }: { content: Content; id: string; onOpen: (id: string) => void }) {
@@ -161,6 +164,15 @@ export function DetailBody({ content, id, onOpen }: { content: Content; id: stri
         </section>
       )}
 
+      {settings.f10_stroke && <StrokeSection kanji={kanji} />}
+
+      {settings.f9_words && kanji.words.length > 0 && (
+        <section className={styles.section} aria-label="대표 단어">
+          <h2 className={styles.sectionTitle}>대표 단어</h2>
+          <WordList kanji={kanji} content={content} limit={settings.words_count} />
+        </section>
+      )}
+
       {settings.f4_phonetic && kanji.phonetic && (
         <section className={styles.section} aria-label="같은 음부">
           <PhoneticChips kanji={kanji} content={content} relations={relations} onOpen={onOpen} />
@@ -201,6 +213,7 @@ function Head({ kanji }: { kanji: Kanji }) {
             {STATUS_LABEL[status]}
           </span>
         </div>
+        <div className={styles.headActions}>
         <button
           type="button"
           className={`${styles.star} ${favorite ? styles.starOn : ''}`}
@@ -210,6 +223,8 @@ function Head({ kanji }: { kanji: Kanji }) {
         >
           <StarIcon filled={favorite} />
         </button>
+        <SpeakButton texts={readingSpeech(kanji.on, kanji.kun)} label={`${kanji.id} 읽기 듣기`} />
+        </div>
       </div>
     </header>
   );

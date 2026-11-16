@@ -263,3 +263,10 @@
 .dotGraduate {
   background: var(--matsu-deep);
 }
+
+/* 즐겨찾기와 🔊(F11)를 한 줄에 */
+.headActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}

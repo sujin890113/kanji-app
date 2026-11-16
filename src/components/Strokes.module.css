@@ -1,0 +1,207 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.title {
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.count {
+  color: var(--ink-3);
+  font-weight: 400;
+}
+
+.muted {
+  color: var(--ink-3);
+  font-size: var(--size-small);
+}
+
+/* ---------- 애니메이션 칸 ---------- */
+.box {
+  align-self: center;
+  width: min(220px, 100%);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-button);
+  background: var(--paper);
+  cursor: pointer;
+}
+
+.boxInner {
+  display: block;
+  aspect-ratio: 1;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.guides {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 0.5;
+  stroke-dasharray: 2 2;
+}
+
+.guides rect {
+  stroke: none;
+}
+
+.shadow path {
+  fill: none;
+  stroke: var(--surface-2);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ink path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.numbers text,
+.modelNumbers text {
+  fill: var(--color-ko-hunum);
+  font-family: var(--font-ui);
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.actions > button {
+  gap: var(--space-1);
+}
+
+/* ---------- 따라 쓰기 시트 ---------- */
+.trace {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-2) var(--gutter) var(--space-5);
+  background: var(--paper);
+  animation: fade var(--dur-fast) var(--ease-out);
+}
+
+.traceHeader {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.traceTitle {
+  color: var(--ink);
+  font-size: var(--size-title);
+  font-weight: var(--weight-title);
+  text-align: center;
+}
+
+.traceCount {
+  min-width: 44px;
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  text-align: right;
+}
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: var(--radius-chip);
+  background: transparent;
+  color: var(--ink-2);
+  cursor: pointer;
+}
+
+.iconButton:active {
+  background: var(--surface-2);
+}
+
+.padWrap {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.pad {
+  width: 100%;
+  max-height: 100%;
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  touch-action: none;
+  user-select: none;
+  cursor: crosshair;
+}
+
+.model path {
+  fill: none;
+  stroke: var(--ink-3);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.35;
+}
+
+.modelNumbers text {
+  opacity: 0.6;
+}
+
+.user path {
+  fill: none;
+  stroke: var(--ai);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.traceHint {
+  color: var(--ink-3);
+  font-size: var(--size-small);
+  text-align: center;
+}
+
+.traceActions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}

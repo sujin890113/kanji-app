@@ -93,3 +93,23 @@ export const StarIcon = ({ filled, ...p }: IconProps & { filled?: boolean }) => 
     <path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" />
   </Base>
 );
+
+export const SpeakerIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" />
+    <path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" />
+  </Base>
+);
+
+export const PlayIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M7 5v14l12-7z" />
+  </Base>
+);
+
+export const PenIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L8 19z" />
+    <path d="M14.5 6.5l3 3" />
+  </Base>
+);

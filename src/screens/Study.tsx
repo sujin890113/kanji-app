@@ -10,6 +10,9 @@ import { BackIcon, CloseIcon, StarIcon, UndoIcon } from '../components/icons';
 import { KoLine, PhoneticChips, ReadingLines, RuleHints, RuleSheet, SimilarBlock } from '../components/KanjiSections';
 import { useRelations, type Relations } from '../content/relations';
 import { DetailBody } from './Detail';
+import { SpeakButton, WordList, useCanSpeak } from '../components/Words';
+import { speak, stopSpeaking } from '../audio/tts';
+import { readingSpeech } from '../domain/speech';
 import { getChapter, levelName, type Chapter, type Content, type Kanji } from '../content/content';
 import { chapterKey, nextChapter, summarizeChapters } from '../domain/progress';
 import { newCard, roundDone, roundNumber, shuffle } from '../domain/scheduler';
@@ -176,6 +179,15 @@ function StudySession({ content, scope, retryIds }: Props) {
   const currentId = mode === 'round' ? progress?.round_queue[0] : queue[0];
   const kanji = currentId ? content.byId.get(currentId) : undefined;
   const limit = sessionLimit(settings.session_size);
+
+  // F11 자동 재생 : 읽기를 펼칠 때 음독·훈독을 읽는다 (tts_auto). 카드를 넘기면 읽던 것을 멈춘다
+  const canSpeak = useCanSpeak();
+  const readingOpen = reveal.reading;
+  useEffect(() => {
+    if (kanji && readingOpen && canSpeak && settings.tts_auto) speak(readingSpeech(kanji.on, kanji.kun), settings.tts_rate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kanji?.id, readingOpen]);
+  useEffect(() => stopSpeaking, [kanji?.id]);
 
   const resetForNextCard = () => {
     setReveal(initialReveal(settings.auto_reveal));
@@ -393,8 +405,13 @@ function StudySession({ content, scope, retryIds }: Props) {
         </button>
 
         <div className={styles.cardBody}>
-          <div className={`${styles.kanji} ${anyOpen ? styles.kanjiSmall : ''}`} lang="ja">
-            {kanji.id}
+          <div className={styles.kanjiRow}>
+            <div className={`${styles.kanji} ${anyOpen ? styles.kanjiSmall : ''}`} lang="ja">
+              {kanji.id}
+            </div>
+            {anyOpen && (
+              <SpeakButton className={styles.kanjiSpeak} texts={readingSpeech(kanji.on, kanji.kun)} label={`${kanji.id} 읽기 듣기`} />
+            )}
           </div>
           {anyOpen && (
             <Answer
@@ -595,6 +612,7 @@ function Answer({
       {reveal.ko && <KoLine kanji={kanji} f1={settings.f1_hunum} f2={settings.f2_ko_form} />}
       {reveal.reading && <ReadingLines kanji={kanji} f1={settings.f1_hunum} />}
       {all && settings.f3_sound_rule && <RuleHints kanji={kanji} relations={relations} onOpen={onRule} />}
+      {all && settings.f9_words && <WordList kanji={kanji} content={content} limit={settings.words_count} />}
       {all && settings.f4_phonetic && <PhoneticChips kanji={kanji} content={content} relations={relations} onOpen={onOpen} />}
       {all && settings.f8_similar && (
         <SimilarBlock

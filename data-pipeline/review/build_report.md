@@ -28,7 +28,7 @@
 후보에서 뺀 이체자 : 근거 없음 863개, 신자체가 한국 교육용 한자라 뺀 것 181개
 
 일치 157자 중 '주의' 표시 20자 (그중 신자체도 한국 교육용 한자인 것 7자). 승인할 때 approve_ko_form.py --exclude-caution으로 뺄 수 있다.
-승인된 정자체(overrides/ko_form.csv) 반영 : 209자. 나머지는 ko_form = null
+승인된 정자체(overrides/ko_form.csv) 반영 : 210자. 나머지는 ko_form = null
 
 ## 한국 훈음 (review/ko_hunum_review.csv)
 
@@ -39,9 +39,9 @@
 | (다) 없음 → KANJIDIC2 한국 음만 | 73 |
 
 - 검수 목록 행 수 : 1443
-- 훈 없이 음만 있는 한자 : 69
+- 훈 없이 음만 있는 한자 : 68
 - 뜻 풀이(meaning_ko, 선택 항목)를 채운 한자 : 10 (비어 있으면 카드에 훈음만 표시)
-- 승인된 훈음(overrides/ko_hunum.csv) 반영 : 12자
+- 승인된 훈음(overrides/ko_hunum.csv) 반영 : 14자
 
 ## 음 대응 규칙·음부 묶음·유사 한자 (M4)
 

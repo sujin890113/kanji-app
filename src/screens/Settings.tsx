@@ -19,20 +19,13 @@ import {
   type Settings,
 } from '../settings/definitions';
 import { useSettings } from '../settings/useSettings';
+import { useJapaneseVoice } from '../audio/tts';
 import { applyChapterSize, resetAll, resetLevel } from '../db/study';
 import styles from './Settings.module.css';
 
 /** 아직 동작을 연결하지 않은 항목 : 해당 단계에서 연결한다 (값은 지금도 저장된다) */
 const LATER: Partial<Record<SettingKey, string>> = {
-  f1_hunum: 'M4',
-  f2_ko_form: 'M4',
-  f3_sound_rule: 'M4',
-  f4_phonetic: 'M4',
   f7_reverse: 'M6',
-  f8_similar: 'M4',
-  f9_words: 'M5',
-  f10_stroke: 'M5',
-  f11_tts: 'M5',
   swipe_enabled: 'M7',
   sound_fx: 'M7',
 };
@@ -50,6 +43,7 @@ export function SettingsScreen() {
 
 function SettingsBody({ content }: { content: Content }) {
   const [settings, setSetting] = useSettings();
+  const voice = useJapaneseVoice();
   const [pendingSize, setPendingSize] = useState<number | null>(null);
   const [resetTarget, setResetTarget] = useState<number>(content.levels[0]?.level ?? 5);
   const [confirmLevel, setConfirmLevel] = useState(false);
@@ -91,6 +85,9 @@ function SettingsBody({ content }: { content: Content }) {
                 <span className={styles.desc}>{featureDescriptions[f]}</span>
                 {LATER[f] && <span className={styles.later}>{LATER[f]}에서 동작을 연결합니다</span>}
                 {f === 'f12_stats' && <span className={styles.later}>통계 탭은 M6에서 만듭니다</span>}
+                {f === 'f11_tts' && voice === 'no' && (
+                  <span className={styles.later}>이 기기에 일본어 음성이 없어 발음 버튼을 숨깁니다. 기기 설정에서 일본어 음성을 설치하면 쓸 수 있습니다.</span>
+                )}
               </div>
               <Switch label={featureDefs[f].label} checked={settings[f]} onChange={(v) => void setSetting(f, v)} />
             </div>

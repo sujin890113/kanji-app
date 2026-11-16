@@ -237,3 +237,18 @@
   overflow-y: auto;
   padding: 0 var(--gutter) calc(var(--space-6) + env(safe-area-inset-bottom));
 }
+
+/* 한자와 🔊(F11). 버튼은 한자 오른쪽에 붙이고 한자는 가운데에 둔다 */
+.kanjiRow {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.kanjiSpeak {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  margin: 0;
+  transform: translateY(-50%);
+}

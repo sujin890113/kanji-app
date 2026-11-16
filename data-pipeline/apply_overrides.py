@@ -111,6 +111,9 @@ def main() -> int:
             if h.get("뜻 풀이"):
                 item["meaning_ko"] = h["뜻 풀이"]
             applied["ko_hunum"] += 1
+        # 그밖의 훈음에서 대표 훈음과 같은 것은 뺀다 (검수로 대표 훈음을 바꾼 경우)
+        if item["ko_main"]:
+            item["ko_more"] = [h for h in item["ko_more"] if h != item["ko_main"]]
         if not item["kokuji"]:
             item["rules"] = match_rules((item["ko_main"] or {}).get("eum"), item["on"], rule_defs["rules"])
         out.append(item)
