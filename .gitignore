@@ -1,0 +1,11 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+Thumbs.db
+
+# 데이터 파이프라인: 내려받은 원본은 git에서 제외 (SPEC 8장)
+data-pipeline/raw/*
+!data-pipeline/raw/.gitkeep
+__pycache__/
+.venv/

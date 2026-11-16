@@ -1,0 +1,31 @@
+.group {
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-button);
+  background: var(--surface-2);
+}
+
+.option {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 var(--space-2);
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius-button) - var(--space-1));
+  background: transparent;
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) ease,
+    color var(--dur-fast) ease;
+}
+
+.checked {
+  background: var(--surface);
+  border-color: var(--edge);
+  color: var(--ink);
+  box-shadow: 0 1px 0 var(--line);
+}

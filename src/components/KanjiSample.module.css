@@ -1,0 +1,22 @@
+.sample {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-4);
+  color: var(--ink);
+}
+
+.kanji {
+  font-family: var(--font-kanji);
+  font-size: var(--size-kanji-detail);
+  font-weight: var(--weight-kanji);
+  line-height: 1.1;
+}
+
+.koForm {
+  font-family: var(--font-ko-form);
+  font-size: calc(var(--size-kanji-detail) * var(--ko-form-ratio));
+  font-weight: var(--weight-kanji);
+  line-height: 1.1;
+  color: var(--ink-2);
+}

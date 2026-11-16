@@ -1,0 +1,58 @@
+/* 빈 화면(M0) 공통 스타일 */
+
+.devLinks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.devLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-button);
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.devLink:active {
+  background: var(--surface-2);
+}
+
+.sectionTitle {
+  font-size: var(--size-small);
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.date {
+  font-size: var(--size-title);
+  font-weight: var(--weight-title);
+}
+
+.settingRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  border: 1px solid var(--edge);
+  box-shadow: var(--shadow-card);
+}
+
+.settingLabel {
+  font-weight: 600;
+}
+
+.note {
+  font-size: var(--size-small);
+  color: var(--ink-3);
+}
