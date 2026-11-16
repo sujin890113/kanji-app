@@ -29,6 +29,7 @@ const router = createHashRouter([
     ],
   },
   { path: 'study', element: <Study /> },
+  { path: 'study/:level/:chapter', element: <Study /> },
   { path: 'result', element: <Result /> },
   { path: 'kanji/:id', element: <Detail /> },
   { path: 'search', element: <Search /> },

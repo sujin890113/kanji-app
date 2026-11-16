@@ -1,0 +1,86 @@
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.three {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.grade {
+  --tone: var(--surface);
+  --tone-deep: var(--line);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  overflow: hidden;
+  border: 1px solid var(--edge);
+  border-bottom: var(--button-depth) solid var(--tone-deep);
+  border-radius: var(--radius-button);
+  background: var(--tone);
+  color: var(--on-accent);
+  font-size: var(--size-body);
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  transition:
+    transform var(--dur-fast) ease,
+    border-bottom-width var(--dur-fast) ease;
+}
+
+.grade:active:not(:disabled) {
+  transform: translateY(var(--button-depth));
+  border-bottom-width: 1px;
+}
+
+.grade:disabled {
+  opacity: 0.5;
+}
+
+.study {
+  --tone: var(--grade-study);
+  --tone-deep: var(--ai-deep);
+}
+
+.vague {
+  --tone: var(--grade-vague);
+  --tone-deep: var(--yamabuki-deep);
+}
+
+.know {
+  --tone: var(--grade-know);
+  --tone-deep: var(--matsu-deep);
+}
+
+.label,
+.hint {
+  position: relative;
+}
+
+.hint {
+  font-size: var(--size-tiny);
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+/* 길게 누르는 동안 차오르는 게이지 (원형 게이지와 도장은 M7에서 다듬음) */
+.gauge {
+  position: absolute;
+  inset: 0;
+  background: var(--matsu-deep);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.holding .gauge {
+  transform: scaleX(1);
+  transition: transform var(--dur-hold) linear;
+}

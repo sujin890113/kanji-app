@@ -193,7 +193,7 @@ JLPT는 2010년 개편 이후 공식 한자 목록을 내지 않는다. 따라�
 | `cards` | `kanji_id` + `direction` | `status`(new / learning / review / graduated), `due`, `stability`, `difficulty`, `reps`, `lapses`, `last_review`, `pass_count`, `study_marks`, `favorite` | 한자별 학습 상태. `direction`은 forward / reverse |
 | `review_logs` | 자동 번호 | `kanji_id`, `direction`, `rating`, `ts`, `elapsed_ms`, `session_id` | 판정 이력. 되돌리기와 통계에 사용 |
 | `sessions` | 자동 번호 | `start`, `end`, `level`, `chapter`, `counts{study, vague, know}` | 세션 기록 |
-| `chapters` | `level` + `chapter` | `pass_count`, `completed_at` | 장별 회독 수 |
+| `chapters` | `level` + `chapter` | `pass_count`, `completed_at`, `round_queue`, `round_size` | 장별 회독 수. `round_queue`는 현재 회독에서 남은 한자의 순서, `round_size`는 그 회독의 처음 한자 수. 앱을 닫았다 열어도 같은 회독의 남은 한자부터 이어진다 |
 | `daily` | 날짜 | `seconds`, `reviewed`, `new_count` | 연속 학습일과 일별 통계 |
 | `settings` | 항목 이름 | `value` | 옵션 |
 

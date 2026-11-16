@@ -56,3 +56,10 @@
   font-size: var(--size-small);
   color: var(--ink-3);
 }
+
+.preview {
+  color: var(--ink-2);
+  font-family: var(--font-ja);
+  font-size: var(--size-ja);
+  letter-spacing: 0.2em;
+}

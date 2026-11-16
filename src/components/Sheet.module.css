@@ -1,0 +1,67 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: var(--scrim);
+  cursor: pointer;
+  animation: fade var(--dur-reveal) ease-out;
+}
+
+.sheet {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: var(--max-width);
+  max-height: 85dvh;
+  overflow-y: auto;
+  padding: var(--space-3) var(--gutter) calc(var(--space-5) + env(safe-area-inset-bottom));
+  border: 1px solid var(--edge);
+  border-bottom: 0;
+  border-radius: var(--radius-card) var(--radius-card) 0 0;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  animation: rise var(--dur-grade) var(--ease-out);
+}
+
+.handle {
+  align-self: center;
+  width: 40px;
+  height: 4px;
+  border-radius: var(--radius-chip);
+  background: var(--line);
+}
+
+.title {
+  font-size: var(--size-title);
+  font-weight: var(--weight-title);
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet {
+    animation-name: fade;
+  }
+}

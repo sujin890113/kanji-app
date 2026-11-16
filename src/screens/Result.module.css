@@ -1,0 +1,121 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  min-height: 100dvh;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: calc(var(--space-5) + env(safe-area-inset-top)) var(--gutter) calc(var(--space-5) + env(safe-area-inset-bottom));
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.where {
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+}
+
+.title {
+  font-size: var(--size-display);
+  font-weight: var(--weight-title);
+  font-variant-numeric: tabular-nums;
+}
+
+.complete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+}
+
+.completeText {
+  color: var(--shu);
+  font-size: var(--size-title);
+  font-weight: var(--weight-title);
+}
+
+.note {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-button);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.ratio {
+  display: flex;
+  height: 16px;
+  overflow: hidden;
+  border-radius: var(--radius-chip);
+  background: var(--surface-2);
+}
+
+.ratioPart {
+  flex-basis: 0;
+}
+
+.ratioLegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-2);
+  font-size: var(--size-small);
+}
+
+.ratioLegend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-stamp-s);
+}
+
+.cells {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+  border-radius: var(--space-2);
+  color: var(--ink);
+  font-family: var(--font-ja);
+  font-size: var(--size-kanji-grid);
+  font-weight: var(--weight-grid);
+  text-decoration: none;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: auto;
+}

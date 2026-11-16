@@ -149,12 +149,12 @@ export const studyDefs = {
     { value: 30, label: '30' },
     { value: 'chapter', label: '장 전체' },
   ]),
-  card_order: sel('출제 순서', 'shuffle' as 'shuffle' | 'sequential', [
+  card_order: sel<'shuffle' | 'sequential'>('출제 순서', 'shuffle', [
     { value: 'shuffle', label: '섞기' },
     { value: 'sequential', label: '순번대로' },
   ]),
   level_lock: sw('앞 장을 완료해야 다음 장 열림', true),
-  auto_reveal: sel('카드가 뜨면 자동으로 펼침', 'none' as 'none' | 'ko' | 'reading' | 'all', [
+  auto_reveal: sel<'none' | 'ko' | 'reading' | 'all'>('카드가 뜨면 자동으로 펼침', 'none', [
     { value: 'none', label: '안 함' },
     { value: 'ko', label: '한국어만' },
     { value: 'reading', label: '읽기만' },
@@ -166,17 +166,17 @@ export const studyDefs = {
 
 /* ---------- 7.4 화면 ---------- */
 export const displayDefs = {
-  theme: sel('테마', 'system' as 'light' | 'dark' | 'system', [
+  theme: sel<'light' | 'dark' | 'system'>('테마', 'system', [
     { value: 'light', label: '라이트' },
     { value: 'dark', label: '다크' },
     { value: 'system', label: '기기 설정 따름' },
   ]),
-  kanji_font: sel('한자 글꼴', 'textbook' as 'textbook' | 'mincho' | 'gothic', [
+  kanji_font: sel<'textbook' | 'mincho' | 'gothic'>('한자 글꼴', 'textbook', [
     { value: 'textbook', label: '교과서체' },
     { value: 'mincho', label: '명조' },
     { value: 'gothic', label: '고딕' },
   ]),
-  kanji_size: sel('카드 한자 크기', 'normal' as 'normal' | 'large', [
+  kanji_size: sel<'normal' | 'large'>('카드 한자 크기', 'normal', [
     { value: 'normal', label: '보통' },
     { value: 'large', label: '크게' },
   ]),

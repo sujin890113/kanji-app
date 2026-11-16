@@ -1,0 +1,43 @@
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--shu);
+  border-radius: var(--radius-stamp-s);
+  color: var(--shu);
+  font-family: var(--font-kanji-mincho);
+  font-weight: var(--weight-kanji);
+  line-height: 1;
+  transform: rotate(-8deg);
+}
+
+.small {
+  width: 22px;
+  height: 22px;
+  font-size: var(--size-stamp-s);
+}
+
+.large {
+  width: 88px;
+  height: 88px;
+  border-width: 4px;
+  border-radius: var(--radius-stamp-l);
+  font-size: var(--size-stamp-l);
+}
+
+.animate {
+  animation: stamp var(--dur-stamp) var(--ease-out);
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    transform: rotate(-40deg) scale(1.6);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate {
+    animation-name: none;
+  }
+}

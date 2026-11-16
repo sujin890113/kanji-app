@@ -14,6 +14,10 @@ import './styles/global.css';
 
 import { App } from './App';
 import { loadSettings } from './settings/store';
+import { loadContent } from './content/content';
+
+// 한자 데이터는 기다리지 않고 바로 읽기 시작한다 (화면은 ContentGate가 기다림)
+void loadContent();
 
 // 설정(테마 포함)을 먼저 읽은 뒤 그려서, 잘못된 테마로 깜박이지 않게 한다.
 loadSettings().finally(() => {

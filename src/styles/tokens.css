@@ -98,6 +98,16 @@
   --cell-graduated: var(--matsu);
 
   --streak: var(--yamabuki);
+
+  /* 버튼 입체감용 짙은 색 (5.5 : 아래쪽 4px 짙은 테두리) */
+  --ai-deep: color-mix(in srgb, var(--ai) 70%, #000);
+  --matsu-deep: color-mix(in srgb, var(--matsu) 70%, #000);
+  --yamabuki-deep: color-mix(in srgb, var(--yamabuki) 70%, #000);
+  --shu-deep: color-mix(in srgb, var(--shu) 70%, #000);
+  --surface-deep: var(--line);
+
+  /* 시트·확인창 뒤 어둡게 */
+  --scrim: rgba(20, 17, 14, 0.45);
 }
 
 /* ---------- 5.4 글꼴 ---------- */
@@ -124,6 +134,10 @@
   --size-body: 16px;
   --size-title: 20px;
   --size-small: 13px;
+  --size-tiny: 11px;
+  --size-display: 28px;
+  --size-stamp-s: 14px;
+  --size-stamp-l: 56px;
   /* 한국 정자체는 함께 놓인 한자 크기의 60% */
   --ko-form-ratio: 0.6;
 
@@ -157,6 +171,8 @@
   --radius-card: 24px;
   --radius-button: 16px;
   --radius-chip: 999px;
+  --radius-stamp-s: 6px;
+  --radius-stamp-l: 12px;
 
   --shadow-card: 0 2px 0 var(--line), 0 12px 32px var(--shadow-color);
   /* 버튼 입체감 : 아래쪽 짙은 테두리 두께 */

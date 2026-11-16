@@ -67,3 +67,29 @@ export const BackIcon = (p: IconProps) => (
     <path d="M15 5 8 12l7 7" />
   </Base>
 );
+
+export const LockIcon = (p: IconProps) => (
+  <Base {...p}>
+    <rect x="5" y="11" width="14" height="9" rx="2" />
+    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+  </Base>
+);
+
+export const CloseIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M6 6l12 12M18 6 6 18" />
+  </Base>
+);
+
+export const UndoIcon = (p: IconProps) => (
+  <Base {...p}>
+    <path d="M9 14 4 9l5-5" />
+    <path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11" />
+  </Base>
+);
+
+export const StarIcon = ({ filled, ...p }: IconProps & { filled?: boolean }) => (
+  <Base {...p} fill={filled ? 'currentColor' : 'none'}>
+    <path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z" />
+  </Base>
+);
