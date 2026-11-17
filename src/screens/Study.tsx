@@ -902,7 +902,7 @@ function RevealChip({ label, pressed, onToggle }: { label: string; pressed: bool
  * 답 영역 (SPEC S3 펼친 뒤, 2.3)
  * - [한국어] : 한국 훈음 줄(F1 켬 : 대표 크게·나머지 작게·뜻 풀이 / 끔 : 뜻 풀이 또는 대표 훈음) + 정자체(F2)
  * - [읽기] : 음독·훈독 줄
- * - 전부 펼침일 때만 : 💡 음 대응(F3), 같은 음부(F4), 닮은 한자(F8)
+ * - 전부 펼침일 때만 : 💡 음 대응(F3), 같은 부분·같은 음독(F4), 닮은 한자(F8)
  */
 function Answer({
   content,

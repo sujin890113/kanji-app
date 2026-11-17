@@ -47,7 +47,7 @@ const RATING_CLASS: Record<Rating, string> = { study: styles.dotStudy, vague: st
 const dueFormat = new Intl.DateTimeFormat('ko-KR', { month: 'long', day: 'numeric', weekday: 'short', hour: 'numeric', minute: '2-digit' });
 
 /**
- * 상세 본문. 위에서부터 머리 → 음훈(F1) → 정자체 대조(F2) → 음 대응(F3) → 같은 음부(F4)·닮은 한자(F8) → 내 기록.
+ * 상세 본문. 위에서부터 머리 → 음훈(F1) → 정자체 대조(F2) → 음 대응(F3) → 같은 부분·같은 음독(F4)·닮은 한자(F8) → 내 기록.
  * 꺼진 기능의 구역은 그리지 않는다. 음 대응 다음에 획순(F10), 대표 단어(F9)를 놓는다 (SPEC S5).
  * 학습 카드 위에 겹쳐 열 때도 이 본문을 쓴다 (onOpen으로 다음 한자를 여는 방법만 다르다).
  */
@@ -174,7 +174,7 @@ export function DetailBody({ content, id, onOpen }: { content: Content; id: stri
       )}
 
       {settings.f4_phonetic && kanji.phonetic && (
-        <section className={styles.section} aria-label="같은 음부">
+        <section className={styles.section} aria-label="같은 부분·같은 음독 한자">
           <PhoneticChips kanji={kanji} content={content} relations={relations} onOpen={onOpen} />
         </section>
       )}

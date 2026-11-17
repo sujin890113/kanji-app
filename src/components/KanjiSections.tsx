@@ -229,7 +229,7 @@ export function RuleSheet({
   );
 }
 
-/** 같은 음부 묶음의 다른 한자 (F4) */
+/** 같은 부분이 들어 있고 음독도 같은 한자 (F4. 데이터의 phonetic 묶음) */
 export function phoneticMates(kanji: Kanji, content: Content, relations: Relations | null): { reading: string; component: string; mates: Kanji[] } | null {
   const g = kanji.phonetic ? relations?.groups.get(kanji.phonetic) : undefined;
   if (!g) return null;
@@ -243,9 +243,12 @@ export function PhoneticChips({ kanji, content, relations, onOpen }: { kanji: Ka
   return (
     <div className={styles.group}>
       <p className={styles.groupLabel}>
-        같은 음부{' '}
         <span lang="ja" className={styles.groupKey}>
-          {p.component}({p.reading})
+          {p.component}
+        </span>{' '}
+        들어간 한자 · 음독{' '}
+        <span lang="ja" className={styles.groupKey}>
+          {p.reading}
         </span>
       </p>
       <div className={styles.chipRow}>
