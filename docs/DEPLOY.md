@@ -16,6 +16,11 @@
    ```
 
 4. Actions 탭에서 'Pages 배포'가 끝나면 `https://<계정>.github.io/kanji-app/` 에서 열린다.
+   - deploy 단계가 `Branch "master" is not allowed to deploy to github-pages`로 실패하면 :
+     Settings › Environments › github-pages › Deployment branches에 `master` 규칙을 추가하고 실패한 작업을 다시 실행한다.
+     (브랜치를 올리기 전에 Pages를 켜면 GitHub가 `main`만 허용하는 규칙을 만든다.)
+
+현재 배포 주소 : https://sujin890113.github.io/kanji-app/
 
 ## 휴대폰 설치 확인 (M7 완료 기준)
 
