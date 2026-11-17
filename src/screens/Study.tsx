@@ -67,20 +67,22 @@ function StudyRoute({ content }: { content: Content }) {
   const [settings] = useSettings();
   const today = location.pathname.endsWith('/today');
   const list = location.pathname.endsWith('/list');
-  const routeState = location.state as { retryIds?: string[]; label?: string } | null;
+  const routeState = location.state as StudyRouteState | null;
+  // 상세 겹침 화면을 열면 방문 기록이 하나 늘어난다. 그때도 같은 세션이 이어지도록 처음 들어온 기록의 키를 쓴다
+  const sessionKey = routeState?.session ?? location.key;
   const retryIds = routeState?.retryIds;
   if (today && !settings.f5_srs) return <Navigate replace to="/study" />;
   // 고른 한자만 학습 (통계의 [이 한자만 학습]) : 목록 없이 들어오면 통계로
   if (list) {
     if (!retryIds?.length) return <Navigate replace to="/stats" />;
     return (
-      <StudySession key={location.key} content={content} scope={{ kind: 'list', label: routeState?.label ?? '고른 한자' }} retryIds={retryIds} />
+      <StudySession key={sessionKey} content={content} scope={{ kind: 'list', label: routeState?.label ?? '고른 한자' }} retryIds={retryIds} />
     );
   }
   if (!today && (level === undefined || chapter === undefined)) return <ResolveCurrent content={content} />;
   return (
     <StudySession
-      key={location.key}
+      key={sessionKey}
       content={content}
       scope={today ? { kind: 'today' } : { kind: 'chapter', level: Number(level), chapter: Number(chapter) }}
       retryIds={retryIds}
@@ -95,6 +97,16 @@ function ResolveCurrent({ content }: { content: Content }) {
   if (!view) return null;
   const cur = view.summary.current;
   return <Navigate replace to={cur ? `/study/${cur.level}/${cur.chapter}` : '/levels'} />;
+}
+
+/** 학습 화면의 방문 기록 상태 */
+interface StudyRouteState {
+  retryIds?: string[];
+  label?: string;
+  /** 세션을 처음 연 기록의 키 */
+  session?: string;
+  /** 카드 위에 겹쳐 연 한자 상세 (위에 쌓인 순서) */
+  peek?: string[];
 }
 
 type Scope = { kind: 'today' } | { kind: 'chapter'; level: number; chapter: number } | { kind: 'list'; label: string };
@@ -163,8 +175,20 @@ function StudySession({ content, scope, retryIds }: Props) {
   const [busy, setBusy] = useState(false);
   const [undo, setUndo] = useState<{ snapshot: UndoSnapshot; ui: UiSnapshot; id: string } | null>(null);
   const [confirmExit, setConfirmExit] = useState(false);
-  /** 카드 위에 겹쳐 연 한자 상세 (세션을 잃지 않도록 화면을 옮기지 않는다). 뒤로 가기용 목록 */
-  const [peek, setPeek] = useState<string[]>([]);
+  /**
+   * 카드 위에 겹쳐 연 한자 상세. 세션을 잃지 않도록 화면은 그대로 두고, 한 겹마다 방문 기록을 하나 쌓는다.
+   * 그래서 휴대폰의 뒤로 가기(스와이프·버튼)는 겹침 화면을 한 겹씩 닫고 학습 카드로 돌아온다.
+   */
+  const location = useLocation();
+  const routeState = location.state as StudyRouteState | null;
+  const peek = routeState?.peek ?? [];
+  const openPeek = (id: string) =>
+    navigate(location.pathname, {
+      state: { ...routeState, session: routeState?.session ?? location.key, peek: [...peek, id] } satisfies StudyRouteState,
+    });
+  const closePeek = (layers: number) => {
+    if (layers > 0) navigate(-layers);
+  };
   const [ruleSheet, setRuleSheet] = useState<string | null>(null);
   const relations = useRelations();
   const shownAt = useRef(Date.now());
@@ -635,7 +659,7 @@ function StudySession({ content, scope, retryIds }: Props) {
                   relations={relations}
                   studyMarks={cards.get(kanji.id)?.study_marks ?? 0}
                   onRule={setRuleSheet}
-                  onOpen={(id) => setPeek([id])}
+                  onOpen={openPeek}
                 />
               )}
             </div>
@@ -666,22 +690,22 @@ function StudySession({ content, scope, retryIds }: Props) {
         onClose={() => setRuleSheet(null)}
         onOpenKanji={(id) => {
           setRuleSheet(null);
-          setPeek([id]);
+          openPeek(id);
         }}
       />
       {peek.length > 0 && (
         <div className={styles.overlay} role="dialog" aria-modal="true" aria-label="한자 상세">
           <header className={styles.overlayHeader}>
-            <button type="button" className={styles.iconButton} aria-label="뒤로" onClick={() => setPeek(peek.slice(0, -1))}>
+            <button type="button" className={styles.iconButton} aria-label="뒤로" onClick={() => closePeek(1)}>
               <BackIcon />
             </button>
             <p className={styles.title}>한자 상세</p>
-            <button type="button" className={styles.iconButton} aria-label="학습 카드로" onClick={() => setPeek([])}>
+            <button type="button" className={styles.iconButton} aria-label="학습 카드로" onClick={() => closePeek(peek.length)}>
               <CloseIcon />
             </button>
           </header>
           <div className={styles.overlayBody}>
-            <DetailBody key={peek[peek.length - 1]} content={content} id={peek[peek.length - 1]} onOpen={(id) => setPeek([...peek, id])} />
+            <DetailBody key={peek[peek.length - 1]} content={content} id={peek[peek.length - 1]} onOpen={openPeek} />
           </div>
         </div>
       )}
