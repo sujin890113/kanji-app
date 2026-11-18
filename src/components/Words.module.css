@@ -72,14 +72,16 @@
 
 .speak {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   margin-left: auto;
-  border: 0;
+  /* 원 테두리로 누를 수 있는 버튼임을 드러낸다 */
+  border: 1px solid var(--line);
   border-radius: var(--radius-chip);
-  background: transparent;
+  background: var(--surface);
   color: var(--ink-2);
   cursor: pointer;
 }

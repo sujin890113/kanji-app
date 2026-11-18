@@ -245,12 +245,16 @@
   justify-content: center;
 }
 
-.kanjiSpeak {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  margin: 0;
-  transform: translateY(-50%);
+/* 답의 첫 줄 + 오른쪽 읽기 듣기 버튼 */
+.answerTop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.answerTopMain {
+  flex: 1;
+  min-width: 0;
 }
 
 /* ───── 역방향 카드 (F7) ───── */

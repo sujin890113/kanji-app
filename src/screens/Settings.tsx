@@ -75,16 +75,13 @@ function SettingsBody({ content }: { content: Content }) {
         <h2 id="g-features" className={styles.groupTitle}>
           기능 켜기·끄기
         </h2>
-        {(Object.keys(featureDefs) as FeatureKey[]).map((f, i) => (
+        {(Object.keys(featureDefs) as FeatureKey[]).map((f) => (
           <div key={f} className={styles.item}>
             <div className={styles.row}>
               <div className={styles.text}>
-                <span className={styles.label}>
-                  F{i + 1} {featureDefs[f].label}
-                </span>
+                <span className={styles.label}>{featureDefs[f].label}</span>
                 <span className={styles.desc}>{featureDescriptions[f]}</span>
                 {LATER[f] && <span className={styles.later}>{LATER[f]}에서 동작을 연결합니다</span>}
-                {f === 'f12_stats' && <span className={styles.later}>통계 탭은 M6에서 만듭니다</span>}
                 {f === 'f11_tts' && voice === 'no' && (
                   <span className={styles.later}>이 기기에 일본어 음성이 없어 발음 버튼을 숨깁니다. 기기 설정에서 일본어 음성을 설치하면 쓸 수 있습니다.</span>
                 )}
@@ -185,6 +182,9 @@ function SettingsBody({ content }: { content: Content }) {
             {new Date(content.meta.built_at).toLocaleString('ko-KR')} · {content.meta.count.toLocaleString('ko-KR')}자
           </dd>
         </dl>
+        {/* 출처·라이선스는 접어 두고 눌러서 펼친다 */}
+        <details className={styles.credits}>
+          <summary className={styles.creditsSummary}>출처와 라이선스</summary>
         <ul className={styles.sources}>
           {content.meta.sources.map((s) => (
             <li key={s.url}>
@@ -207,6 +207,7 @@ function SettingsBody({ content }: { content: Content }) {
         <CreditList items={FONT_CREDITS} />
         <h3 className={styles.creditTitle}>라이브러리</h3>
         <CreditList items={LIBRARY_CREDITS} />
+        </details>
       </section>
 
       <Sheet open={pendingSize !== null} title={`장 크기를 ${pendingSize}자로 바꿀까요?`} onClose={() => setPendingSize(null)}>

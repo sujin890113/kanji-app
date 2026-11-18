@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router';
 import { ContentGate } from '../components/ContentGate';
 import { GradeButtons } from '../components/GradeButtons';
@@ -7,7 +7,7 @@ import { Sheet } from '../components/Sheet';
 import { Button } from '../components/Button';
 import { Stamp } from '../components/Stamp';
 import { BackIcon, CloseIcon, StarIcon, UndoIcon } from '../components/icons';
-import { KoLine, PhoneticChips, ReadingLines, RuleHints, RuleSheet, SimilarBlock } from '../components/KanjiSections';
+import { KoLine, PhoneticChips, ReadingLines, RuleHints, RuleSheet, SimilarBlock, DetailLink } from '../components/KanjiSections';
 import { useRelations, type Relations } from '../content/relations';
 import { DetailBody } from './Detail';
 import { SpeakButton, WordList, useCanSpeak } from '../components/Words';
@@ -645,9 +645,6 @@ function StudySession({ content, scope, retryIds }: Props) {
                 <div className={`${styles.kanji} ${anyOpen ? styles.kanjiSmall : ''}`} lang="ja">
                   {kanji.id}
                 </div>
-                {anyOpen && (
-                  <SpeakButton className={styles.kanjiSpeak} texts={readingSpeech(kanji.on, kanji.kun)} label={`${kanji.id} 읽기 듣기`} />
-                )}
               </div>
               {anyOpen && (
                 <Answer
@@ -660,6 +657,7 @@ function StudySession({ content, scope, retryIds }: Props) {
                   studyMarks={cards.get(kanji.id)?.study_marks ?? 0}
                   onRule={setRuleSheet}
                   onOpen={openPeek}
+                  speak={<SpeakButton texts={readingSpeech(kanji.on, kanji.kun)} label={`${kanji.id} 읽기 듣기`} />}
                 />
               )}
             </div>
@@ -937,6 +935,7 @@ function Answer({
   studyMarks,
   onRule,
   onOpen,
+  speak,
 }: {
   content: Content;
   kanji: Kanji;
@@ -946,12 +945,19 @@ function Answer({
   studyMarks: number;
   onRule: (ruleId: string) => void;
   onOpen: (id: string) => void;
+  /** 읽기 듣기 버튼 : 답의 첫 줄 오른쪽에 둔다 (한자 옆은 카드 누르기와 겹쳐 누르기 어려움) */
+  speak: ReactNode;
 }) {
   const all = reveal.ko && reveal.reading;
+  const ko = reveal.ko && <KoLine kanji={kanji} f1={settings.f1_hunum} f2={settings.f2_ko_form} />;
+  const reading = reveal.reading && <ReadingLines kanji={kanji} f1={settings.f1_hunum} />;
   return (
     <div className={styles.answer}>
-      {reveal.ko && <KoLine kanji={kanji} f1={settings.f1_hunum} f2={settings.f2_ko_form} />}
-      {reveal.reading && <ReadingLines kanji={kanji} f1={settings.f1_hunum} />}
+      <div className={styles.answerTop}>
+        <div className={styles.answerTopMain}>{ko || reading}</div>
+        {speak}
+      </div>
+      {ko && reading}
       {all && settings.f3_sound_rule && <RuleHints kanji={kanji} relations={relations} onOpen={onRule} />}
       {all && settings.f9_words && <WordList kanji={kanji} content={content} limit={settings.words_count} />}
       {all && settings.f4_phonetic && <PhoneticChips kanji={kanji} content={content} relations={relations} onOpen={onOpen} />}
@@ -961,9 +967,10 @@ function Answer({
           content={content}
           autoOpen={settings.similar_auto_open && studyMarks >= 2}
           onOpen={onOpen}
-          onDetail={() => onOpen(kanji.id)}
         />
       )}
+      {/* 획순·따라 쓰기·내 기록은 모든 한자에 있으므로 상세 보기는 언제나 둔다 */}
+      {all && <DetailLink onClick={() => onOpen(kanji.id)} />}
     </div>
   );
 }

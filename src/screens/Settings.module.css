@@ -148,3 +148,32 @@
   color: var(--ink-2);
   font-size: var(--size-small);
 }
+
+.credits {
+  border-top: 1px solid var(--line);
+}
+
+.creditsSummary {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 var(--space-4);
+  color: var(--ink-2);
+  font-size: var(--size-small);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* 펼칠 수 있다는 표시 */
+.creditsSummary::-webkit-details-marker {
+  display: none;
+}
+
+.creditsSummary::after {
+  content: '▾';
+  margin-left: auto;
+}
+
+.credits[open] > .creditsSummary::after {
+  content: '▴';
+}

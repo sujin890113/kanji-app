@@ -269,13 +269,11 @@ export function SimilarBlock({
   content,
   autoOpen,
   onOpen,
-  onDetail,
 }: {
   kanji: Kanji;
   content: Content;
   autoOpen: boolean;
   onOpen: (id: string) => void;
-  onDetail?: () => void;
 }) {
   const [open, setOpen] = useState(autoOpen);
   const list = kanji.similar.map((id) => content.byId.get(id)).filter((k): k is Kanji => !!k);
@@ -325,18 +323,22 @@ export function SimilarBlock({
           ))}
         </div>
       )}
-      {onDetail && (
-        <button
-          type="button"
-          className={styles.detailLink}
-          onClick={(e) => {
-            e.stopPropagation();
-            onDetail();
-          }}
-        >
-          상세 보기 ›
-        </button>
-      )}
     </div>
+  );
+}
+
+/** 학습 카드의 [상세 보기 ›] : 획순·따라 쓰기·내 기록이 있는 상세를 연다 */
+export function DetailLink({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      className={styles.detailLink}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+    >
+      상세 보기 ›
+    </button>
   );
 }
